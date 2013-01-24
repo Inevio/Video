@@ -1,61 +1,61 @@
 
 {
 
-	"name"    : "weeVideo",
-	"version" : "1.0",
-	"state"   : "beta",
+    "name"    : "weeVideo",
+    "version" : "1.0",
+    "state"   : "beta",
 
-	"developer" : "wz",
-	"authKey"   : "wz",
+    "developer" : "wz",
+    "authKey"   : "wz",
 
-	"language" : {
+    "language" : {
 
-		"default" : "en-en",
-		"list"    : [ "en-en" ]
+        "default" : "en-en",
+        "list"    : [ "en-en" ]
 
-	},
+    },
 
-	"common" : {
+    "common" : {
 
-		"css"    : ["style.css"],
-		"script" : ["script.js"]
+        "css"    : ["style.css"],
+        "script" : ["script.js"]
 
-	},
+    },
 
-	"primary" : "main",
+    "primary" : "main",
 
-	"window" : {
+    "window" : {
 
-		"main" : {
+        "main" : {
 
-			"description" : "",
-			
-			"template" : "main.html",
+            "description" : "",
+            
+            "template" : "main.html",
 
-			"maxizable" : false,
-			"resizable" : false,
+            "maxizable" : false,
+            "resizable" : false,
 
-			"width"  : {
+            "width"  : {
 
-				"default" : 620,
-				"min"     : 0,
-				"max"     : 0
+                "default" : 620,
+                "min"     : 0,
+                "max"     : 0
 
-			},
+            },
 
-			"height" : {
+            "height" : {
 
-				"default" : 460,
-				"min"     : 0,
-				"max"     : 0
+                "default" : 460,
+                "min"     : 0,
+                "max"     : 0
 
-			},
+            },
 
-			"css"    : [],
-			"script" : []
+            "css"    : [],
+            "script" : []
 
-		}
+        }
 
-	}
+    }
 
 }
