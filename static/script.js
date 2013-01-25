@@ -89,7 +89,42 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
             video[0].currentTime += 10;
             
-        });
+        })
+		
+		.key('whitespace',
+		
+			if( win.hasClass('play') ){
+                video[0].pause();
+            }else{
+                video[0].play();
+            }
+			
+		)
+		
+		.key('enter',
+		
+			if( win.hasClass('maximized') ){
+                
+                if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
+                if( video[0].webkitCancelFullScreen ){ video[0].webkitCancelFullScreen(); }
+                if( video[0].mozCancelFullScreen ){ video[0].mozCancelFullScreen(); }       
+                
+            }else{
+                
+                if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
+                if( video[0].webkitRequestFullScreen ){ video[0].webkitRequestFullScreen(); }
+                if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
+                
+            }
+			
+		)
+		
+		.key('right', video[0].currentTime += 10;, video[0].currentTime += 10; )
+		.key('left', video[0].currentTime -= 10;, video[0].currentTime -= 10; )
+		.key('up', video[0].volume += 0.1;, video[0].volume += 0.1; )
+		.key('down', video[0].volume -= 0.1;, video[0].volume -= 0.1; )
+		.key('backspace', video[0].currentTime = 0; );
+			
     
     video
     
