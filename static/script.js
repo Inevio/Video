@@ -19,7 +19,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
             video.append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) );
             video.append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) );
-            weevideoTitle.text(structure.name);
+            weevideoTitle.text(structure.name).add( weevideoTitle.prev() ).animate({'opacity':'1'},250);
             
         });
         

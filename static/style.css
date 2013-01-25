@@ -5,6 +5,7 @@
     height: 100%;
     
     background: #000;
+    border-radius: 7px;
     
 }
 
@@ -161,6 +162,8 @@
     width: 17px;
     height: 12px;
     display: inline-block;
+
+    opacity: 0;
     
     background: url('https://static.weezeel.com/app/4/sprite.png') -89px 0;
     
@@ -170,6 +173,8 @@
     
     font-size: 14px;
     color: #FFF;
+
+    opacity: 0;
     
     margin-left: 5px;
     
