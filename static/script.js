@@ -90,20 +90,20 @@ wz.app.addScript( 4, 'common', function( win, params ){
             video[0].currentTime += 10;
             
         })
-		
-		.key('whitespace',
-		
-			if( win.hasClass('play') ){
+        
+        .key('whitespace', function(){
+        
+            if( win.hasClass('play') ){
                 video[0].pause();
             }else{
                 video[0].play();
             }
 			
-		)
-		
-		.key('enter',
-		
-			if( win.hasClass('maximized') ){
+		})
+        
+        .key('enter', function(){
+        
+            if( win.hasClass('maximized') ){
                 
                 if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
                 if( video[0].webkitCancelFullScreen ){ video[0].webkitCancelFullScreen(); }
@@ -116,15 +116,37 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
                 
             }
-			
+            
+		})
+		
+		.key(
+			'right',
+			function(){ video[0].currentTime += 10; },
+			function(){ video[0].currentTime += 10; }
 		)
 		
-		.key('right', video[0].currentTime += 10;, video[0].currentTime += 10; )
-		.key('left', video[0].currentTime -= 10;, video[0].currentTime -= 10; )
-		.key('up', video[0].volume += 0.1;, video[0].volume += 0.1; )
-		.key('down', video[0].volume -= 0.1;, video[0].volume -= 0.1; )
-		.key('backspace', video[0].currentTime = 0; );
-			
+		.key(
+			'left',
+			function(){ video[0].currentTime -= 10; },
+			function(){ video[0].currentTime -= 10; }
+		)
+		
+		.key(
+			'up',
+			function(){ video[0].volume += 0.1; },
+			function(){ video[0].volume += 0.1; }
+		)
+		
+		.key(
+			'down',
+			function(){ video[0].volume -= 0.1; },
+			function(){ video[0].volume -= 0.1; }
+		)
+		
+		.key(
+			'backspace',
+			function(){ video[0].currentTime = 0; }
+		);            
     
     video
     
@@ -159,62 +181,62 @@ wz.app.addScript( 4, 'common', function( win, params ){
         .on('timeupdate', function(e){
                         
             var time = this.duration;
-			var totalHour = parseInt(time/3600);
-			var rem	 = (time%3600);
-			var totalMin = parseInt(rem/60);
-						
-			var time = this.currentTime;
-			var hour = parseInt(time/3600);
-			var rem	 = (time%3600);
-			var min	 = parseInt(rem/60);
-			var sec	 = parseInt(rem%60);
-			
-			if(totalHour > 9 && hour < 10){ hour = '0' + hour}	
-			if(totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min }
-			if(sec < 10){ sec  = '0'+sec }
-						
-			if(totalHour){
-				weevideoCurrentTime.text(hour+':'+min+':'+sec);
-			}else if(totalMin){
-				weevideoCurrentTime.text(min+':'+sec);
-			}else{
-				weevideoCurrentTime.text('0:'+sec);
-			}
-			
-			var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
+            var totalHour = parseInt(time/3600);
+            var rem     = (time%3600);
+            var totalMin = parseInt(rem/60);
+                        
+            var time = this.currentTime;
+            var hour = parseInt(time/3600);
+            var rem     = (time%3600);
+            var min     = parseInt(rem/60);
+            var sec     = parseInt(rem%60);
+            
+            if(totalHour > 9 && hour < 10){ hour = '0' + hour}    
+            if(totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min }
+            if(sec < 10){ sec  = '0'+sec }
+                        
+            if(totalHour){
+                weevideoCurrentTime.text(hour+':'+min+':'+sec);
+            }else if(totalMin){
+                weevideoCurrentTime.text(min+':'+sec);
+            }else{
+                weevideoCurrentTime.text('0:'+sec);
+            }
+            
+            var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
 
-			weevideoProgress.width(pos);
+            weevideoProgress.width(pos);
 
-			weevideoSeeker.css('left',pos-weevideoSeekerWidth);
+            weevideoSeeker.css('left',pos-weevideoSeekerWidth);
             
         })
         
         .on('durationchange', function(e){
                                                 
             var time = this.duration;
-			var hour = parseInt(time/3600);
-			var rem	 = (time%3600);
-			var min	 = parseInt(rem/60);
-			var sec	 = parseInt(rem%60);
-		
-			if(hour > 0 && min < 10){ min  = '0' + min }
-			if(sec < 10){ sec  = '0' + sec }
-			
-			weevideoBackprogress.animate({'opacity':'1'},250);
+            var hour = parseInt(time/3600);
+            var rem     = (time%3600);
+            var min     = parseInt(rem/60);
+            var sec     = parseInt(rem%60);
+        
+            if(hour > 0 && min < 10){ min  = '0' + min }
+            if(sec < 10){ sec  = '0' + sec }
+            
+            weevideoBackprogress.animate({'opacity':'1'},250);
 
-			if(9 < hour){
-				weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00:00');
-				weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
-			}else if(0 < hour && hour < 10){
-				weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00:00');
-				weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
-			}else if(9 < min){
-				weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00');
-				weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
-			}else{
-				weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00');
-				weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
-			}
+            if(9 < hour){
+                weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00:00');
+                weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
+            }else if(0 < hour && hour < 10){
+                weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00:00');
+                weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
+            }else if(9 < min){
+                weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00');
+                weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
+            }else{
+                weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00');
+                weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
+            }
         
         })
         
