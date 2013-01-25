@@ -91,7 +91,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
         })
         
-        .key('whitespace', function(){
+        .key('space', function(){
         
             if( win.hasClass('play') ){
                 video[0].pause();
