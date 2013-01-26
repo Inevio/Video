@@ -90,6 +90,46 @@ wz.app.addScript( 4, 'common', function( win, params ){
             video[0].currentTime += 10;
             
         })
+		
+		.on('enterfullscreen', function(){
+
+            win.addClass('fullscreen');
+            
+        })
+		
+		.on('exitfullscreen', function(){
+			
+			win.removeClass('fullscreen');
+            
+        })
+		
+		.on('click', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
+			
+    		if( win.hasClass('play') ){
+				video[0].pause();
+			}else{
+				video[0].play();
+			}
+			
+        })
+		
+		.on('dblclick', function(){
+			
+			video[0].play();
+    
+            if( win.hasClass('fullscreen') ){
+				                
+                wz.tool.exitFullscreen();     
+                
+            }else{
+                
+                if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
+                if( video[0].webkitRequestFullScreen ){ video[0].webkitRequestFullScreen(); }
+                if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
+                
+            }
+
+        })
         
         .key('space', function(){
         
@@ -103,12 +143,10 @@ wz.app.addScript( 4, 'common', function( win, params ){
         
         .key('enter', function(){
         
-            if( win.hasClass('maximized') ){
-                
-                if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
-                if( video[0].webkitCancelFullScreen ){ video[0].webkitCancelFullScreen(); }
-                if( video[0].mozCancelFullScreen ){ video[0].mozCancelFullScreen(); }       
-                
+            if( win.hasClass('fullscreen') ){
+
+                wz.tool.exitFullscreen();
+				
             }else{
                 
                 if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
@@ -133,14 +171,38 @@ wz.app.addScript( 4, 'common', function( win, params ){
 		
 		.key(
 			'up',
-			function(){ video[0].volume += 0.1; },
-			function(){ video[0].volume += 0.1; }
+			function(){ 
+				if((video[0].volume + 0.1) < 1){
+					video[0].volume += 0.1;
+				}else{
+					video[0].volume = 1;
+				}
+			},
+			function(){ 
+				if((video[0].volume + 0.1) < 1){
+					video[0].volume += 0.1;
+				}else{
+					video[0].volume = 1;
+				}
+			}
 		)
 		
 		.key(
 			'down',
-			function(){ video[0].volume -= 0.1; },
-			function(){ video[0].volume -= 0.1; }
+			function(){ 
+				if((video[0].volume - 0.1) > 0){
+					video[0].volume -= 0.1;
+				}else{
+					video[0].volume = 0;
+				}
+			},
+			function(){ 
+				if((video[0].volume - 0.1) > 0){
+					video[0].volume -= 0.1;
+				}else{
+					video[0].volume = 0;
+				}
+			}
 		)
 		
 		.key(
@@ -164,16 +226,6 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 win.addClass('muted');
             }else{
                 win.removeClass('muted');
-            }
-            
-        })
-        
-        .on('fullscreenchange mozfullscreenchange webkitfullscreenchange', function(){
-            
-            if( this.fullScreen ){
-                win.addClass('fullscreen');
-            }else{
-                win.removeClass('fullscreen');
             }
             
         })
@@ -271,5 +323,5 @@ wz.app.addScript( 4, 'common', function( win, params ){
             this.pause();
                         
         });
-    
+		 
 });
