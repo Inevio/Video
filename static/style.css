@@ -1,4 +1,8 @@
 
+.wz-app-4{
+	background:#000;
+}
+
 .wz-app-4 video{
     
     width: 100%;
@@ -177,7 +181,7 @@
     opacity: 0;
     
 	position: relative;
-	margin-top: -2px;
+	top: -2px;
     margin-left: 5px;
     
 }
