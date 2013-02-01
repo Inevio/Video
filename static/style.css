@@ -35,7 +35,7 @@
 
 .wz-app-4 .weevideo-bottom-shadow{
  
-     width: 100%;   
+    width: 100%;   
     height: 138px;
     position: absolute;
     bottom: 0px;
@@ -116,7 +116,7 @@
 
 .wz-app-4 .weevideo-info-buffer{
     
-    width: 235px;
+    width: 0;
     
     background-color: #F00; 
 
