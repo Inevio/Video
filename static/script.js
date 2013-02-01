@@ -52,6 +52,8 @@ wz.app.addScript( 4, 'common', function( win, params ){
 			weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
 		}
 		
+		video[0].play();
+		
 		$( win )
 		
 			.on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
