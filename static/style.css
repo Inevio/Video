@@ -154,8 +154,10 @@
     width: 18px;
     height: 22px;
     position: relative;
-    top: -18px;
-    left: -9px;
+
+    -moz-transform: translate(-9px,-18px);
+    -webkit-transform: translate(-9px,-18px);
+    transform: translate(-9px,-18px);
     
     background: url('https://static.weezeel.com/app/4/sprite.png') -105px -17px;  
 
@@ -249,8 +251,10 @@
     width: 14px;
     height: 17px;
     position: relative;
-    top: -11px;
-    left: 37px;
+
+    -moz-transform: translate(37px,-11px);
+    -webkit-transform: translate(37px,-11px);
+    transform: translate(37px,-11px);
     
     background: url('https://static.weezeel.com/app/4/sprite.png') -106px 0;
 
