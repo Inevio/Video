@@ -1,17 +1,19 @@
 
 wz.app.addScript( 4, 'common', function( win, params ){
     
-    var video = $('video',win);
-    var weevideoTop = $('.weevideo-top',win);
-    var weevideoBottom = $('.weevideo-bottom-shadow',win);
-    var weevideoCurrentTime = $('.currentTime',win);
-    var weevideoTotalTime = $('.totalTime',win);
-    var weevideoProgress = $('.weevideo-info-progress',win);
-    var weevideoBackprogress = $('.weevideo-info-backprogress',win);
-    var weevideoBufferprogress = $('.weevideo-info-buffer',win);
-    var weevideoSeeker = $('.weevideo-info-seeker',win);
-    var weevideoTitle = $('.weevideo-title-text',win);
-    var weevideoSeekerWidth = weevideoSeeker.width()/2;
+    var video 					= $('video',win);
+    var weevideoTop 			= $('.weevideo-top',win);
+    var weevideoBottom 			= $('.weevideo-bottom-shadow',win);
+    var weevideoCurrentTime 	= $('.currentTime',win);
+    var weevideoTotalTime 		= $('.totalTime',win);
+    var weevideoProgress		= $('.weevideo-info-progress',win);
+    var weevideoBackprogress 	= $('.weevideo-info-backprogress',win);
+    var weevideoBufferprogress 	= $('.weevideo-info-buffer',win);
+    var weevideoSeeker 			= $('.weevideo-info-seeker',win);
+    var weevideoTitle 			= $('.weevideo-title-text',win);
+	var weevideoVolume 			= $('.weevideo-volume-current',win);
+	var weevideoVolumeSeeker 	= $('.weevideo-volume-seeker',win);
+	var weevideoMaxVolume 		= $('.weevideo-volume-max',win);
     
     if( params && params.length ){
         
@@ -52,10 +54,38 @@ wz.app.addScript( 4, 'common', function( win, params ){
 			weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
 		}
 		
+		var volumePosition = this.volume*weevideoMaxVolume.width();
+		weevideoVolume.css('width',volumePosition);
+		weevideoVolumeSeeker.css({x:volumePosition});
+		weevideoVolumeSeeker.addClass('wz-dragger-x');
+		weevideoSeeker.addClass('wz-dragger-x');
+		
 		video[0].play();
 		
 		$( win )
 		
+			.on('wz-dragmove', '.weevideo-volume-seeker', function(e,posX,posY){
+				
+				if( win.hasClass('muted') ){
+					video[0].muted = false;
+				}
+				
+				weevideoVolume.css('width',posX * weevideoMaxVolume.width());
+				
+				video[0].volume = 1*posX;
+				
+			})
+			
+			.on('wz-dragmove', '.weevideo-info-seeker', function(e,posX,posY){
+				
+				video[0].pause();
+				
+				weevideoProgress.css('width',posX * weevideoBackprogress.width());
+				
+				video[0].currentTime = video[0].duration*posX;
+				
+			})
+					
 			.on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
 							
 				if( video[0].duration ){
@@ -100,15 +130,31 @@ wz.app.addScript( 4, 'common', function( win, params ){
 			
 			.on('mouseleave', function(){
 		
-				weevideoTop.stop(true).transition({top:-172},1000);
-				weevideoBottom.stop(true).transition({bottom:-138},1000);
-	
+				if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') ){
+					weevideoTop.stop(true).transition({top:-172},1000);
+					weevideoBottom.stop(true).transition({bottom:-138},1000);
+				}
+				
 			})
 	
 			.on('mouseenter', function(){
 	
 				weevideoTop.stop(true).transition({top:0},500);
 				weevideoBottom.stop(true).transition({bottom:0},500);
+				
+			})
+			
+			.on('wz-dragend', function(){
+				
+				if( !$('.wz-win:hover').is( win ) ){
+					win.mouseleave();
+				}
+				
+			})
+			
+			.on('wz-dragend', '.weevideo-info-seeker', function(){
+				
+				video[0].play();
 				
 			})
 			
@@ -251,6 +297,11 @@ wz.app.addScript( 4, 'common', function( win, params ){
 					win.removeClass('muted');
 				}
 				
+				
+				var volumePosition = this.volume*weevideoMaxVolume.width();
+				weevideoVolume.css('width',volumePosition);
+				weevideoVolumeSeeker.css({x:volumePosition});
+				
 			})
 			
 			.on('timeupdate', function(e){
@@ -281,8 +332,10 @@ wz.app.addScript( 4, 'common', function( win, params ){
 				var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
 	
 				weevideoProgress.width(pos);
-	
-				weevideoSeeker.css('left',pos-weevideoSeekerWidth);
+				
+				if( !weevideoSeeker.hasClass('wz-drag-active') ){
+					weevideoSeeker.css({x:pos});
+				}
 				
 			})
 			
@@ -301,20 +354,24 @@ wz.app.addScript( 4, 'common', function( win, params ){
 			})
 			
 			.on('ended', function(){
-							
-				var time = this.duration;
-				var hour = parseInt(time/3600);
-				weevideoProgress.width(0);
-				weevideoSeeker.css('left',9);
 				
-				if(parseInt(hour)){
-					weevideoCurrentTime.text('00:00:00');
-				}else{
-					weevideoCurrentTime.text('00:00');
-				}
-				
-				this.currentTime = 0;
-				this.pause();
+				if( !weevideoSeeker.hasClass('wz-drag-active') ){
+					
+					var time = this.duration;
+					var hour = parseInt(time/3600);
+					weevideoProgress.width(0);
+					weevideoSeeker.css({x:0});
+					
+					if(parseInt(hour)){
+						weevideoCurrentTime.text('00:00:00');
+					}else{
+						weevideoCurrentTime.text('00:00');
+					}
+					
+					this.currentTime = 0;
+					this.pause();
+					
+				}			
 							
 			});
 		
