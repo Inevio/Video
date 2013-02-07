@@ -86,18 +86,14 @@ wz.app.addScript( 4, 'common', function( win, params ){
 				
 			})
 					
-			.on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-							
-				if( video[0].duration ){
+			.on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){				
 						
-					if( win.hasClass('play') ){
-						video[0].pause();
-					}else{
-						video[0].play();
-					}
-					
+				if( win.hasClass('play') ){
+					video[0].pause();
+				}else{
+					video[0].play();
 				}
-				
+
 			})
 			
 			.on('click', '.weevideo-volume-icon', function(){
