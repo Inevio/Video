@@ -19,7 +19,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
             video.append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) );
             video.append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) );
-            weevideoTitle.text(structure.name).add( weevideoTitle.prev() ).animate({'opacity':'1'},250);
+            weevideoTitle.text(structure.name).add( weevideoTitle.prev() ).transition({opacity:1},250);
             
         });
         
@@ -36,20 +36,20 @@ wz.app.addScript( 4, 'common', function( win, params ){
 		if(hour > 0 && min < 10){ min  = '0' + min }
 		if(sec < 10){ sec  = '0' + sec }
 		
-		weevideoBackprogress.animate({'opacity':'1'},250);
+		weevideoBackprogress.transition({opacity:1},250);
 	
 		if(9 < hour){
-			weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00:00');
-			weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
+			weevideoCurrentTime.transition({opacity:1},250).text('00:00:00');
+			weevideoTotalTime.transition({opacity:1},250).text(hour+':'+min+':'+sec);
 		}else if(0 < hour && hour < 10){
-			weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00:00');
-			weevideoTotalTime.animate({'opacity':'1'},250).text(hour+':'+min+':'+sec);
+			weevideoCurrentTime.transition({opacity:1},250).text('0:00:00');
+			weevideoTotalTime.transition({opacity:1},250).text(hour+':'+min+':'+sec);
 		}else if(9 < min){
-			weevideoCurrentTime.animate({'opacity':'1'},250).text('00:00');
-			weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
+			weevideoCurrentTime.transition({opacity:1},250).text('00:00');
+			weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
 		}else{
-			weevideoCurrentTime.animate({'opacity':'1'},250).text('0:00');
-			weevideoTotalTime.animate({'opacity':'1'},250).text(min+':'+sec);
+			weevideoCurrentTime.transition({opacity:1},250).text('0:00');
+			weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
 		}
 		
 		video[0].play();
@@ -100,15 +100,15 @@ wz.app.addScript( 4, 'common', function( win, params ){
 			
 			.on('mouseleave', function(){
 		
-				weevideoTop.stop(true).animate({top:-172},1000);
-				weevideoBottom.stop(true).animate({bottom:-138},1000);
+				weevideoTop.stop(true).transition({top:-172},1000);
+				weevideoBottom.stop(true).transition({bottom:-138},1000);
 	
 			})
 	
 			.on('mouseenter', function(){
 	
-				weevideoTop.stop(true).animate({top:0},500);
-				weevideoBottom.stop(true).animate({bottom:0},500);
+				weevideoTop.stop(true).transition({top:0},500);
+				weevideoBottom.stop(true).transition({bottom:0},500);
 				
 			})
 			
@@ -295,7 +295,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
 				var width = (weevideoBackprogress.width()*(buffer/this.duration));
 				
 				if(width > 0){
-					weevideoBufferprogress.animate({width:width},100);
+					weevideoBufferprogress.transition({width:width},100);
 				}
 						
 			})
