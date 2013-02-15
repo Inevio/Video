@@ -21,9 +21,11 @@ wz.app.addScript( 4, 'common', function( win, params ){
         
             wz.structure( params[0], function( error, structure ){
                 
+                video.empty();
                 video.append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) );
                 video.append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) );
                 weevideoTitle.text(structure.name).add( weevideoTitle.prev() ).transition({opacity:1},250);
+                video.load();
                 
             });
             
@@ -90,7 +92,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 
             })
                     
-            .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){               
+            .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
                         
                 if( win.hasClass('play') ){
                     video[0].pause();
@@ -116,7 +118,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
                     
                     if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
                     if( video[0].webkitCancelFullScreen ){ video[0].webkitCancelFullScreen(); }
-                    if( video[0].mozCancelFullScreen ){ video[0].mozCancelFullScreen(); }       
+                    if( video[0].mozCancelFullScreen ){ video[0].mozCancelFullScreen(); }
                     
                 }else{
                     
@@ -188,7 +190,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
         
                 if( win.hasClass('fullscreen') ){
                                     
-                    wz.tool.exitFullscreen();     
+                    wz.tool.exitFullscreen();
                     
                 }else{
                     
@@ -240,14 +242,14 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
             .key(
                 'up',
-                function(){ 
+                function(){
                     if((video[0].volume + 0.1) < 1){
                         video[0].volume += 0.1;
                     }else{
                         video[0].volume = 1;
                     }
                 },
-                function(){ 
+                function(){
                     if((video[0].volume + 0.1) < 1){
                         video[0].volume += 0.1;
                     }else{
@@ -258,14 +260,14 @@ wz.app.addScript( 4, 'common', function( win, params ){
             
             .key(
                 'down',
-                function(){ 
+                function(){
                     if((video[0].volume - 0.1) > 0){
                         video[0].volume -= 0.1;
                     }else{
                         video[0].volume = 0;
                     }
                 },
-                function(){ 
+                function(){
                     if((video[0].volume - 0.1) > 0){
                         video[0].volume -= 0.1;
                     }else{
@@ -277,7 +279,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
             .key(
                 'backspace',
                 function(){ video[0].currentTime = 0; }
-            );            
+            );
         
         video
         
@@ -307,19 +309,19 @@ wz.app.addScript( 4, 'common', function( win, params ){
             .on('timeupdate', function(e){
                             
                 var time      = this.duration;
-                var totalHour = parseInt(time/3600);
-                var rem       = (time%3600);
-                var totalMin  = parseInt(rem/60);
+                var totalHour = parseInt( time / 3600, 10 );
+                var rem       = time % 3600;
+                var totalMin  = parseInt( rem / 60, 10 );
                             
-                var time    = this.currentTime;
-                var hour    = parseInt(time/3600);
-                var rem     = (time%3600);
-                var min     = parseInt(rem/60);
-                var sec     = parseInt(rem%60);
+                time        = this.currentTime;
+                var hour    = parseInt( time / 3600, 10 );
+                rem         = time % 3600;
+                var min     = parseInt( rem / 60, 10 );
+                var sec     = parseInt( rem % 60, 10 );
                 
-                if(totalHour > 9 && hour < 10){ hour = '0' + hour}    
-                if(totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min }
-                if(sec < 10){ sec  = '0'+sec }
+                if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
+                if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
+                if( sec < 10 ){ sec  = '0'+sec; }
                             
                 if(totalHour){
                     weevideoCurrentTime.text(hour+':'+min+':'+sec);
@@ -340,15 +342,17 @@ wz.app.addScript( 4, 'common', function( win, params ){
             })
             
             .on('progress',function(){
-                            
+                
+                var buffer = 0;
+
                 try{
-                    var buffer  = this.buffered.end(0);
+                    buffer = this.buffered.end(0);
                 }catch(e){}
                 
-                var width = (weevideoBackprogress.width()*(buffer/this.duration));
+                var width = ( weevideoBackprogress.width() * ( buffer / this.duration ) );
                 
-                if(width > 0){
-                    weevideoBufferprogress.transition({width:width},100);
+                if( width > 0 ){
+                    weevideoBufferprogress.transition( { width : width },100);
                 }
                         
             })
@@ -358,11 +362,11 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 if( !weevideoSeeker.hasClass('wz-drag-active') ){
                     
                     var time = this.duration;
-                    var hour = parseInt(time/3600);
+                    var hour = parseInt( time / 3600, 10 );
                     weevideoProgress.width(0);
                     weevideoSeeker.css({x:0});
                     
-                    if(parseInt(hour)){
+                    if( parseInt( hour, 10 ) ){
                         weevideoCurrentTime.text('00:00:00');
                     }else{
                         weevideoCurrentTime.text('00:00');
@@ -371,7 +375,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
                     this.currentTime = 0;
                     this.pause();
                     
-                }           
+                }
                             
             });
         
