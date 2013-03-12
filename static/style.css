@@ -109,7 +109,7 @@
     margin-top:4px;
     opacity: 0;
     
-    background-color: rgba(217,217,217,0.3);
+    background-color: rgba(217, 217, 217, 0.2);
 
 }
 
@@ -117,7 +117,7 @@
     
     width: 0;
     
-    background-color: #F00; 
+    background-color: rgba(217, 217, 217, 0.3);
 
 }
 
