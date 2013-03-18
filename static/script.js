@@ -92,7 +92,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 
             })
                     
-            .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
+            .on('mousedown', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
                         
                 if( win.hasClass('play') ){
                     video[0].pause();
@@ -102,7 +102,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
 
             })
             
-            .on('click', '.weevideo-volume-icon', function(){
+            .on('mousedown', '.weevideo-volume-icon', function(){
                 
                 if( win.hasClass('muted') ){
                     video[0].muted = false;
@@ -112,8 +112,8 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 
             })
             
-            .on('click', '.wz-win-maximize', function(){
-                
+            .on('mousedown', '.wz-win-maximize', function(){
+
                 if( win.hasClass('maximized') ){
                     
                     if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
@@ -160,13 +160,13 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 
             })
             
-            .on('click', '.weevideo-controls-rewind', function(){
+            .on('mousedown', '.weevideo-controls-rewind', function(){
                 
                 video[0].currentTime -= 10;
                 
             })
             
-            .on('click', '.weevideo-controls-forward', function(){
+            .on('mousedown', '.weevideo-controls-forward', function(){
                 
                 video[0].currentTime += 10;
                 
@@ -183,8 +183,8 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 win.removeClass('fullscreen');
                 
             })
-            
-            .on('dblclick', function(){
+
+            .on('dblclick', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
                 
                 video[0].play();
         
