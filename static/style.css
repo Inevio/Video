@@ -12,16 +12,18 @@
     
 }
 
-.wz-app-4 .wz-win-maximize{
+.wz-app-4 .wz-win-fullscreen{
     
     width: 12px;
     height: 14px;
+    margin: 0px 23px;
+    float: left;
         
     background: url('https://static.weezeel.com/app/4/sprite.png') -77px 0;
     
 }
 
-.wz-app-4.fullscreen .wz-win-maximize{
+.wz-app-4.fullscreen .wz-win-fullscreen{
     background-position: 0 -33px;
 }
 

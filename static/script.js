@@ -112,7 +112,7 @@ wz.app.addScript( 4, 'common', function( win, params ){
                 
             })
             
-            .on('mousedown', '.wz-win-maximize', function(){
+            .on('mousedown', '.wz-win-fullscreen', function(){
 
                 if( win.hasClass('maximized') ){
                     
