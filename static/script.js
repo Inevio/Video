@@ -1,5 +1,5 @@
 
-wz.app.addScript( 4, 'common', function( win, params ){
+wz.app.addScript( 4, 'common', function( win, app, lang, params ){
     
     var video                   = $('video',win);
     var weevideoTop             = $('.weevideo-top',win);
