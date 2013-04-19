@@ -14,6 +14,10 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
     var weevideoVolume          = $('.weevideo-volume-current',win);
     var weevideoVolumeSeeker    = $('.weevideo-volume-seeker',win);
     var weevideoMaxVolume       = $('.weevideo-volume-max',win);
+    var weevideoPositionX       = 0;
+    var weevideoPositionY       = 0;
+    var oldWidth                = 0;
+    var oldHeight               = 0;
     
     win.on( 'app-param', function( e, params ){
 
@@ -32,6 +36,29 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
         }
         
     });
+
+    var goFullscreen = function(){
+
+        video[0].play();
+        
+        if( win.hasClass( 'fullscreen' ) ){
+                            
+            wz.tool.exitFullscreen();
+            
+        }else{
+
+            weevideoPositionX = win.css( 'x' );
+            weevideoPositionY = win.css( 'y' );
+            oldWidth          = win.width();
+            oldHeight         = win.height();
+            
+            if( win[0].requestFullScreen ){ win[0].requestFullScreen(); }
+            if( win[0].webkitRequestFullScreen ){ win[0].webkitRequestFullScreen(); }
+            if( win[0].mozRequestFullScreen ){ win[0].mozRequestFullScreen(); }
+            
+        }
+
+    };
     
     video.on('durationchange', function(){
         
@@ -92,17 +119,17 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                 
             })
                     
-            .on('mousedown', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-                        
-                if( win.hasClass('play') ){
-                    video[0].pause();
-                }else{
-                    video[0].play();
-                }
+            .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
+
+                    if( win.hasClass('play') ){
+                        video[0].pause();
+                    }else{
+                        video[0].play();
+                    }
 
             })
             
-            .on('mousedown', '.weevideo-volume-icon', function(){
+            .on('click', '.weevideo-volume-icon', function(){
                 
                 if( win.hasClass('muted') ){
                     video[0].muted = false;
@@ -112,21 +139,9 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                 
             })
             
-            .on('mousedown', '.wz-win-fullscreen', function(){
+            .on('click', '.wz-win-fullscreen', function(){
 
-                if( win.hasClass('maximized') ){
-                    
-                    if( video[0].cancelFullScreen ){ video[0].cancelFullScreen(); }
-                    if( video[0].webkitCancelFullScreen ){ video[0].webkitCancelFullScreen(); }
-                    if( video[0].mozCancelFullScreen ){ video[0].mozCancelFullScreen(); }
-                    
-                }else{
-                    
-                    if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
-                    if( video[0].webkitRequestFullScreen ){ video[0].webkitRequestFullScreen(); }
-                    if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
-                    
-                }
+                goFullscreen();
                 
             })
             
@@ -160,13 +175,13 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                 
             })
             
-            .on('mousedown', '.weevideo-controls-rewind', function(){
+            .on('click', '.weevideo-controls-rewind', function(){
                 
                 video[0].currentTime -= 10;
                 
             })
             
-            .on('mousedown', '.weevideo-controls-forward', function(){
+            .on('click', '.weevideo-controls-forward', function(){
                 
                 video[0].currentTime += 10;
                 
@@ -175,30 +190,24 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             .on('enterfullscreen', function(){
     
                 win.addClass('fullscreen');
+                console.log( win, win.width(), oldWidth, win.height(), oldHeight );
+                wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
+                win.css( 'border-radius', 0 );
+                $( '.wz-win-menu', win ).css( 'border-radius', 0 );
+                win.css({ x : 0 , y : 0 });
                 
             })
             
             .on('exitfullscreen', function(){
                 
                 win.removeClass('fullscreen');
+                win.css({ x : weevideoPositionX , y : weevideoPositionY });
                 
             })
 
             .on('dblclick', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
                 
-                video[0].play();
-        
-                if( win.hasClass('fullscreen') ){
-                                    
-                    wz.tool.exitFullscreen();
-                    
-                }else{
-                    
-                    if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
-                    if( video[0].webkitRequestFullScreen ){ video[0].webkitRequestFullScreen(); }
-                    if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
-                    
-                }
+                goFullscreen();
     
             })
             
@@ -214,17 +223,7 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             
             .key('enter', function(){
             
-                if( win.hasClass('fullscreen') ){
-    
-                    wz.tool.exitFullscreen();
-                    
-                }else{
-                    
-                    if( video[0].requestFullScreen ){ video[0].requestFullScreen(); }
-                    if( video[0].webkitRequestFullScreen ){ video[0].webkitRequestFullScreen(); }
-                    if( video[0].mozRequestFullScreen ){ video[0].mozRequestFullScreen(); }
-                    
-                }
+                goFullscreen();
                 
             })
             
