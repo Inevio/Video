@@ -2,6 +2,10 @@
 .wz-app-4{
     background:#000;
 }
+
+.wz-app-4 *{
+    cursor: inherit;
+}
     
 .wz-app-4 video{
     

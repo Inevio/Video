@@ -204,7 +204,7 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                 win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '7px' , x : weevideoPositionX , y : weevideoPositionY });
                 $( '.weevideo-controls', win ).css( 'margin-left', '50px' );
                 wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
-                $( '.wz-win-menu', win ).css( 'border-radius', '7px' );
+                $( '.wz-win-menu', win ).css( 'border-radius', '7px 7px 0 0' );
                 
             })
 
