@@ -77,6 +77,8 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             weevideoBottom.transition( { bottom : -138 }, 1000 );
         }
 
+        win.addClass( 'hidden-controls' );
+
     };
 
     var showControls = function(){
@@ -91,6 +93,8 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             weevideoTop.transition( { top : 0 }, 500 );
             weevideoBottom.transition( { bottom : 0 }, 500 );
         }
+
+        win.removeClass( 'hidden-controls' );
 
     };
 
@@ -276,7 +280,6 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                     if( win.hasClass( 'hidden-controls' ) ){
 
                         showControls();
-                        win.removeClass( 'hidden-controls' );
                         win.css( 'cursor', 'default' );
 
                     }
@@ -286,7 +289,6 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
                         hidingControls = setTimeout( function(){
 
                             hideControls();
-                            win.addClass( 'hidden-controls' );
                             win.css( 'cursor', 'none' );
 
                         }, 3000 );
