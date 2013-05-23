@@ -95,6 +95,7 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
         }
 
         win.removeClass( 'hidden-controls' );
+        win.css( 'cursor', 'default' );
 
     };
 
@@ -447,7 +448,6 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             .on('ended', function(){
 
                 showControls();
-                win.css( 'cursor', 'default' );
                 
                 if( !weevideoSeeker.hasClass('wz-drag-active') ){
                     
