@@ -18,7 +18,10 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
     var weevideoPositionY       = 0;
     var oldWidth                = 0;
     var oldHeight               = 0;
-    var hideControls            = 0;
+    var hidingControls          = 0;
+    var prevClientX             = 0;
+    var prevClientY             = 0;
+    var isWebKit                = /webkit/i.test( navigator.userAgent );
     
     win.on( 'app-param', function( e, params ){
 
@@ -60,7 +63,37 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
         }
 
     };
-    
+
+    var hideControls = function(){
+
+        weevideoTop.stop().clearQueue();
+        weevideoBottom.stop().clearQueue();
+
+        if( isWebKit ){
+            weevideoTop.animate( { top : -172 }, 1000 );
+            weevideoBottom.animate( { bottom : -138 }, 1000 );
+        }else{
+            weevideoTop.transition( { top : -172 }, 1000 );
+            weevideoBottom.transition( { bottom : -138 }, 1000 );
+        }
+
+    };
+
+    var showControls = function(){
+
+        weevideoTop.stop().clearQueue();
+        weevideoBottom.stop().clearQueue();
+
+        if( isWebKit ){
+            weevideoTop.animate( { top : 0 }, 500 );
+            weevideoBottom.animate( { bottom : 0 }, 500 );
+        }else{
+            weevideoTop.transition( { top : 0 }, 500 );
+            weevideoBottom.transition( { bottom : 0 }, 500 );
+        }
+
+    };
+
     video.on('durationchange', function(){
         
         var time    = this.duration;
@@ -147,18 +180,22 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             })
             
             .on('mouseleave', function(){
-        
+
                 if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
-                    weevideoTop.stop(true).transition({top:-172},1000);
-                    weevideoBottom.stop(true).transition({bottom:-138},1000);
+
+                    hideControls();                    
+
                 }
                 
             })
     
             .on('mouseenter', function(){
     
-                weevideoTop.stop(true).transition({top:0},500);
-                weevideoBottom.stop(true).transition({bottom:0},500);
+                if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
+
+                    showControls();
+
+                }
                 
             })
             
@@ -189,20 +226,33 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             })
             
             .on('enterfullscreen', function(){
+
+                win.width( $( window ).width() );
+                win.height( $(window).height() );
+                win.css( 'top', 0 );
     
                 win.addClass('fullscreen wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
                 $( '.weevideo-controls', win ).css( 'margin-left', ( win.width() - 155 - 138 - $( '.weevideo-controls', win ).width() ) / 2 - 10 + 'px' );
+
                 wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
                 $( '.wz-win-menu', win ).css( 'border-radius', 0 );
+
+                video.css( 'border-radius', 0 );
+
                 oldWidth = win.width();
                 oldHeight = win.height();
                 
             })
             
             .on('exitfullscreen', function(){
+
+                win.width( '620px' );
+                win.height( '460px' );
+                win.css( 'top', '' );
                 
                 win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '7px' , x : weevideoPositionX , y : weevideoPositionY });
                 $( '.weevideo-controls', win ).css( 'margin-left', '50px' );
+
                 wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
                 $( '.wz-win-menu', win ).css( 'border-radius', '7px 7px 0 0' );
                 
@@ -214,29 +264,34 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
     
             })
 
-            .on( 'mousemove', function(){
+            .on( 'mousemove', function( e ){
 
-                clearTimeout( hideControls );
+                if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
 
-                if( win.hasClass( 'hidden-controls' ) ){
+                    prevClientX = e.clientX;
+                    prevClientY = e.clientY;
 
-                    weevideoTop.stop( true ).transition({ top : 0 }, 500 );
-                    weevideoBottom.stop( true ).transition({ bottom : 0 }, 500 );
-                    win.removeClass( 'hidden-controls' );
-                    win.css( 'cursor', 'default' );
+                    clearTimeout( hidingControls );
 
-                }
+                    if( win.hasClass( 'hidden-controls' ) ){
 
-                if( win.hasClass( 'fullscreen' ) && win.hasClass( 'play' ) ){
+                        showControls();
+                        win.removeClass( 'hidden-controls' );
+                        win.css( 'cursor', 'default' );
 
-                    hideControls = setTimeout( function(){
+                    }
 
-                        weevideoTop.stop( true ).transition({ top : -172 }, 1000 );
-                        weevideoBottom.stop( true ).transition({ bottom : -138 }, 1000 );
-                        win.addClass( 'hidden-controls' );
-                        win.css( 'cursor', 'none' );
+                    if( win.hasClass( 'fullscreen' ) && win.hasClass( 'play' ) ){
 
-                    }, 3000 );
+                        hidingControls = setTimeout( function(){
+
+                            hideControls();
+                            win.addClass( 'hidden-controls' );
+                            win.css( 'cursor', 'none' );
+
+                        }, 3000 );
+
+                    }
 
                 }
 
@@ -389,8 +444,7 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
             
             .on('ended', function(){
 
-                weevideoTop.stop( true ).transition({ top : 0 }, 500 );
-                weevideoBottom.stop( true ).transition({ bottom : 0 }, 500 );
+                showControls();
                 win.css( 'cursor', 'default' );
                 
                 if( !weevideoSeeker.hasClass('wz-drag-active') ){
