@@ -20,11 +20,29 @@
     width: 620px;
 }
 
+.wz-app-4 .wz-win-menu-group{
+    padding-bottom: 8px;
+}
+
+.wz-app-4 .wz-win-minimize{
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+
+.wz-app-4 .wz-win-close{
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
 .wz-app-4 .wz-win-fullscreen{
+    margin-left: 5px;
+    padding: 5px 8px 6px;
+}
+
+.wz-app-4 .wz-win-fullscreen i{
     
     width: 12px;
     height: 14px;
-    margin: 0px 23px;
     float: left;
         
     background: url('https://static.weezeel.com/app/4/sprite.png') -77px 0;
@@ -32,7 +50,7 @@
     
 }
 
-.wz-app-4.fullscreen .wz-win-fullscreen{
+.wz-app-4.fullscreen .wz-win-fullscreen i{
     background-position: -9px -33px;
 }
 
@@ -60,10 +78,10 @@
 .wz-app-4 .weevideo-controls{
     
     width: 215px;
-    height: 37px;
+    height: 45px;
     float: left;
     margin-left: 50px;
-    padding-top: 12px;
+    padding-top: 4px;
     
     background: url('https://static.weezeel.com/app/4/light.png') 41px -1px no-repeat;
     background-size: 128px 51px;
@@ -71,11 +89,15 @@
 }
 
 .wz-app-4 .weevideo-controls-forward{
+    margin-left: 18px;
+    margin-top: 7px;
+}
+
+.wz-app-4 .weevideo-controls-forward i{
     
     width: 24px;
     height: 16px;
     float: left;
-    margin: 6px 34px;
     
     background: url('https://static.weezeel.com/app/4/sprite.png') -52px 0;
     background-size: 150px 50px;
@@ -83,6 +105,12 @@
 }
 
 .wz-app-4 .weevideo-controls-play{
+    height: 30px;
+    margin-left: 20px;
+    padding-bottom: 4px;
+}
+
+.wz-app-4 .weevideo-controls-play i{
 
     width: 28px;
     height: 32px;
@@ -93,16 +121,20 @@
     
 }
 
-.wz-app-4.play .weevideo-controls-play{
+.wz-app-4.play .weevideo-controls-play i{
     background-position: -77px -15px;
 }
 
 .wz-app-4 .weevideo-controls-rewind{
+    margin-left: 26px;
+    margin-top: 7px;
+}
+
+.wz-app-4 .weevideo-controls-rewind i{
     
     width: 25px;
     height: 16px;
     float: left;
-    margin: 6px 34px;
     
     background: url('https://static.weezeel.com/app/4/sprite.png') -28px 0;
     background-size: 150px 50px;
@@ -225,7 +257,16 @@
 
 }
 
+.wz-app-4 .weevideo-volume{
+    height: 31px;
+    padding: 10px 23px 8px 17px;
+}
+
 .wz-app-4 .weevideo-volume-icon{
+    padding: 5px 5px 3px 4px;
+}
+
+.wz-app-4 .weevideo-volume-icon i{
     
     width: 25px;
     height: 21px;
@@ -236,7 +277,7 @@
     
 }
 
-.wz-app-4.muted .weevideo-volume-icon{
+.wz-app-4.muted .weevideo-volume-icon i{
     background-position: -122px 0;
 }
 
@@ -252,8 +293,8 @@
     
     width: 74px;
     float: left;
-    margin-top: 6px;
-    margin-left: 9px;
+    margin-top: 13px;
+    margin-left: 3px;
     
     background-color: rgba(217,217,217,0.2);
     
