@@ -50,7 +50,7 @@ video{
     
 }
 
-.wz-app-4.fullscreen .wz-win-fullscreen i{
+.wz-win.fullscreen .wz-win-fullscreen i{
     background-position: -9px -33px;
 }
 
@@ -121,7 +121,7 @@ video{
     
 }
 
-.wz-app-4.play .weevideo-controls-play i{
+.wz-win.play .weevideo-controls-play i{
     background-position: -77px -15px;
 }
 
@@ -277,7 +277,7 @@ video{
     
 }
 
-.wz-app-4.muted .weevideo-volume-icon i{
+.wz-win.muted .weevideo-volume-icon i{
     background-position: -122px 0;
 }
 
