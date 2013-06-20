@@ -25,6 +25,10 @@ wz.app.addScript( 4, 'common', function( win, app, lang, params ){
     
     win.on( 'app-param', function( e, params ){
 
+        if( win.hasClass( 'wz-win-minimized' ) ){
+            win.removeClass( 'wz-win-minimized' );
+        }
+
         if( params && params.length ){
         
             wz.structure( params[0], function( error, structure ){
