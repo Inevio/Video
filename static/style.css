@@ -24,21 +24,6 @@ video{
     padding-bottom: 8px;
 }
 
-.wz-win-minimize{
-    padding-top: 4px;
-    padding-bottom: 8px;
-}
-
-.wz-win-close{
-    padding-top: 5px;
-    padding-bottom: 7px;
-}
-
-.wz-win-fullscreen{
-    margin-left: 5px;
-    padding: 5px 8px 6px;
-}
-
 .wz-win-fullscreen i{
     
     width: 12px;
