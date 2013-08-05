@@ -389,8 +389,7 @@
                 }else{
                     win.removeClass('muted');
                     wql.changeMute(0);
-                }
-                
+                }      
                 
                 var volumePosition = this.volume*weevideoMaxVolume.width();
                 weevideoVolume.css('width',volumePosition);
