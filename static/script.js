@@ -127,7 +127,7 @@
             weevideoCurrentTime.transition({opacity:1},250).text('0:00');
             weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
         }
-        
+
         var volumePosition = this.volume*weevideoMaxVolume.width();
         weevideoVolume.css('width',volumePosition);
         weevideoVolumeSeeker.css({x:volumePosition});
@@ -208,7 +208,7 @@
             
             .on('wz-dragend', function(){
                 
-                if( !$('.wz-win:hover').is( win ) ){
+                if( !win.is( ':hover' ) ){
                     win.mouseleave();
                 }
                 
@@ -385,14 +385,17 @@
                 
                 if( this.muted ){
                     win.addClass('muted');
+                    wql.changeMute(1);
                 }else{
                     win.removeClass('muted');
+                    wql.changeMute(0);
                 }
                 
                 
                 var volumePosition = this.volume*weevideoMaxVolume.width();
                 weevideoVolume.css('width',volumePosition);
                 weevideoVolumeSeeker.css({x:volumePosition});
+                wql.changeVolume( this.volume );
                 
             })
             
@@ -470,5 +473,25 @@
                 }
                             
             });
+
+        wql.getConfig( function( error, result ){
+
+            if( result.length ){
+
+                if( result[0].mute ){
+                    $( '.weevideo-volume-icon', win ).click();
+                }
+
+                if( result[0].volume !== 1 ){
+                    video[0].volume = result[0].volume;
+                }
+
+            }else{
+
+                wql.insertConfig();
+
+            }
+
+        });
         
     });
