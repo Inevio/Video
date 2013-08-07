@@ -128,9 +128,6 @@
             weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
         }
 
-        var volumePosition = this.volume*weevideoMaxVolume.width();
-        weevideoVolume.css('width',volumePosition);
-        weevideoVolumeSeeker.css({x:volumePosition});
         weevideoVolumeSeeker.addClass('wz-dragger-x');
         weevideoSeeker.addClass('wz-dragger-x');
         
@@ -138,352 +135,350 @@
         
         $( win )
         
-            .on('wz-dragmove', '.weevideo-volume-seeker', function(e,posX,posY){
-                
-                if( win.hasClass('muted') ){
-                    video[0].muted = false;
-                }
-                
-                weevideoVolume.css('width',posX * weevideoMaxVolume.width());
-                
-                video[0].volume = 1*posX;
-                
-            })
+        .on('wz-dragmove', '.weevideo-volume-seeker', function(e,posX,posY){
             
-            .on('wz-dragmove', '.weevideo-info-seeker', function(e,posX,posY){
-                
-                video[0].pause();
-                
-                weevideoProgress.css('width',posX * weevideoBackprogress.width());
-                
-                video[0].currentTime = video[0].duration*posX;
-                
-            })
-                    
-            .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-
-                    if( win.hasClass('play') ){
-                        video[0].pause();
-                    }else{
-                        video[0].play();
-                    }
-
-            })
+            if( win.hasClass('muted') ){
+                video[0].muted = false;
+            }
             
-            .on('click', '.weevideo-volume-icon', function(){
-                
-                if( win.hasClass('muted') ){
-                    video[0].muted = false;
-                }else{
-                    video[0].muted = true;
-                }
-                
-            })
+            weevideoVolume.css('width',posX * weevideoMaxVolume.width());
             
-            .on('click', '.wz-win-fullscreen', function(){
-
-                goFullscreen();
-                
-            })
+            video[0].volume = 1*posX;
             
-            .on('mouseleave', function(){
-
-                if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
-
-                    hideControls();                    
-
-                }
-                
-            })
-    
-            .on('mouseenter', function(){
-    
-                if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
-
-                    showControls();
-
-                }
-                
-            })
+        })
+        
+        .on('wz-dragmove', '.weevideo-info-seeker', function(e,posX,posY){
             
-            .on('wz-dragend', function(){
-                
-                if( !win.is( ':hover' ) ){
-                    win.mouseleave();
-                }
-                
-            })
+            video[0].pause();
             
-            .on('wz-dragend', '.weevideo-info-seeker', function(){
-                
-                video[0].play();
-                
-            })
+            weevideoProgress.css('width',posX * weevideoBackprogress.width());
             
-            .on('click', '.weevideo-controls-rewind', function(){
-                
-                video[0].currentTime -= 10;
-                
-            })
+            video[0].currentTime = video[0].duration*posX;
             
-            .on('click', '.weevideo-controls-forward', function(){
+        })
                 
-                video[0].currentTime += 10;
-                
-            })
-            
-            .on('enterfullscreen', function(){
+        .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
 
-                win.width( $( window ).width() );
-                win.height( $(window).height() );
-                win.css( 'top', 0 );
-    
-                win.addClass('fullscreen wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
-                $( '.weevideo-controls', win ).css( 'margin-left', ( win.width() - 155 - 138 - $( '.weevideo-controls', win ).width() ) / 2 - 10 + 'px' );
-
-                wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
-                $( '.wz-win-menu', win ).css( 'border-radius', 0 );
-
-                video.css( 'border-radius', 0 );
-
-                oldWidth = win.width();
-                oldHeight = win.height();
-                
-            })
-            
-            .on('exitfullscreen', function(){
-
-                win.width( '620px' );
-                win.height( '460px' );
-                win.css( 'top', '' );
-                
-                win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '7px' , x : weevideoPositionX , y : weevideoPositionY });
-                $( '.weevideo-controls', win ).css( 'margin-left', '50px' );
-
-                wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
-                $( '.wz-win-menu', win ).css( 'border-radius', '7px 7px 0 0' );
-                
-            })
-
-            .on('dblclick', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-                
-                goFullscreen();
-    
-            })
-
-            .on( 'mousemove', function( e ){
-
-                if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
-
-                    prevClientX = e.clientX;
-                    prevClientY = e.clientY;
-
-                    clearTimeout( hidingControls );
-
-                    if( win.hasClass( 'hidden-controls' ) ){
-
-                        showControls();
-                        win.css( 'cursor', 'default' );
-
-                    }
-
-                    if( win.hasClass( 'fullscreen' ) && win.hasClass( 'play' ) ){
-
-                        hidingControls = setTimeout( function(){
-
-                            hideControls();
-                            win.css( 'cursor', 'none' );
-
-                        }, 3000 );
-
-                    }
-
-                }
-
-            })
-            
-            .key('space', function(){
-            
                 if( win.hasClass('play') ){
                     video[0].pause();
                 }else{
                     video[0].play();
                 }
-                
-            })
+
+        })
+        
+        .on('click', '.weevideo-volume-icon', function(){
             
-            .key('enter', function(){
+            if( win.hasClass('muted') ){
+                video[0].muted = false;
+            }else{
+                video[0].muted = true;
+            }
             
-                goFullscreen();
-                
-            })
+        })
+        
+        .on('click', '.wz-win-fullscreen', function(){
+
+            goFullscreen();
             
-            .key(
-                'right',
-                function(){ video[0].currentTime += 10; },
-                function(){ video[0].currentTime += 10; }
-            )
+        })
+        
+        .on('mouseleave', function(){
+
+            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
+
+                hideControls();                    
+
+            }
             
-            .key(
-                'left',
-                function(){ video[0].currentTime -= 10; },
-                function(){ video[0].currentTime -= 10; }
-            )
+        })
+
+        .on('mouseenter', function(){
+
+            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
+
+                showControls();
+
+            }
             
-            .key(
-                'up',
-                function(){
-                    if((video[0].volume + 0.1) < 1){
-                        video[0].volume += 0.1;
-                    }else{
-                        video[0].volume = 1;
-                    }
-                },
-                function(){
-                    if((video[0].volume + 0.1) < 1){
-                        video[0].volume += 0.1;
-                    }else{
-                        video[0].volume = 1;
-                    }
+        })
+        
+        .on('wz-dragend', function(){
+            
+            if( !win.is( ':hover' ) ){
+                win.mouseleave();
+            }
+            
+        })
+        
+        .on('wz-dragend', '.weevideo-info-seeker', function(){
+            
+            video[0].play();
+            
+        })
+        
+        .on('click', '.weevideo-controls-rewind', function(){
+            
+            video[0].currentTime -= 10;
+            
+        })
+        
+        .on('click', '.weevideo-controls-forward', function(){
+            
+            video[0].currentTime += 10;
+            
+        })
+        
+        .on('enterfullscreen', function(){
+
+            win.width( $( window ).width() );
+            win.height( $(window).height() );
+            win.css( 'top', 0 );
+
+            win.addClass('fullscreen wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
+            $( '.weevideo-controls', win ).css( 'margin-left', ( win.width() - 155 - 138 - $( '.weevideo-controls', win ).width() ) / 2 - 10 + 'px' );
+
+            wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
+            $( '.wz-win-menu', win ).css( 'border-radius', 0 );
+
+            video.css( 'border-radius', 0 );
+
+            oldWidth = win.width();
+            oldHeight = win.height();
+            
+        })
+        
+        .on('exitfullscreen', function(){
+
+            win.width( '620px' );
+            win.height( '460px' );
+            win.css( 'top', '' );
+            
+            win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '7px' , x : weevideoPositionX , y : weevideoPositionY });
+            $( '.weevideo-controls', win ).css( 'margin-left', '50px' );
+
+            wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
+            $( '.wz-win-menu', win ).css( 'border-radius', '7px 7px 0 0' );
+            
+        })
+
+        .on('dblclick', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
+            
+            goFullscreen();
+
+        })
+
+        .on( 'mousemove', function( e ){
+
+            if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
+
+                prevClientX = e.clientX;
+                prevClientY = e.clientY;
+
+                clearTimeout( hidingControls );
+
+                if( win.hasClass( 'hidden-controls' ) ){
+
+                    showControls();
+                    win.css( 'cursor', 'default' );
+
                 }
-            )
-            
-            .key(
-                'down',
-                function(){
-                    if((video[0].volume - 0.1) > 0){
-                        video[0].volume -= 0.1;
-                    }else{
-                        video[0].volume = 0;
-                    }
-                },
-                function(){
-                    if((video[0].volume - 0.1) > 0){
-                        video[0].volume -= 0.1;
-                    }else{
-                        video[0].volume = 0;
-                    }
+
+                if( win.hasClass( 'fullscreen' ) && win.hasClass( 'play' ) ){
+
+                    hidingControls = setTimeout( function(){
+
+                        hideControls();
+                        win.css( 'cursor', 'none' );
+
+                    }, 3000 );
+
                 }
-            )
+
+            }
+
+        })
+        
+        .key('space', function(){
+        
+            if( win.hasClass('play') ){
+                video[0].pause();
+            }else{
+                video[0].play();
+            }
             
-            .key(
-                'backspace',
-                function(){ video[0].currentTime = 0; }
-            );
+        })
+        
+        .key('enter', function(){
+        
+            goFullscreen();
+            
+        })
+        
+        .key(
+            'right',
+            function(){ video[0].currentTime += 10; },
+            function(){ video[0].currentTime += 10; }
+        )
+        
+        .key(
+            'left',
+            function(){ video[0].currentTime -= 10; },
+            function(){ video[0].currentTime -= 10; }
+        )
+        
+        .key(
+            'up',
+            function(){
+                if((video[0].volume + 0.1) < 1){
+                    video[0].volume += 0.1;
+                }else{
+                    video[0].volume = 1;
+                }
+            },
+            function(){
+                if((video[0].volume + 0.1) < 1){
+                    video[0].volume += 0.1;
+                }else{
+                    video[0].volume = 1;
+                }
+            }
+        )
+        
+        .key(
+            'down',
+            function(){
+                if((video[0].volume - 0.1) > 0){
+                    video[0].volume -= 0.1;
+                }else{
+                    video[0].volume = 0;
+                }
+            },
+            function(){
+                if((video[0].volume - 0.1) > 0){
+                    video[0].volume -= 0.1;
+                }else{
+                    video[0].volume = 0;
+                }
+            }
+        )
+        
+        .key(
+            'backspace',
+            function(){ video[0].currentTime = 0; }
+        );
         
         video
         
-            .on('play',function(){
-                win.addClass('play');
-            })
+        .on('play',function(){
+            win.addClass('play');
+        })
+        
+        .on('pause',function(){
+            win.removeClass('play');
+        })
+        
+        .on('volumechange', function(){
             
-            .on('pause',function(){
-                win.removeClass('play');
-            })
+            if( this.muted ){
+                win.addClass('muted');
+                wql.changeMute(1);
+            }else{
+                win.removeClass('muted');
+                wql.changeMute(0);
+            }      
             
-            .on('volumechange', function(){
-                
-                if( this.muted ){
-                    win.addClass('muted');
-                    wql.changeMute(1);
-                }else{
-                    win.removeClass('muted');
-                    wql.changeMute(0);
-                }      
-                
-                var volumePosition = this.volume*weevideoMaxVolume.width();
-                weevideoVolume.css('width',volumePosition);
-                weevideoVolumeSeeker.css({x:volumePosition});
-                wql.changeVolume( this.volume );
-                
-            })
+            var volumePosition = this.volume*weevideoMaxVolume.width();
+            weevideoVolume.css('width',volumePosition);
+            weevideoVolumeSeeker.css({x:volumePosition});
+            wql.changeVolume( this.volume );
             
-            .on('timeupdate', function(e){
-                            
-                var time      = this.duration;
-                var totalHour = parseInt( time / 3600, 10 );
-                var rem       = time % 3600;
-                var totalMin  = parseInt( rem / 60, 10 );
-                            
-                time        = this.currentTime;
-                var hour    = parseInt( time / 3600, 10 );
-                rem         = time % 3600;
-                var min     = parseInt( rem / 60, 10 );
-                var sec     = parseInt( rem % 60, 10 );
-                
-                if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
-                if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
-                if( sec < 10 ){ sec  = '0'+sec; }
-                            
-                if(totalHour){
-                    weevideoCurrentTime.text(hour+':'+min+':'+sec);
-                }else if(totalMin){
-                    weevideoCurrentTime.text(min+':'+sec);
-                }else{
-                    weevideoCurrentTime.text('0:'+sec);
-                }
-                
-                var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
-    
-                weevideoProgress.width(pos);
-                
-                if( !weevideoSeeker.hasClass('wz-drag-active') ){
-                    weevideoSeeker.css({x:pos});
-                }
-                
-            })
-            
-            .on('progress',function(){
-                
-                var buffer = 0;
-
-                try{
-                    buffer = this.buffered.end(0);
-                }catch(e){}
-                
-                var width = ( weevideoBackprogress.width() * ( buffer / this.duration ) );
-                
-                if( width > 0 ){
-                    weevideoBufferprogress.transition( { width : width },100);
-                }
+        })
+        
+        .on('timeupdate', function(e){
                         
-            })
+            var time      = this.duration;
+            var totalHour = parseInt( time / 3600, 10 );
+            var rem       = time % 3600;
+            var totalMin  = parseInt( rem / 60, 10 );
+                        
+            time        = this.currentTime;
+            var hour    = parseInt( time / 3600, 10 );
+            rem         = time % 3600;
+            var min     = parseInt( rem / 60, 10 );
+            var sec     = parseInt( rem % 60, 10 );
             
-            .on('ended', function(){
+            if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
+            if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
+            if( sec < 10 ){ sec  = '0'+sec; }
+                        
+            if(totalHour){
+                weevideoCurrentTime.text(hour+':'+min+':'+sec);
+            }else if(totalMin){
+                weevideoCurrentTime.text(min+':'+sec);
+            }else{
+                weevideoCurrentTime.text('0:'+sec);
+            }
+            
+            var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
 
-                showControls();
+            weevideoProgress.width(pos);
+            
+            if( !weevideoSeeker.hasClass('wz-drag-active') ){
+                weevideoSeeker.css({x:pos});
+            }
+            
+        })
+        
+        .on('progress',function(){
+            
+            var buffer = 0;
+
+            try{
+                buffer = this.buffered.end(0);
+            }catch(e){}
+            
+            var width = ( weevideoBackprogress.width() * ( buffer / this.duration ) );
+            
+            if( width > 0 ){
+                weevideoBufferprogress.transition( { width : width },100);
+            }
+                    
+        })
+        
+        .on('ended', function(){
+
+            showControls();
+            
+            if( !weevideoSeeker.hasClass('wz-drag-active') ){
                 
-                if( !weevideoSeeker.hasClass('wz-drag-active') ){
-                    
-                    var time = this.duration;
-                    var hour = parseInt( time / 3600, 10 );
-                    weevideoProgress.width(0);
-                    weevideoSeeker.css({x:0});
-                    
-                    if( parseInt( hour, 10 ) ){
-                        weevideoCurrentTime.text('00:00:00');
-                    }else{
-                        weevideoCurrentTime.text('00:00');
-                    }
-                    
-                    this.currentTime = 0;
-                    this.pause();
-                    
+                var time = this.duration;
+                var hour = parseInt( time / 3600, 10 );
+                weevideoProgress.width(0);
+                weevideoSeeker.css({x:0});
+                
+                if( parseInt( hour, 10 ) ){
+                    weevideoCurrentTime.text('00:00:00');
+                }else{
+                    weevideoCurrentTime.text('00:00');
                 }
-                            
-            });
+                
+                this.currentTime = 0;
+                this.pause();
+                
+            }
+                        
+        });
 
         wql.getConfig( function( error, result ){
 
             if( result.length ){
 
                 if( result[0].mute ){
-                    $( '.weevideo-volume-icon', win ).click();
+                    video[0].muted = true;
                 }
 
-                if( result[0].volume !== 1 ){
-                    video[0].volume = result[0].volume;
-                }
+                video[0].volume = result[0].volume;
 
             }else{
 
