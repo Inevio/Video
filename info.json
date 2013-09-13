@@ -34,13 +34,13 @@
             
             "template" : "main.html",
 
-            "maxizable" : false,
-            "resizable" : false,
+            "maxizable" : true,
+            "resizable" : true,
 
             "width"  : {
 
                 "default" : 620,
-                "min"     : 0,
+                "min"     : 590,
                 "max"     : 0
 
             },
@@ -48,7 +48,7 @@
             "height" : {
 
                 "default" : 460,
-                "min"     : 0,
+                "min"     : 332,
                 "max"     : 0
 
             },

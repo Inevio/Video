@@ -8,16 +8,9 @@
 }
     
 video{
-    
-    width: 620px;
-    height: 460px;
-    
-    background: #000;
-    
-}
-
-.wz-win-menu{
-    width: 620px;
+    width: 100%;
+    height: 100%;
+    background: #000; 
 }
 
 .wz-win-menu-group{
@@ -48,7 +41,7 @@ video{
 
 .weevideo-bottom-shadow{
  
-    width: 620px;   
+    width: 100%;   
     height: 138px;
     position: absolute;
     bottom: 0px;
@@ -65,7 +58,6 @@ video{
     width: 215px;
     height: 45px;
     float: left;
-    margin-left: 50px;
     padding-top: 4px;
     
     background: url('https://static.weezeel.com/app/4/light.png') 41px -2px no-repeat;
@@ -128,26 +120,26 @@ video{
 
 .weevideo-info{
 
+    width: 100%;
     position: absolute;
     bottom: 18px;
+    text-align: center;
 
 }
 
 .weevideo-info-backprogress{
 
     width: 464px;
-    float: left;
-    margin-top:4px;
+    margin: 1px 7px;
     opacity: 0;
-    
     background-color: rgba(217, 217, 217, 0.2);
+    display: inline-block;
 
 }
 
 .weevideo-info-buffer{
     
     width: 0;
-    
     background-color: rgba(217, 217, 217, 0.3);
 
 }
@@ -156,12 +148,9 @@ video{
 
     font-size: 13px;
     color: #FFF;
-    
-    width: 56px;
     height: 13px;
-    float: left;
-    margin: 0 11px;
     opacity:0;
+    display: inline-block;
 
 }
 
@@ -174,7 +163,6 @@ video{
     width: 0px;   
     position: relative;
     top: -5px;
-
     background-color: #FFF;
 
 }
@@ -220,7 +208,7 @@ video{
 
 .weevideo-top{
 
-    width: 620px;
+    width: 100%;
     position: absolute;
     top: 0px;
 
@@ -228,7 +216,7 @@ video{
 
 .weevideo-top-shadow{
     
-    width: 620px;
+    width: 100%;
     height: 102px;
     float: left;
     

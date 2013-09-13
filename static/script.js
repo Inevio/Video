@@ -32,9 +32,13 @@
             wz.structure( params[0], function( error, structure ){
                 
                 video.empty();
+
                 video.append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) );
                 video.append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) );
-                weevideoTitle.text(structure.name).add( weevideoTitle.prev() ).transition({opacity:1},250);
+
+                resizeVideo( structure.metadata.media.video.resolution.w, structure.metadata.media.video.resolution.h );
+
+                weevideoTitle.text( structure.name ).add( weevideoTitle.prev() ).transition({ opacity: 1 }, 250 );
                 video.load();
                 
             });
@@ -42,6 +46,92 @@
         }
         
     });
+
+    var resizeVideo = function( width, height ){
+
+        if( wz.tool.desktopWidth() * 0.55 / width < wz.tool.desktopHeight() * 0.7 / height ){
+
+            if( width < wz.tool.desktopWidth() * 0.55 ){
+
+                if( width < parseInt( win.css( 'min-width' ), 10 ) ){
+
+                    win.css({
+
+                        width  : parseInt( win.css( 'min-width' ), 10 ),
+                        height : parseInt( win.css( 'min-height' ), 10 )
+
+                    });
+
+                }else{
+
+                    win.css({
+
+                        width  : width,
+                        height : height
+
+                    });
+
+                }
+
+            }else{
+
+                win.css({
+
+                    width  : wz.tool.desktopWidth() * 0.55,
+                    height : height * ( wz.tool.desktopWidth() * 0.55 / width )
+
+                });
+
+            }
+
+        }else{
+
+           if( height < wz.tool.desktopHeight() * 0.7 ){
+
+                if( height < parseInt( win.css( 'min-height' ), 10 ) ){
+
+                    win.css({
+
+                        width  : parseInt( win.css( 'min-width' ), 10 ),
+                        height : parseInt( win.css( 'min-height' ), 10 )
+
+                    });
+
+                }else{
+
+                    win.css({
+
+                        width  : width,
+                        height : height
+
+                    });
+
+                }
+
+            }else{
+
+                win.css({
+
+                    width  : width * ( wz.tool.desktopHeight() * 0.7 / height ),
+                    height : wz.tool.desktopHeight() * 0.7
+
+                });
+
+            } 
+
+        }
+
+        win.deskitemX( parseInt( wz.tool.environmentWidth() / 2 - win.width() / 2 - wz.tool.environmentWidth() + wz.tool.desktopWidth(), 10 ) );
+        win.deskitemY( parseInt( wz.tool.environmentHeight() / 2 - win.height() / 2, 10 ) );
+
+        centerControls();
+
+    }
+
+    var centerControls = function(){
+        console.log(1);
+        $( '.weevideo-controls', weevideoTop ).css( 'margin-left', win.width() / 2 - $( '.weevideo-controls', weevideoTop ).outerWidth( true ) / 2 - $( '.weevideo-volume', weevideoTop ).outerWidth( true ) );
+    }
 
     var goFullscreen = function(){
 
@@ -85,19 +175,23 @@
 
     var showControls = function(){
 
-        weevideoTop.stop().clearQueue();
-        weevideoBottom.stop().clearQueue();
+        if( !win.hasClass( 'resizing' ) ){
 
-        if( isWebKit ){
-            weevideoTop.animate( { top : 0 }, 500 );
-            weevideoBottom.animate( { bottom : 0 }, 500 );
-        }else{
-            weevideoTop.transition( { top : 0 }, 500 );
-            weevideoBottom.transition( { bottom : 0 }, 500 );
+            weevideoTop.stop().clearQueue();
+            weevideoBottom.stop().clearQueue();
+
+            if( isWebKit ){
+                weevideoTop.animate( { top : 0 }, 500 );
+                weevideoBottom.animate( { bottom : 0 }, 500 );
+            }else{
+                weevideoTop.transition( { top : 0 }, 500 );
+                weevideoBottom.transition( { bottom : 0 }, 500 );
+            }
+
+            win.removeClass( 'hidden-controls' );
+            win.css( 'cursor', 'default' );
+
         }
-
-        win.removeClass( 'hidden-controls' );
-        win.css( 'cursor', 'default' );
 
     };
 
@@ -297,6 +391,15 @@
 
             }
 
+        })
+
+        .on( 'wz-resize-start', function(){
+            win.addClass( 'resizing' );
+        })
+
+        .on( 'wz-resize-end', function(){
+            win.removeClass( 'resizing' );
+            centerControls();
         })
         
         .key('space', function(){
