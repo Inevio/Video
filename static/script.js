@@ -129,8 +129,7 @@
     }
 
     var centerControls = function(){
-        console.log(1);
-        $( '.weevideo-controls', weevideoTop ).css( 'margin-left', win.width() / 2 - $( '.weevideo-controls', weevideoTop ).outerWidth( true ) / 2 - $( '.weevideo-volume', weevideoTop ).outerWidth( true ) );
+        $( '.weevideo-controls', weevideoTop ).css( 'margin-left', win.width() / 2 - $( '.weevideo-controls', weevideoTop ).width() / 2 - $( '.weevideo-volume', weevideoTop ).outerWidth( true ) );
     }
 
     var goFullscreen = function(){
@@ -399,6 +398,16 @@
 
         .on( 'wz-resize-end', function(){
             win.removeClass( 'resizing' );
+            centerControls();
+        })
+
+        .on( 'wz-maximize', function(){
+            win.addClass( 'fullscreen' );
+            centerControls();
+        })
+
+        .on( 'wz-unmaximize', function(){
+            win.removeClass( 'fullscreen' );
             centerControls();
         })
         
