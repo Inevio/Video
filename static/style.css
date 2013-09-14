@@ -17,19 +17,19 @@ video{
     padding-bottom: 8px;
 }
 
-.wz-win-fullscreen i{
-    
-    width: 12px;
-    height: 14px;
-    float: left;
-        
-    background: url('https://static.weezeel.com/app/4/sprite.png') -77px 0;
-    background-size: 150px 50px;
-    
+.wz-win-fullscreen{
+    margin-left: 5px;
 }
 
-.wz-win.fullscreen .wz-win-fullscreen i{
-    background-position: -9px -33px;
+.wz-win-fullscreen i{
+    
+    width: 9px;
+    height: 10px;
+    float: left;
+        
+    background: url('https://staticbeta.weezeel.com/app/4/sprite.png') 0 -30px;
+    background-size: 150px 50px;
+    
 }
 
 .weevideo-bar{

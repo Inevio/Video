@@ -324,34 +324,27 @@
         
         .on('enterfullscreen', function(){
 
-            win.width( $( window ).width() );
-            win.height( $(window).height() );
+            win.width( screen.width );
+            win.height( screen.height );
             win.css( 'top', 0 );
 
             win.addClass('fullscreen wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
-            $( '.weevideo-controls', win ).css( 'margin-left', ( win.width() - 155 - 138 - $( '.weevideo-controls', win ).width() ) / 2 - 10 + 'px' );
+            centerControls();
 
-            wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
             $( '.wz-win-menu', win ).css( 'border-radius', 0 );
-
-            video.css( 'border-radius', 0 );
-
-            oldWidth = win.width();
-            oldHeight = win.height();
             
         })
         
         .on('exitfullscreen', function(){
 
-            win.width( '620px' );
-            win.height( '460px' );
+            win.width( oldWidth );
+            win.height( oldHeight );
             win.css( 'top', '' );
             
-            win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '7px' , x : weevideoPositionX , y : weevideoPositionY });
-            $( '.weevideo-controls', win ).css( 'margin-left', '50px' );
+            win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
+            centerControls();
 
-            wz.fit( win, win.width() / oldWidth, win.height() / oldHeight );
-            $( '.wz-win-menu', win ).css( 'border-radius', '7px 7px 0 0' );
+            $( '.wz-win-menu', win ).css( 'border-radius', '3px 3px 0 0' );
             
         })
 
