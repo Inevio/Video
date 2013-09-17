@@ -278,7 +278,7 @@
         
         .on('mouseleave', function(){
 
-            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
+            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'maximized' ) ){
 
                 hideControls();                    
 
@@ -288,7 +288,7 @@
 
         .on('mouseenter', function(){
 
-            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'fullscreen' ) ){
+            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'maximized' ) ){
 
                 showControls();
 
@@ -328,7 +328,7 @@
             win.height( screen.height );
             win.css( 'top', 0 );
 
-            win.addClass('fullscreen wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
+            win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
             centerControls();
 
             $( '.wz-win-menu', win ).css( 'border-radius', 0 );
@@ -341,7 +341,7 @@
             win.height( oldHeight );
             win.css( 'top', '' );
             
-            win.removeClass('fullscreen wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
+            win.removeClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
             centerControls();
 
             $( '.wz-win-menu', win ).css( 'border-radius', '3px 3px 0 0' );
@@ -370,7 +370,7 @@
 
                 }
 
-                if( win.hasClass( 'fullscreen' ) && win.hasClass( 'play' ) ){
+                if( win.hasClass( 'maximized' ) && win.hasClass( 'play' ) ){
 
                     hidingControls = setTimeout( function(){
 
@@ -395,12 +395,12 @@
         })
 
         .on( 'wz-maximize', function(){
-            win.addClass( 'fullscreen' );
+            win.addClass( 'maximized' );
             centerControls();
         })
 
         .on( 'wz-unmaximize', function(){
-            win.removeClass( 'fullscreen' );
+            win.removeClass( 'maximized' );
             centerControls();
         })
         
