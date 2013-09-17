@@ -146,10 +146,11 @@
             weevideoPositionY = win.css( 'y' );
             oldWidth          = win.width();
             oldHeight         = win.height();
-            
+
             if( win[0].requestFullScreen ){ win[0].requestFullScreen(); }
-            if( win[0].webkitRequestFullScreen ){ win[0].webkitRequestFullScreen(); }
-            if( win[0].mozRequestFullScreen ){ win[0].mozRequestFullScreen(); }
+            else if( win[0].webkitRequestFullScreen ){ win[0].webkitRequestFullScreen(); }
+            else if( win[0].mozRequestFullScreen ){ win[0].mozRequestFullScreen(); }
+            else{ alert( lang.fullscreenSupport, null, win.data().win ); }
             
         }
 
@@ -324,12 +325,12 @@
         
         .on('enterfullscreen', function(){
 
+            win.css( 'top', 0 );
             win.width( screen.width );
             win.height( screen.height );
-            win.css( 'top', 0 );
 
-            win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
             centerControls();
+            win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
 
             $( '.wz-win-menu', win ).css( 'border-radius', 0 );
             
