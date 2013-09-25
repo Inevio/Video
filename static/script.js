@@ -578,19 +578,11 @@
 
         wql.getConfig( function( error, result ){
 
-            if( result.length ){
-
-                if( result[0].mute ){
-                    video[0].muted = true;
-                }
-
-                video[0].volume = result[0].volume;
-
-            }else{
-
-                wql.insertConfig();
-
+            if( result[0].mute ){
+                video[0].muted = true;
             }
+
+            video[0].volume = result[0].volume;
 
         });
         
