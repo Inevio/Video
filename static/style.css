@@ -13,6 +13,10 @@ video{
     background: #000; 
 }
 
+.wz-win-menu{
+    text-align: center;
+}
+
 .wz-win-menu-group{
     padding-bottom: 9px;
 }
@@ -57,8 +61,8 @@ video{
     
     width: 157px;
     height: 43px;
-    float: left;
     padding-top: 6px;
+    display: inline-block;
     
     background: url('https://static.weezeel.com/app/4/light.png') 14px -2px no-repeat;
     background-size: 128px 51px;

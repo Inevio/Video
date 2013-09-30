@@ -124,12 +124,6 @@
         win.deskitemX( parseInt( wz.tool.environmentWidth() / 2 - win.width() / 2 - wz.tool.environmentWidth() + wz.tool.desktopWidth(), 10 ) );
         win.deskitemY( parseInt( wz.tool.environmentHeight() / 2 - win.height() / 2, 10 ) );
 
-        centerControls();
-
-    }
-
-    var centerControls = function(){
-        $( '.weevideo-controls', weevideoTop ).css( 'margin-left', win.width() / 2 - $( '.weevideo-controls', weevideoTop ).width() / 2 - $( '.weevideo-volume', weevideoTop ).outerWidth( true ) );
     }
 
     var goFullscreen = function(){
@@ -329,7 +323,6 @@
             win.width( screen.width );
             win.height( screen.height );
 
-            centerControls();
             win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
 
             $( '.wz-win-menu', win ).css( 'border-radius', 0 );
@@ -343,7 +336,6 @@
             win.css( 'top', '' );
             
             win.removeClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
-            centerControls();
 
             $( '.wz-win-menu', win ).css( 'border-radius', '3px 3px 0 0' );
             
@@ -392,17 +384,14 @@
 
         .on( 'wz-resize-end', function(){
             win.removeClass( 'resizing' );
-            centerControls();
         })
 
         .on( 'wz-maximize', function(){
             win.addClass( 'maximized' );
-            centerControls();
         })
 
         .on( 'wz-unmaximize', function(){
             win.removeClass( 'maximized' );
-            centerControls();
         })
         
         .key('space', function(){
