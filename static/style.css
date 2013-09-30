@@ -64,7 +64,7 @@ video{
     padding-top: 6px;
     display: inline-block;
     
-    background: url('https://static.weezeel.com/app/4/light.png') 14px -2px no-repeat;
+    background: url('https://static.weezeel.com/app/4/light.png') 13px -2px no-repeat;
     background-size: 128px 51px;
 
 }
@@ -85,6 +85,10 @@ video{
     background-size: 136px 31px;
     opacity: 0.7;
     
+}
+
+.weevideo-controls-forward:hover i{
+    opacity: 1;
 }
 
 .weevideo-controls-play{
@@ -124,6 +128,10 @@ video{
     background-size: 136px 31px;
     opacity: 0.7;
     
+}
+
+.weevideo-controls-rewind:hover i{
+    opacity: 1;
 }
 
 .weevideo-info{
