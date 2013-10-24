@@ -31,7 +31,7 @@ video{
     height: 10px;
     float: left;
         
-    background: url('https://static.weezeel.com/app/4/sprite.png') -88px -16px no-repeat;
+    background: url('@static/sprite.png') -88px -16px no-repeat;
     background-size: 136px 31px;
     
 }
@@ -64,7 +64,7 @@ video{
     padding-top: 6px;
     display: inline-block;
     
-    background: url('https://static.weezeel.com/app/4/light.png') 13px -2px no-repeat;
+    background: url('@static/light.png') 13px -2px no-repeat;
     background-size: 128px 51px;
 
 }
@@ -81,7 +81,7 @@ video{
     height: 16px;
     float: left;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') -76px 0 no-repeat;
+    background: url('@static/sprite.png') -76px 0 no-repeat;
     background-size: 136px 31px;
     opacity: 0.7;
     
@@ -104,7 +104,7 @@ video{
     height: 28px;
     float: left;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') 0 0 no-repeat;
+    background: url('@static/sprite.png') 0 0 no-repeat;
     background-size: 136px 31px;
     
 }
@@ -124,7 +124,7 @@ video{
     height: 16px;
     float: left;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') -50px 0 no-repeat;
+    background: url('@static/sprite.png') -50px 0 no-repeat;
     background-size: 136px 31px;
     opacity: 0.7;
     
@@ -191,7 +191,7 @@ video{
     top: -18px;
     left: -9px;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') -118px 0 no-repeat;
+    background: url('@static/sprite.png') -118px 0 no-repeat;
     background-size: 136px 31px; 
 
 }
@@ -204,7 +204,7 @@ video{
 
     opacity: 0;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') -102px 0 no-repeat;
+    background: url('@static/sprite.png') -102px 0 no-repeat;
     background-size: 136px 31px;
     
 }
@@ -261,7 +261,7 @@ video{
     height: 15px;
     float: left;
     
-    background: url('https://static.weezeel.com/app/4/sprite.png') -50px -16px no-repeat;
+    background: url('@static/sprite.png') -50px -16px no-repeat;
     background-size: 136px 31px;
     
 }
@@ -297,7 +297,7 @@ video{
     top: -11px;
     position: relative;
 
-    background: url('https://static.weezeel.com/app/4/sprite.png') -102px -11px no-repeat;
+    background: url('@static/sprite.png') -102px -11px no-repeat;
     background-size: 136px 31px;
 
 }
