@@ -1,4 +1,5 @@
     
+    var win                     = $( this );
     var video                   = $('video',win);
     var weevideoTop             = $('.weevideo-top',win);
     var weevideoBottom          = $('.weevideo-bottom-shadow',win);
