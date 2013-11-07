@@ -25,7 +25,7 @@
     win.on( 'app-param', function( e, params ){
 
         if( win.hasClass( 'wz-win-minimized' ) ){
-            win.removeClass( 'wz-win-minimized' );
+            win.removeClass( 'wz-win-minimized' ); // To Do -> Quitar esto y hacerlo usando el API
         }
 
         if( params && params.length ){
