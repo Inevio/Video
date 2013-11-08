@@ -1,6 +1,6 @@
     
     var win   = $( this );
-    var video = $('video',win);
+    var video = $( 'video',win );
     
     if( params.command === 'openFile' ){
 
@@ -21,4 +21,14 @@
 
     video.on('durationchange', function(){
         video[ 0 ].play();
+    });
+
+    win.on( 'remoteMessage', function(){
+
+        if( video[ 0 ].paused ){
+            video[ 0 ].play();
+        }else{
+            video[ 0 ].pause();
+        }
+        
     });

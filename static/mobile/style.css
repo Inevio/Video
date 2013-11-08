@@ -2,4 +2,57 @@
 .wz-win{
     background:#000;
     color: #fff;
+    box-sizing: border-box;
+    padding: 47px 26px;
+}
+
+.weevideo-title{
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.weevideo-bar{
+    width: 100%;
+    height: 6px;
+    background: #fff;
+}
+
+.weevideo-info-backprogress{
+    margin: 35px 0px 45px;
+}
+
+.weevideo-controls{
+    text-align: center;
+}
+
+.weevideo-controls-rewind{
+    display: inline-block;
+    background: #f00;
+    height: 43px;
+    margin: 9px 0px;
+    width: 72px;
+}
+
+.weevideo-controls-play{
+    display: inline-block;
+    background: #f00;
+    height: 61px;
+    width: 60px;
+    margin: 0px 38px;
+}
+
+.weevideo-controls-forward{
+    display: inline-block;
+    background: #f00;
+    height: 43px;
+    margin: 9px 0px;
+    width: 72px;
+}
+
+.weevideo-volume{
+    background: #0f0;
+    width: 280px;
+    margin: 40px auto 0px;
 }
