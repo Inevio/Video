@@ -80,10 +80,11 @@
 
                 "main" : {
                     
-                    "template" : "mainMobile.html",
-                    "css"      : ["mobile/style.css"],
-                    "script"   : ["mobile/script.js"],
-                    "start"    : []
+                    "template"    : "mainMobile.html",
+                    "orientation" : "landscape",
+                    "css"         : ["mobile/style.css"],
+                    "script"      : ["mobile/script.js"],
+                    "start"       : []
 
                 }
 

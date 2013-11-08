@@ -19,8 +19,45 @@
     background: #fff;
 }
 
-.weevideo-info-backprogress{
+.weevideo-info{
     margin: 35px 0px 45px;
+}
+
+.weevideo-info-backprogress{
+    position: relative;
+}
+
+.weevideo-info-buffer{
+    width: 0%;
+    height: 6px;
+    background: rgba( 125, 129, 190, 0.5 );
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.weevideo-info-progress{
+    width: 0%;
+    height: 6px;
+    background: #7D81BE;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.weevideo-info-data{
+    height: 17px;
+    line-height: 17px;
+    font-size: 17px;
+    margin-top: 6px;
+}
+
+.weevideo-info-data.currentTime{
+    float: left;
+}
+
+.weevideo-info-data.totalTime{
+    float: right;
 }
 
 .weevideo-controls{
@@ -41,6 +78,10 @@
     height: 61px;
     width: 60px;
     margin: 0px 38px;
+}
+
+.wz-win.play .weevideo-controls-play{
+    background: #0f0;
 }
 
 .weevideo-controls-forward{
