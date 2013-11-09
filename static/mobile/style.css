@@ -1,6 +1,10 @@
 
 .wz-win{
-    background:#000;
+    background:#383838;
+    background-image: -moz-linear-gradient(50% 0% -90deg,rgba(56,56,56,1) 0%,rgba(46,46,46,1) 100%); 
+    background-image: -webkit-linear-gradient(-90deg,rgba(56,56,56,1) 0%,rgba(46,46,46,1) 100%);
+    background-image: -o-linear-gradient(-90deg,rgba(56,56,56,1) 0%,rgba(46,46,46,1) 100%);
+    background-image: linear-gradient(0deg,rgba(46,46,46,1) 0%,rgba(56,56,56,1) 100%);
     color: #fff;
     box-sizing: border-box;
     padding: 47px 26px;
@@ -62,34 +66,62 @@
 
 .weevideo-controls{
     text-align: center;
+    height: 63px;
 }
 
 .weevideo-controls-rewind{
     display: inline-block;
-    background: #f00;
-    height: 43px;
-    margin: 9px 0px;
-    width: 72px;
+    height: 45px;
+    width: 73px;
+    vertical-align: 70%;
+}
+
+.weevideo-controls-rewind i{
+    background-image: url('@static/mobile/sprite.png');
+    background-size: 259px 63px;
+    background-position: -113px 0px;
+    display: inline-block;
+    height: 45px;
+    width: 73px;
 }
 
 .weevideo-controls-play{
     display: inline-block;
-    background: #f00;
-    height: 61px;
-    width: 60px;
+    height: 63px;
+    width: 58px;
     margin: 0px 38px;
+    text-align: center;
 }
 
-.wz-win.play .weevideo-controls-play{
-    background: #0f0;
+.weevideo-controls-play i{
+    background-image: url('@static/mobile/sprite.png');
+    background-size: 259px 63px;
+    background-position: 0px 0px;
+    height: 63px;
+    width: 55px;
+    display: inline-block;
+}
+
+.wz-win.play .weevideo-controls-play i{
+    background-position: -55px 0px;
+    height: 63px;
+    width: 58px;
 }
 
 .weevideo-controls-forward{
     display: inline-block;
-    background: #f00;
-    height: 43px;
-    margin: 9px 0px;
-    width: 72px;
+    height: 45px;
+    width: 73px;
+    vertical-align: 70%;
+}
+
+.weevideo-controls-forward i{
+    background-image: url('@static/mobile/sprite.png');
+    background-size: 259px 63px;
+    background-position: -186px 0px;
+    height: 45px;
+    width: 73px;
+    display: inline-block;
 }
 
 .weevideo-volume{

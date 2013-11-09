@@ -1,6 +1,8 @@
 
     var win         = $( this );
     var play        = $( '.weevideo-controls-play', win );
+    var rewind      = $( '.weevideo-controls-rewind', win );
+    var forward     = $( '.weevideo-controls-forward', win );
     var title       = $( '.weevideo-title', win );
     var progressBar = $( '.weevideo-info-progress', win );
     var bufferBar   = $( '.weevideo-info-buffer', win );
@@ -49,6 +51,8 @@
                 .stop()
                 .animate( { width : ( ( value + 2 ) / time ) * 100 + '%' }, 2000 );
 
+            win.addClass('play');
+
         }else{
 
             progressBar
@@ -69,7 +73,8 @@
 
     };
 
-    play.on( 'tap', function(){
+    play
+    .on( 'tap', function(){
 
         if( win.hasClass('play') ){
 
@@ -83,6 +88,16 @@
 
         }
         
+    });
+
+    rewind
+    .on( 'hold', function(){
+        console.log('rewind');
+    });
+
+    forward
+    .on( 'hold', function(){
+        console.log('forward');
     });
 
     win.on( 'tvMessage', function( e, info, data ){
@@ -113,8 +128,6 @@
         }*/
 
     });
-
-    win.addClass('play');
 
     if( params.command === 'openFile' ){
 
