@@ -129,3 +129,30 @@
     width: 280px;
     margin: 40px auto 0px;
 }
+
+.weevideo-volume-max{
+    position: relative;
+}
+
+.weevideo-seeker{
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba( 0, 255, 0, 0.5 );
+    position: absolute;
+    top: -9px;
+    left: -9px;
+}
+
+.weevideo-pearl{
+    display: inline-block;
+    margin: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.5 );
+    background-image: -webkit-linear-gradient( bottom, #D1D1D1, #FFFFFF );
+    background-image: -moz-linear-gradient( bottom, #D1D1D1, #FFFFFF );
+    background-image: -o-linear-gradient( bottom, #D1D1D1, #FFFFFF );
+    background-image: linear-gradient( to top, #D1D1D1, #FFFFFF );
+}
