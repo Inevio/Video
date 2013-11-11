@@ -138,7 +138,7 @@
     width: 24px;
     height: 24px;
     border-radius: 6px;
-    background: rgba( 0, 255, 0, 0.5 );
+    /*background: rgba( 0, 255, 0, 0.5 );*/
     position: absolute;
     top: -9px;
     left: -9px;

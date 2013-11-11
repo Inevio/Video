@@ -5,9 +5,11 @@
     var forward     = $( '.weevideo-controls-forward', win );
     var title       = $( '.weevideo-title', win );
     var progressBar = $( '.weevideo-info-progress', win );
+    var pearlTime   = $( '.weevideo-info-seeker', win );
     var bufferBar   = $( '.weevideo-info-buffer', win );
     var currentTime = $( '.currentTime', win );
     var totalTime   = $( '.totalTime', win );
+    var infoWidth   = $( '.weevideo-info-backprogress', win ).width();
     var time        = 0;
     var totalHour   = 0;
     var totalMin    = 0;
@@ -51,6 +53,11 @@
                 .stop()
                 .animate( { width : ( ( value + 2 ) / time ) * 100 + '%' }, 2000 );
 
+            pearlTime
+                .clearQueue()
+                .stop()
+                .animate( { x : ( ( value + 2 ) / time ) * infoWidth + 'px' }, 2000 );
+
             win.addClass('play');
 
         }else{
@@ -59,6 +66,11 @@
                 .clearQueue()
                 .stop()
                 .animate( { width : ( value / time ) * 100 + '%' }, 200 );
+
+            pearlTime
+                .clearQueue()
+                .stop()
+                .animate( { x : ( value / time ) * infoWidth + 'px' }, 200 );
 
         }
 
@@ -100,7 +112,8 @@
         console.log('forward');
     });
 
-    win.on( 'tvMessage', function( e, info, data ){
+    win
+    .on( 'tvMessage', function( e, info, data ){
         
         var newTime = data[ 0 ][ 0 ];
         var cmd     = data[ 0 ][ 1 ];
@@ -127,6 +140,9 @@
             video[ 0 ].pause();
         }*/
 
+    })
+    .on( 'wz-dragmove', function( e, x, y ){
+        console.log( arguments );
     });
 
     if( params.command === 'openFile' ){
