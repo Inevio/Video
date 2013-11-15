@@ -135,18 +135,18 @@
 }
 
 .weevideo-seeker{
-    width: 24px;
-    height: 24px;
+    width: 12px;
+    height: 12px;
+    padding: 6px;
     border-radius: 6px;
     /*background: rgba( 0, 255, 0, 0.5 );*/
     position: absolute;
     top: -9px;
-    left: -9px;
+    left: -6px;
 }
 
 .weevideo-pearl{
     display: inline-block;
-    margin: 6px;
     width: 12px;
     height: 12px;
     border-radius: 6px;

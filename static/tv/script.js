@@ -1,8 +1,9 @@
     
-    var win     = $( this );
-    var video   = $( 'video',win );
-    var cmdTime = 0;
-    var timeNow = 0;
+    var win      = $( this );
+    var video    = $( 'video',win );
+    var cmdTime  = 0;
+    var seekTime = 0;
+    var timeNow  = 0;
 
     var interval = 0;
 
@@ -63,6 +64,7 @@
 
         var newTime = data[ 0 ][ 0 ];
         var cmd     = data[ 0 ][ 1 ];
+        var arg     = data[ 0 ][ 2 ];
 
         if( newTime < cmdTime ){
             return false;
@@ -72,8 +74,15 @@
 
         if( cmd === 'play' ){
             video[ 0 ].play();
-        }else{
+        }else if( cmd === 'pause' ){
             video[ 0 ].pause();
+        }else if( cmd === 'currentTime' && newTime > seekTime + 200 ){
+            
+            seekTime               = newTime;
+            video[ 0 ].currentTime = arg;
+            
+        }else if( cmd === 'volume' ){
+            video[ 0 ].volume = arg;
         }
 
     });

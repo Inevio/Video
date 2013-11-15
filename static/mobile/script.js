@@ -4,17 +4,24 @@
     var rewind      = $( '.weevideo-controls-rewind', win );
     var forward     = $( '.weevideo-controls-forward', win );
     var title       = $( '.weevideo-title', win );
+    var backBar     = $( '.weevideo-info-backprogress', win );
     var progressBar = $( '.weevideo-info-progress', win );
     var pearlTime   = $( '.weevideo-info-seeker', win );
     var bufferBar   = $( '.weevideo-info-buffer', win );
     var currentTime = $( '.currentTime', win );
     var totalTime   = $( '.totalTime', win );
-    var infoWidth   = $( '.weevideo-info-backprogress', win ).width();
+    var infoWidth   = backBar.width();
+    var volumeWidth = $( '.weevideo-volume-max', win ).width();
+    var pearlVolume = $( '.weevideo-volume-seeker', win );
     var time        = 0;
+    var nowTime     = 0;
     var totalHour   = 0;
     var totalMin    = 0;
     var cmdTime     = 0;
     var nextUpdate  = 0;
+    var volume      = 1;
+    var seeking     = false;
+    var holding     = false;
 
     var toTimeString = function( value ){
                         
@@ -40,23 +47,28 @@
     var updateProgressBar = function( value, playing ){
 
         clearInterval( nextUpdate );
+
         currentTime.text( toTimeString( value ) );
 
         if( playing ){
 
             nextUpdate = setTimeout( function(){
+
+                nowTime = value + 1;
+
                 currentTime.text( toTimeString( value + 1 ) );
+
             }, 1000 );
 
             progressBar
                 .clearQueue()
                 .stop()
-                .animate( { width : ( ( value + 2 ) / time ) * 100 + '%' }, 2000 );
+                .animate( { width : ( ( value + 2 ) / time ) * 100 + '%' }, 2000, 'linear' );
 
             pearlTime
                 .clearQueue()
                 .stop()
-                .animate( { x : ( ( value + 2 ) / time ) * infoWidth + 'px' }, 2000 );
+                .animate( { x : ( ( value + 2 ) / time ) * infoWidth + 'px' }, 2000, 'linear' );
 
             win.addClass('play');
 
@@ -85,6 +97,38 @@
 
     };
 
+    var startHolding = function( type ){
+
+        clearInterval( holding );
+        
+        type = type === 'forward';
+
+        if( type ){
+            forward.trigger('tap');
+        }else{
+            rewind.trigger('tap');
+        }
+
+        holding = setInterval( function(){
+
+            if( type ){
+                forward.trigger('tap');
+            }else{
+                rewind.trigger('tap');
+            }
+
+        }, 500 );
+
+    };
+
+    var updateProgressBarInstant = function( x ){
+
+        pearlTime.css( 'x', x * infoWidth );            
+        progressBar.css( 'width', x * infoWidth );
+        currentTime.text( toTimeString( x * time ) );
+
+    };
+
     play
     .on( 'tap', function(){
 
@@ -103,13 +147,48 @@
     });
 
     rewind
+    .on( 'tap', function(){
+
+        nowTime = nowTime - 10;
+
+        if( nowTime < 0 ){
+            nowTime = 0;
+        }
+
+        updateProgressBarInstant( nowTime / time );
+        remote.send( Date.now(), 'currentTime', nowTime );
+
+    })
+
     .on( 'hold', function(){
-        console.log('rewind');
+        startHolding('rewind');
     });
 
     forward
+    .on( 'tap', function(){
+
+        nowTime = nowTime + 10;
+
+        if( nowTime > time ){
+            nowTime = time;
+        }
+
+        updateProgressBarInstant( nowTime / time );
+        remote.send( Date.now(), 'currentTime', nowTime );
+
+    })
+
     .on( 'hold', function(){
-        console.log('forward');
+        startHolding('forward');
+    });
+
+    rewind.add( forward )
+    .on( 'touchend', function(){
+
+        clearInterval( holding );
+        
+        holding = false;
+
     });
 
     win
@@ -127,7 +206,11 @@
         cmdTime = newTime;
 
         if( cmd === 'timeupdate' ){
+
+            nowTime = value;
+
             updateProgressBar( value, playing );
+
         }else if( cmd === 'durationchange' ){
 
             time = value;
@@ -136,14 +219,45 @@
 
         }else if( cmd === 'progress' ){
             updateBuffer( value );
+        }else if( cmd === 'volume' ){
+            volume = value;
         }/*else{
             video[ 0 ].pause();
         }*/
 
     })
-    .on( 'wz-dragmove', function( e, x, y ){
-        console.log( arguments );
+    .on( 'wz-dragend', '.weevideo-info-backprogress', function(){
+        
+        if( seeking ){
+
+            seeking = false;
+            remote.send( Date.now(), 'currentTime', time * ( progressBar.width() / infoWidth ) );
+            remote.send( Date.now(), 'play' );
+
+        }
+
+    })
+
+    .on( 'wz-dragmove', '.weevideo-info-backprogress', function( e, x, y ){
+
+        if( !seeking ){
+
+            seeking = true;
+            remote.send( Date.now(), 'pause' );
+
+        }
+
+        updateProgressBarInstant( x );
+        remote.send( Date.now(), 'currentTime', x * time );
+        
+    })
+
+    .on( 'wz-dragmove', '.weevideo-volume-max', function( e, x, y ){
+        remote.send( Date.now(), 'volume', x );
+        console.log(x);
     });
+
+    pearlVolume.css( 'x', volumeWidth + 'px' );
 
     if( params.command === 'openFile' ){
 
