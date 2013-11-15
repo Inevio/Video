@@ -254,7 +254,6 @@
 
     .on( 'wz-dragmove', '.weevideo-volume-max', function( e, x, y ){
         remote.send( Date.now(), 'volume', x );
-        console.log(x);
     });
 
     pearlVolume.css( 'x', volumeWidth + 'px' );
