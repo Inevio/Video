@@ -31,7 +31,7 @@
         var sec  = parseInt( tmp % 60, 10 );
         
         if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
-        if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
+        if( ( totalHour > 0 || totalMin > 10 ) && min < 10 ){ min  = '0' + min; }
         if( sec < 10 ){ sec  = '0'+sec; }
                     
         if( totalHour ){
@@ -254,11 +254,9 @@
 
     .on( 'wz-dragmove', '.weevideo-volume-max', function( e, x, y ){
         remote.send( Date.now(), 'volume', x );
-    });
+    })
 
-    pearlVolume.css( 'x', volumeWidth + 'px' );
-
-    if( params.command === 'openFile' ){
+    .on( 'app-param', function( e, params ){
 
         wz.structure( params.data.id , function( error, structure ){
 
@@ -272,5 +270,6 @@
 
         });
 
-    }
+    });
 
+    pearlVolume.css( 'x', volumeWidth + 'px' );
