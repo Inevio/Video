@@ -4,7 +4,7 @@
     var cmdTime  = 0;
     var seekTime = 0;
     var timeNow  = 0;
-
+    var minimize = false;
     var interval = 0;
 
     var sendTime = function(){
@@ -30,7 +30,7 @@
     };
 
     video
-    .on('durationchange', function(){
+    .on( 'durationchange', function(){
 
         remote.send( Date.now(), 'durationchange', this.duration );
 
@@ -85,6 +85,22 @@
             video[ 0 ].volume = arg;
         }
 
+    })
+
+    .on( 'wz-minimize', function(){
+        
+        minimize = !video[ 0 ].paused;
+
+        video[ 0 ].pause();
+
+    })
+
+    .on( 'wz-unminimize', function(){
+        
+        if( minimize ){
+            video[ 0 ].play();
+        }
+        
     });
 
     if( params.command === 'openFile' ){
