@@ -12,6 +12,7 @@
     var totalTime   = $( '.totalTime', win );
     var infoWidth   = backBar.width();
     var volumeWidth = $( '.weevideo-volume-max', win ).width();
+    var volumeBar   = $( '.weevideo-volume-current', win );
     var pearlVolume = $( '.weevideo-volume-seeker', win );
     var time        = 0;
     var nowTime     = 0;
@@ -253,7 +254,10 @@
     })
 
     .on( 'wz-dragmove', '.weevideo-volume-max', function( e, x, y ){
+
+        volumeBar.width( x * 100 + '%' );
         remote.send( Date.now(), 'volume', x );
+
     })
 
     .on( 'app-param', function( e, params ){

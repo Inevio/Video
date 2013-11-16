@@ -130,6 +130,10 @@
     margin: 40px auto 0px;
 }
 
+.weevideo-volume-current{
+    background: #7d81be;
+}
+
 .weevideo-volume-max{
     position: relative;
 }
