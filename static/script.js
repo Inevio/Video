@@ -28,21 +28,17 @@
             win.removeClass( 'wz-win-minimized' ); // To Do -> Quitar esto y hacerlo usando el API
         }
 
-        if( params && params.length ){
-        
-            wz.structure( params[0], function( error, structure ){
-                
-                video.empty();
+        if( params && params.command === 'openFile' ){
+            
+            video.empty();
 
-                video.append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) );
-                video.append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) );
+            video.append( $('<source></source>').attr('type','video/webm').attr('src', params.data.formats.webm.url) );
+            video.append( $('<source></source>').attr('type','video/mp4').attr('src', params.data.formats.mp4.url) );
 
-                resizeVideo( structure.metadata.media.video.resolution.w, structure.metadata.media.video.resolution.h );
+            resizeVideo( params.data.metadata.media.video.resolution.w, params.data.metadata.media.video.resolution.h );
 
-                weevideoTitle.text( structure.name ).add( weevideoTitle.prev() ).transition({ opacity: 1 }, 250 );
-                video.load();
-                
-            });
+            weevideoTitle.text( params.data.name ).add( weevideoTitle.prev() ).transition({ opacity: 1 }, 250 );
+            video.load();
             
         }
         
