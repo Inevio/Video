@@ -193,40 +193,6 @@
     });
 
     win
-    .on( 'tvMessage', function( e, info, data ){
-        
-        var newTime = data[ 0 ][ 0 ];
-        var cmd     = data[ 0 ][ 1 ];
-        var value   = data[ 0 ][ 2 ];
-        var playing = data[ 0 ][ 3 ];
-
-        if( newTime < cmdTime ){
-            return false;
-        }
-
-        cmdTime = newTime;
-
-        if( cmd === 'timeupdate' ){
-
-            nowTime = value;
-
-            updateProgressBar( value, playing );
-
-        }else if( cmd === 'durationchange' ){
-
-            time = value;
-
-            totalTime.text( toTimeString( time ) );
-
-        }else if( cmd === 'progress' ){
-            updateBuffer( value );
-        }else if( cmd === 'volume' ){
-            volume = value;
-        }/*else{
-            video[ 0 ].pause();
-        }*/
-
-    })
     .on( 'wz-dragend', '.weevideo-info-backprogress', function(){
         
         if( seeking ){

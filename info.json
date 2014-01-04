@@ -90,33 +90,6 @@
 
             }
 
-        },
-
-        "tv" : {
-
-            "primary" : "main",
-            "service" : [],
-            "common"  : {
-
-                "css"    : [],
-                "script" : [],
-                "start"  : []
-
-            },
-
-            "view" : {
-
-                "main" : {
-                    
-                    "template" : "mainTv.html",
-                    "css"      : ["tv/style.css"],
-                    "script"   : ["tv/script.js"],
-                    "start"    : []
-
-                }
-                
-            }
-
         }
 
     },
