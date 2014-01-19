@@ -375,19 +375,19 @@
 
         })
 
-        .on( 'wz-resize-start', function(){
+        .on( 'ui-view-resize-start', function(){
             win.addClass( 'resizing' );
         })
 
-        .on( 'wz-resize-end', function(){
+        .on( 'ui-view-resize-end', function(){
             win.removeClass( 'resizing' );
         })
 
-        .on( 'wz-maximize', function(){
+        .on( 'ui-view-maximize', function(){
             win.addClass( 'maximized' );
         })
 
-        .on( 'wz-unmaximize', function(){
+        .on( 'ui-view-unmaximize', function(){
             win.removeClass( 'maximized' );
         })
         
