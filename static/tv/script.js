@@ -107,7 +107,7 @@
 
         if( params.command === 'openFile' ){
 
-            wz.structure( params.data.id , function( error, structure ){
+            wz.fs( params.data.id , function( error, structure ){
 
                 // To Do -> Error
                 

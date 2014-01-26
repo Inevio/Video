@@ -228,7 +228,7 @@
 
     .on( 'app-param', function( e, params ){
 
-        wz.structure( params.data.id , function( error, structure ){
+        wz.fs( params.data.id , function( error, structure ){
 
             time      = structure.metadata.media.duration.seconds;
             totalHour = parseInt( time / 3600, 10 );
