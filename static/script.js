@@ -1,26 +1,26 @@
     
-    var win                     = $( this );
-    var video                   = $('video',win);
-    var weevideoTop             = $('.weevideo-top',win);
-    var weevideoBottom          = $('.weevideo-bottom-shadow',win);
-    var weevideoCurrentTime     = $('.currentTime',win);
-    var weevideoTotalTime       = $('.totalTime',win);
-    var weevideoProgress        = $('.weevideo-info-progress',win);
-    var weevideoBackprogress    = $('.weevideo-info-backprogress',win);
-    var weevideoBufferprogress  = $('.weevideo-info-buffer',win);
-    var weevideoSeeker          = $('.weevideo-info-seeker',win);
-    var weevideoTitle           = $('.weevideo-title-text',win);
-    var weevideoVolume          = $('.weevideo-volume-current',win);
-    var weevideoVolumeSeeker    = $('.weevideo-volume-seeker',win);
-    var weevideoMaxVolume       = $('.weevideo-volume-max',win);
-    var weevideoPositionX       = 0;
-    var weevideoPositionY       = 0;
-    var oldWidth                = 0;
-    var oldHeight               = 0;
-    var hidingControls          = 0;
-    var prevClientX             = 0;
-    var prevClientY             = 0;
-    var isWebKit                = /webkit/i.test( navigator.userAgent );
+    var win                    = $( this );
+    var video                  = $('video',win);
+    var weevideoTop            = $('.weevideo-top',win);
+    var weevideoBottom         = $('.weevideo-bottom-shadow',win);
+    var weevideoCurrentTime    = $('.currentTime',win);
+    var weevideoTotalTime      = $('.totalTime',win);
+    var weevideoProgress       = $('.weevideo-info-progress',win);
+    var weevideoBackprogress   = $('.weevideo-info-backprogress',win);
+    var weevideoBufferprogress = $('.weevideo-info-buffer',win);
+    var weevideoSeeker         = $('.weevideo-info-seeker',win);
+    var weevideoTitle          = $('.weevideo-title-text',win);
+    var weevideoVolume         = $('.weevideo-volume-current',win);
+    var weevideoVolumeSeeker   = $('.weevideo-volume-seeker',win);
+    var weevideoMaxVolume      = $('.weevideo-volume-max',win);
+    var weevideoPositionX      = 0;
+    var weevideoPositionY      = 0;
+    var oldWidth               = 0;
+    var oldHeight              = 0;
+    var hidingControls         = 0;
+    var prevClientX            = 0;
+    var prevClientY            = 0;
+    var isWebKit               = /webkit/i.test( navigator.userAgent );
     
     win.on( 'app-param', function( e, params ){
 
@@ -114,14 +114,14 @@
 
                 });
 
-            } 
+            }
 
         }
 
         win.deskitemX( parseInt( wz.tool.environmentWidth() / 2 - win.width() / 2 - wz.tool.environmentWidth() + wz.tool.desktopWidth(), 10 ) );
         win.deskitemY( parseInt( wz.tool.environmentHeight() / 2 - win.height() / 2, 10 ) );
 
-    }
+    };
 
     var goFullscreen = function(){
 
