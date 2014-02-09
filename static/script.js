@@ -24,8 +24,8 @@
     
     win.on( 'app-param', function( e, params ){
 
-        if( win.hasClass( 'wz-win-minimized' ) ){
-            win.removeClass( 'wz-win-minimized' ); // To Do -> Quitar esto y hacerlo usando el API
+        if( win.hasClass( 'wz-view-minimized' ) ){
+            win.removeClass( 'wz-view-minimized' ); // To Do -> Quitar esto y hacerlo usando el API
         }
 
         if( params && params.command === 'openFile' ){
@@ -262,7 +262,7 @@
             
         })
         
-        .on('click', '.wz-win-fullscreen', function(){
+        .on('click', '.wz-view-fullscreen', function(){
 
             goFullscreen();
             
@@ -322,7 +322,7 @@
 
             win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
 
-            $( '.wz-win-menu', win ).css( 'border-radius', 0 );
+            $( '.wz-view-menu', win ).css( 'border-radius', 0 );
             
         })
         
@@ -334,7 +334,7 @@
             
             win.removeClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
 
-            $( '.wz-win-menu', win ).css( 'border-radius', '3px 3px 0 0' );
+            $( '.wz-view-menu', win ).css( 'border-radius', '3px 3px 0 0' );
             
         })
 

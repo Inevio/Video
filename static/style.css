@@ -1,5 +1,5 @@
 
-.wz-win{
+.wz-view{
     background:#000;
 }
 
@@ -13,19 +13,19 @@ video{
     background: #000; 
 }
 
-.wz-win-menu{
+.wz-view-menu{
     text-align: center;
 }
 
-.wz-win-menu-group{
+.wz-view-menu-group{
     padding-bottom: 9px;
 }
 
-.wz-win-fullscreen{
+.wz-view-fullscreen{
     margin-left: 5px;
 }
 
-.wz-win-fullscreen i{
+.wz-view-fullscreen i{
     
     width: 9px;
     height: 10px;
@@ -109,7 +109,7 @@ video{
     
 }
 
-.wz-win.play .weevideo-controls-play i{
+.wz-view.play .weevideo-controls-play i{
     background-position: -25px 0;
 }
 
@@ -266,7 +266,7 @@ video{
     
 }
 
-.wz-win.muted .weevideo-volume-icon i{
+.wz-view.muted .weevideo-volume-icon i{
     background-position: -69px -16px;
 }
 
