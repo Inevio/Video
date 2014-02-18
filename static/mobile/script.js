@@ -124,7 +124,7 @@
 
     var updateProgressBarInstant = function( x ){
 
-        pearlTime.css( 'x', x * infoWidth );            
+        pearlTime.css( 'x', x * infoWidth );
         progressBar.css( 'width', x * infoWidth );
         currentTime.text( toTimeString( x * time ) );
 

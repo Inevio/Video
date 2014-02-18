@@ -1,9 +1,10 @@
 
-var win = $( this );
+var win            = $( this );
+var volumePosition = 0;
 
 wql.getConfig( function( error, result ){
 
-    if( result.length ){     
+    if( result.length ){
 
         if( result[0].mute ){
 
@@ -11,7 +12,8 @@ wql.getConfig( function( error, result ){
 
         }
 
-        var volumePosition = result[0].volume * $( '.weevideo-volume-max', win ).width();
+        volumePosition = result[0].volume * $( '.weevideo-volume-max', win ).width();
+
         $( '.weevideo-volume-current', win ).css( 'width', volumePosition );
         $( '.weevideo-volume-seeker', win ).css({ x : volumePosition });
 
@@ -19,7 +21,8 @@ wql.getConfig( function( error, result ){
 
         wql.insertConfig();
 
-        var volumePosition = $( '.weevideo-volume-max', win ).width();
+        volumePosition = $( '.weevideo-volume-max', win ).width();
+        
         $( '.weevideo-volume-current', win ).css( 'width', volumePosition );
         $( '.weevideo-volume-seeker', win ).css({ x : volumePosition });
 

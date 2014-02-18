@@ -272,7 +272,7 @@
 
             if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'maximized' ) ){
 
-                hideControls();                    
+                hideControls();
 
             }
             
