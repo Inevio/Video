@@ -141,7 +141,7 @@
             if( win[0].requestFullScreen ){ win[0].requestFullScreen(); }
             else if( win[0].webkitRequestFullScreen ){ win[0].webkitRequestFullScreen(); }
             else if( win[0].mozRequestFullScreen ){ win[0].mozRequestFullScreen(); }
-            else{ alert( lang.fullscreenSupport, null, win.data().win ); }
+            else{ alert( lang.fullscreenSupport ); }
             
         }
 
