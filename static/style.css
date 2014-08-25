@@ -13,12 +13,13 @@ video{
     background: #000; 
 }
 
-.wz-view-menu{
+.wz-ui-header{
     text-align: center;
+    height: 48px;
 }
 
 .wz-view-menu-group{
-    padding-bottom: 9px;
+    padding: 12px 20px;
 }
 
 .wz-view-fullscreen{
@@ -248,7 +249,7 @@ video{
 
 .weevideo-volume{
     height: 30px;
-    padding: 13px 23px 6px 17px;
+    padding: 12px 23px 6px 17px;
 }
 
 .weevideo-volume-icon{
