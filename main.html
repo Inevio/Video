@@ -1,24 +1,53 @@
 
 <video></video>
     
-<section class="weevideo-top">
+<section class="wz-ui-header dark wz-dragger">
 
-    <section class="wz-ui-header dark wz-dragger">
-
-        <section class="wz-view-menu-group weevideo-volume wz-dragger">
+    <section class="wz-view-menu-group weevideo-volume wz-dragger">
+    
+        <figure class="wz-view-option weevideo-volume-icon">
+            <i></i>
+        </figure>
         
-            <figure class="wz-view-option weevideo-volume-icon">
-                <i></i>
-            </figure>
-            
-            <section class="weevideo-bar weevideo-volume-max wz-drag-limit wz-dragger-x-magnet">
-                <section class="weevideo-bar weevideo-volume-current"></section>
-                <section class="weevideo-volume-seeker wz-draggable"></section>
-            </section>
-            
+        <section class="weevideo-volume-max wz-drag-limit wz-dragger-x-magnet">
+            <section class="weevideo-volume-current"></section>
+            <section class="weevideo-seeker weevideo-volume-seeker wz-draggable"></section>
         </section>
+        
+    </section>
 
-        <section class="weevideo-controls wz-dragger">
+    <span class="weevideo-title ellipsis wz-dragger"></span>
+
+    <section class="wz-view-menu-group right wz-dragger">
+        <figure class="wz-view-minimize">
+            <i></i>
+        </figure>
+        <figure class="wz-view-maximize">
+            <i></i>
+        </figure>
+        <figure class="wz-view-option wz-view-fullscreen">
+            <i></i>
+        </figure>
+        <figure class="wz-view-close">
+            <i></i>
+        </figure>
+    </section>
+
+</section>
+
+<section class="weevideo-bottom">
+
+    <section class="weevideo-backprogress wz-drag-limit wz-dragger-x-magnet">
+        <section class="weevideo-buffer"></section>
+        <section class="weevideo-progress"></section>
+        <section class="weevideo-seeker weevideo-time-seeker wz-draggable"></section>
+    </section>
+
+    <section class="weevideo-info">
+
+        <span class="weevideo-info-data currentTime"></span>
+        
+        <section class="weevideo-controls">
         
             <figure class="wz-view-option weevideo-controls-rewind">
                 <i></i>
@@ -31,46 +60,8 @@
             </figure>
             
         </section>
-
-        <section class="wz-view-menu-group right wz-dragger">
-            <figure class="wz-view-minimize">
-                <i></i>
-            </figure>
-            <figure class="wz-view-maximize">
-                <i></i>
-            </figure>
-            <figure class="wz-view-option wz-view-fullscreen">
-                <i></i>
-            </figure>
-            <figure class="wz-view-close">
-                <i></i>
-            </figure>
-        </section>
-
-    </section>
-
-    <section class="weevideo-top-shadow">
-
-        <i class="weevideo-title-icon"></i>
-        <span class="weevideo-title-text"></span>
-
-    </section>
-
-</section>
-
-<section class="weevideo-bottom-shadow">
-
-    <section class="weevideo-info">
-
-        <span class="weevideo-info-data currentTime"></span>
         
-        <section class="weevideo-bar weevideo-info-backprogress wz-drag-limit wz-dragger-x-magnet">
-            <section class="weevideo-bar weevideo-info-buffer"></section>
-            <section class="weevideo-bar weevideo-info-progress"></section>
-            <section class="weevideo-info-seeker wz-draggable"></section>
-        </section>
-        
-        <span class="weevideo-info-data totalTime"></span>
+        <span class="weevideo-info-data right totalTime"></span>
 
     </section>
 

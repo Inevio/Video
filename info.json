@@ -18,8 +18,8 @@
         "desktop" : {
 
             "primary" : "main",
-            "service" : [],
             "unique"  : true,
+            "service" : [],
             "common"  : {
 
                 "css"    : [],
@@ -55,36 +55,7 @@
 
                     "css"    : ["style.css"],
                     "script" : ["script.js"],
-                    "start"  : ["start.js"]
-
-                }
-
-            }
-
-        },
-
-        "mobile" : {
-
-            "primary" : "main",
-            "service" : [],
-            "unique"  : true,
-            "common"  : {
-
-                "css"    : [],
-                "script" : [],
-                "start"  : []
-
-            },
-
-            "view" : {
-
-                "main" : {
-                    
-                    "template"    : "mainMobile.html",
-                    "orientation" : "landscape",
-                    "css"         : ["mobile/style.css"],
-                    "script"      : ["mobile/script.js"],
-                    "start"       : []
+                    "start"  : []
 
                 }
 

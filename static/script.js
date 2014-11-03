@@ -1,575 +1,628 @@
+
+// Constant
+var VIEW_MARGIN = 50;
+var HIDE_DURATION = 1000;
+var SHOW_DURATION = 500;
+
+// Local variables
+var win               = $( this );
+var video             = $('video');
+var uiBarBottom       = $('.weevideo-bottom');
+var uiBarTop          = $('.wz-ui-header');
+var uiProgress        = $('.weevideo-progress');
+var uiProgressBack    = $('.weevideo-backprogress');
+var uiProgressBuffer  = $('.weevideo-buffer');
+var uiTimeCurrent     = $('.currentTime');
+var uiTimeSeeker      = $('.weevideo-time-seeker');
+var uiTimeTotal       = $('.totalTime');
+var uiTitle           = $('.weevideo-title');
+var uiVolume          = $('.weevideo-volume-current');
+var uiVolumeMax       = $('.weevideo-volume-max');
+var uiVolumeSeeker    = $('.weevideo-volume-seeker');
+var isWebKit          = /webkit/i.test( navigator.userAgent );
+var prevClientX       = 0;
+var prevClientY       = 0;
+var hideControlsTimer = 0;
+var normalWidth       = 0;
+var normalHeight      = 0;
+
+/*
+ * Las operaciones de cambio de tiempos por drag son muy exigentes en cuanto a procesador,
+ * por lo que las emulamos con un pequeño lag.
+ * Las variables que declaramos a continuación están pensadas para ello.
+ * Ponemos un timer para de vez en cuando forzar que pueda cachear
+ */
+var emulatedSeekerTimer = 0;
+var emulatedSeekerTime  = 0;
+
+// Start app
+uiVolume.width( uiVolumeMax.width() );
+uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
+
+// Functions
+var loadItem = function( structure ){
+
+    video
+        .empty()
+        .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
+        .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+        .load();
+
+    resizeVideo(
+
+        structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
+        structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
+        true
+
+    );
+
+    uiTitle.text( structure.name );
+
+};
+
+var toggleFullscreen = function(){
+
+    video[ 0 ].play();
     
-    var win                    = $( this );
-    var video                  = $('video',win);
-    var weevideoTop            = $('.weevideo-top',win);
-    var weevideoBottom         = $('.weevideo-bottom-shadow',win);
-    var weevideoCurrentTime    = $('.currentTime',win);
-    var weevideoTotalTime      = $('.totalTime',win);
-    var weevideoProgress       = $('.weevideo-info-progress',win);
-    var weevideoBackprogress   = $('.weevideo-info-backprogress',win);
-    var weevideoBufferprogress = $('.weevideo-info-buffer',win);
-    var weevideoSeeker         = $('.weevideo-info-seeker',win);
-    var weevideoTitle          = $('.weevideo-title-text',win);
-    var weevideoVolume         = $('.weevideo-volume-current',win);
-    var weevideoVolumeSeeker   = $('.weevideo-volume-seeker',win);
-    var weevideoMaxVolume      = $('.weevideo-volume-max',win);
-    var weevideoPositionX      = 0;
-    var weevideoPositionY      = 0;
-    var oldWidth               = 0;
-    var oldHeight              = 0;
-    var hidingControls         = 0;
-    var prevClientX            = 0;
-    var prevClientY            = 0;
-    var isWebKit               = /webkit/i.test( navigator.userAgent );
-    
-    win.on( 'app-param', function( e, params ){
+    if( win.hasClass( 'fullscreen' ) ){
 
-        if( win.hasClass( 'wz-view-minimized' ) ){
-            win.removeClass( 'wz-view-minimized' ); // To Do -> Quitar esto y hacerlo usando el API
-        }
+        wz.tool.exitFullscreen();
 
-        if( params && params.command === 'openFile' ){
-            
-            video.empty();
+    }else{
 
-            video.append( $('<source></source>').attr('type','video/webm').attr('src', params.data.formats.webm.url) );
-            video.append( $('<source></source>').attr('type','video/mp4').attr('src', params.data.formats.mp4.url) );
-
-            resizeVideo( params.data.metadata.media.video.resolution.w, params.data.metadata.media.video.resolution.h );
-
-            weevideoTitle.text( params.data.name ).add( weevideoTitle.prev() ).transition({ opacity: 1 }, 250 );
-            video.load();
-            
-        }
-        
-    });
-
-    var resizeVideo = function( width, height ){
-
-        if( wz.tool.desktopWidth() * 0.55 / width < wz.tool.desktopHeight() * 0.7 / height ){
-
-            if( width < wz.tool.desktopWidth() * 0.55 ){
-
-                if( width < parseInt( win.css( 'min-width' ), 10 ) ){
-
-                    win.css({
-
-                        width  : parseInt( win.css( 'min-width' ), 10 ),
-                        height : parseInt( win.css( 'min-height' ), 10 )
-
-                    });
-
-                }else{
-
-                    win.css({
-
-                        width  : width,
-                        height : height
-
-                    });
-
-                }
-
-            }else{
-
-                win.css({
-
-                    width  : wz.tool.desktopWidth() * 0.55,
-                    height : height * ( wz.tool.desktopWidth() * 0.55 / width )
-
-                });
-
-            }
-
+        if( win[ 0 ].requestFullScreen ){
+            win[ 0 ].requestFullScreen();
+        }else if( win[ 0 ].webkitRequestFullScreen ){
+            win[ 0 ].webkitRequestFullScreen();
+        }else if( win[ 0 ].mozRequestFullScreen ){
+            win[ 0 ].mozRequestFullScreen();
         }else{
+            alert( lang.fullscreenSupport );
+        }
 
-           if( height < wz.tool.desktopHeight() * 0.7 ){
+        normalWidth  = win.width();
+        normalHeight = win.height();
 
-                if( height < parseInt( win.css( 'min-height' ), 10 ) ){
+    }
 
-                    win.css({
+};
 
-                        width  : parseInt( win.css( 'min-width' ), 10 ),
-                        height : parseInt( win.css( 'min-height' ), 10 )
+var resizeVideo = function( width, height, limit ){
 
-                    });
+    width  = parseInt( width, 10 );
+    height = parseInt( height, 10 );
 
-                }else{
+    if( limit ){
 
-                    win.css({
+        var widthRatio  = width / ( wz.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
+        var heightRatio = height / ( wz.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
 
-                        width  : width,
-                        height : height
+        if( widthRatio > 1 || heightRatio > 1 ){
 
-                    });
+            if( widthRatio > heightRatio ){
 
-                }
+                width  = wz.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
+                height = height / widthRatio;
 
             }else{
 
-                win.css({
-
-                    width  : width * ( wz.tool.desktopHeight() * 0.7 / height ),
-                    height : wz.tool.desktopHeight() * 0.7
-
-                });
+                width  = width / heightRatio;
+                height = wz.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
 
             }
 
         }
 
-        win.deskitemX( parseInt( wz.tool.environmentWidth() / 2 - win.width() / 2 - wz.tool.environmentWidth() + wz.tool.desktopWidth(), 10 ) );
-        win.deskitemY( parseInt( wz.tool.environmentHeight() / 2 - win.height() / 2, 10 ) );
+    }
 
-    };
+    wz.fit( win, width - win.width(), height - win.height() );
+    win.deskitemX( parseInt( ( wz.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+    win.deskitemY( parseInt( ( wz.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+    updateBars();
 
-    var goFullscreen = function(){
+};
 
-        video[0].play();
-        
-        if( win.hasClass( 'fullscreen' ) ){
-                            
-            wz.tool.exitFullscreen();
-            
+var updateBars = function(){
+
+    var backWidth = uiProgressBack.width();
+
+    uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+    uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+    updateProgressBar( true );
+    
+};
+
+var updateProgressBar = function( noAnimate ){
+    
+    var buffer = 0;
+
+    try{
+        buffer = video[ 0 ].buffered.end( 0 );
+    }catch(e){}
+    
+    var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
+    
+    if( width > 0 ){
+
+        if( noAnimate ){
+            uiProgressBuffer.stop().clearQueue().width( width );
         }else{
-
-            weevideoPositionX = win.css( 'x' );
-            weevideoPositionY = win.css( 'y' );
-            oldWidth          = win.width();
-            oldHeight         = win.height();
-
-            if( win[0].requestFullScreen ){ win[0].requestFullScreen(); }
-            else if( win[0].webkitRequestFullScreen ){ win[0].webkitRequestFullScreen(); }
-            else if( win[0].mozRequestFullScreen ){ win[0].mozRequestFullScreen(); }
-            else{ alert( lang.fullscreenSupport ); }
-            
+            uiProgressBuffer.stop().clearQueue().transition( { width : width }, 100 );
         }
 
-    };
+    }
+    
+};
 
-    var hideControls = function(){
+var hideControls = function(){
 
-        weevideoTop.stop().clearQueue();
-        weevideoBottom.stop().clearQueue();
+    if( win.hasClass( 'hidden-controls') ){
+        return;
+    }
+
+    uiBarTop.stop().clearQueue();
+    uiBarBottom.stop().clearQueue();
+    win.addClass( 'hidden-controls' );
+
+    if( isWebKit ){
+
+        uiBarTop.animate( { top : -1 * uiBarTop.height() }, 1000 );
+        uiBarBottom.animate( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
+
+    }else{
+
+        uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
+        uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
+
+    }
+
+};
+
+var showControls = function(){
+
+    /*
+    if( !win.hasClass( 'resizing' ) ){
+        */
+
+        if( !win.hasClass( 'hidden-controls') ){
+            return;
+        }
+
+        uiBarTop.stop().clearQueue();
+        uiBarBottom.stop().clearQueue();
+        win.removeClass( 'hidden-controls' );
 
         if( isWebKit ){
-            weevideoTop.animate( { top : -172 }, 1000 );
-            weevideoBottom.animate( { bottom : -138 }, 1000 );
+
+            uiBarTop.animate( { top : 0 }, 500 );
+            uiBarBottom.animate( { bottom : 0 }, 500 );
+
         }else{
-            weevideoTop.transition( { top : -172 }, 1000 );
-            weevideoBottom.transition( { bottom : -138 }, 1000 );
-        }
 
-        win.addClass( 'hidden-controls' );
-
-    };
-
-    var showControls = function(){
-
-        if( !win.hasClass( 'resizing' ) ){
-
-            weevideoTop.stop().clearQueue();
-            weevideoBottom.stop().clearQueue();
-
-            if( isWebKit ){
-                weevideoTop.animate( { top : 0 }, 500 );
-                weevideoBottom.animate( { bottom : 0 }, 500 );
-            }else{
-                weevideoTop.transition( { top : 0 }, 500 );
-                weevideoBottom.transition( { bottom : 0 }, 500 );
-            }
-
-            win.removeClass( 'hidden-controls' );
-            win.css( 'cursor', 'default' );
+            uiBarTop.transition( { top : 0 }, 500 );
+            uiBarBottom.transition( { bottom : 0 }, 500 );
 
         }
 
-    };
+        /*
+    }
+    */
 
-    video.on('durationchange', function(){
-        
-        var time    = this.duration;
-        var hour    = parseInt( time / 3600, 10 );
-        var rem     = time % 3600;
-        var min     = parseInt( rem / 60, 10 );
-        var sec     = parseInt( rem % 60, 10 );
+};
+
+// Events
+win.on( 'app-param', function( e, params ){
+
+    if( params && params.command === 'openFile' ){
+        loadItem( params.data );
+    }
+
+});
+
+video.on( 'durationchange', function(){
     
-        if( hour > 0 && min < 10 ){ min  = '0' + min; }
-        if( sec < 10 ){ sec = '0' + sec; }
-        
-        weevideoBackprogress.transition({opacity:1},250);
-    
-        if( 9 < hour ){
-            weevideoCurrentTime.transition({opacity:1},250).text('00:00:00');
-            weevideoTotalTime.transition({opacity:1},250).text(hour+':'+min+':'+sec);
-        }else if( 0 < hour && hour < 10 ){
-            weevideoCurrentTime.transition({opacity:1},250).text('0:00:00');
-            weevideoTotalTime.transition({opacity:1},250).text(hour+':'+min+':'+sec);
-        }else if( 9 < min ){
-            weevideoCurrentTime.transition({opacity:1},250).text('00:00');
-            weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
-        }else{
-            weevideoCurrentTime.transition({opacity:1},250).text('0:00');
-            weevideoTotalTime.transition({opacity:1},250).text(min+':'+sec);
-        }
+    var time = this.duration;
+    var hour = parseInt( time / 3600, 10 );
+    var rem  = time % 3600;
+    var min  = parseInt( rem / 60, 10 );
+    var sec  = parseInt( rem % 60, 10 );
 
-        weevideoVolumeSeeker.addClass('wz-dragger-x');
-        weevideoSeeker.addClass('wz-dragger-x');
-        
-        video[0].play();
-        
-        $( win )
-        
-        .on('wz-dragmove', '.weevideo-volume-seeker', function(e,posX,posY){
-            
-            if( win.hasClass('muted') ){
-                video[0].muted = false;
-            }
-            
-            weevideoVolume.css('width',posX * weevideoMaxVolume.width());
-            
-            video[0].volume = 1*posX;
-            
-        })
-        
-        .on('wz-dragmove', '.weevideo-info-seeker', function(e,posX,posY){
-            
-            video[0].pause();
-            
-            weevideoProgress.css('width',posX * weevideoBackprogress.width());
-            
-            video[0].currentTime = video[0].duration*posX;
-            
-        })
+    if( hour > 0 && min < 10 ){ min  = '0' + min; }
+    if( sec < 10 ){ sec = '0' + sec; }
+
+    if( 9 < hour ){
+
+        uiTimeCurrent.text('00:00:00');
+        uiTimeTotal.text(hour+':'+min+':'+sec);
+
+    }else if( 0 < hour && hour < 10 ){
+
+        uiTimeCurrent.text('0:00:00');
+        uiTimeTotal.text(hour+':'+min+':'+sec);
+
+    }else if( 9 < min ){
+
+        uiTimeCurrent.text('00:00');
+        uiTimeTotal.text(min+':'+sec);
+
+    }else{
+
+        uiTimeCurrent.text('0:00');
+        uiTimeTotal.text(min+':'+sec);
+
+    }
+
+    uiVolumeSeeker.addClass('wz-dragger-x');
+    uiTimeSeeker.addClass('wz-dragger-x');
+    
+    video[ 0 ].play();
+
+    win
+    .on( 'click', 'video', function(){
                 
-        .on('click', '.weevideo-controls-play, video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-
-                if( win.hasClass('play') ){
-                    video[0].pause();
-                }else{
-                    video[0].play();
-                }
-
-        })
+        if( win.hasClass('play') ){
+            video[ 0 ].pause();
+        }else{
+            video[ 0 ].play();
+        }
         
-        .on('click', '.weevideo-volume-icon', function(){
-            
-            if( win.hasClass('muted') ){
-                video[0].muted = false;
-            }else{
-                video[0].muted = true;
-            }
-            
-        })
+    })
+
+    .on( 'mousedown', '.weevideo-controls-play', function(){
+                
+        if( win.hasClass('play') ){
+            video[ 0 ].pause();
+        }else{
+            video[ 0 ].play();
+        }
         
-        .on('click', '.wz-view-fullscreen', function(){
+    })
 
-            goFullscreen();
-            
-        })
+    .on( 'mousedown', '.weevideo-volume-icon', function(){
         
-        .on('mouseleave', function(){
-
-            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'maximized' ) ){
-
-                hideControls();
-
-            }
-            
-        })
-
-        .on('mouseenter', function(){
-
-            if( !weevideoSeeker.hasClass('wz-drag-active') && !weevideoVolumeSeeker.hasClass('wz-drag-active') && !win.hasClass( 'maximized' ) ){
-
-                showControls();
-
-            }
-            
-        })
+        if( win.hasClass('muted') ){
+            video[ 0 ].muted = false;
+        }else{
+            video[ 0 ].muted = true;
+        }
         
-        .on('wz-dragend', function(){
-            
-            if( !win.is( ':hover' ) ){
-                win.mouseleave();
-            }
-            
-        })
+    })
+
+    .on( 'wz-dragmove', '.weevideo-volume-seeker', function( e, posX, posY ){
         
-        .on('wz-dragend', '.weevideo-info-seeker', function(){
-            
-            video[0].play();
-            
-        })
+        if( win.hasClass('muted') ){
+            video[ 0 ].muted = false;
+        }
         
-        .on('click', '.weevideo-controls-rewind', function(){
-            
-            video[0].currentTime -= 10;
-            
-        })
+        uiVolume.css( 'width', posX * uiVolumeMax.width() );
         
-        .on('click', '.weevideo-controls-forward', function(){
-            
-            video[0].currentTime += 10;
-            
-        })
+        video[ 0 ].volume = 1 * posX;
         
-        .on('enterfullscreen', function(){
+    })
+    
+    .on( 'wz-dragmove', '.weevideo-time-seeker', function( e, posX, posY ){
 
-            win.css( 'top', 0 );
-            win.width( screen.width );
-            win.height( screen.height );
+        // Usar el de Music
+        video[ 0 ].pause();
 
-            win.addClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : 0 , x : 0 , y : 0 });
+        if( !emulatedSeekerTimer ){
 
-            $( '.wz-view-menu', win ).css( 'border-radius', 0 );
-            
-        })
+            emulatedSeekerTimer = setInterval( function(){
+                video[ 0 ].currentTime = emulatedSeekerTime;
+            }, 100 );
+
+        }
         
-        .on('exitfullscreen', function(){
+        uiProgress.css( 'width', posX * uiProgressBack.width() );
 
-            win.width( oldWidth );
-            win.height( oldHeight );
-            win.css( 'top', '' );
-            
-            win.removeClass('fullscreen maximized wz-drag-ignore').css({ 'border-radius' : '3px' , x : weevideoPositionX , y : weevideoPositionY });
+        /*
+         * Como cambiar el currentTime de un elemento es un proceso costoso
+         * para el procesador, emulamos ese proceso
+         */
+        emulatedSeekerTime = video[ 0 ].duration * posX;
 
-            $( '.wz-view-menu', win ).css( 'border-radius', '3px 3px 0 0' );
-            
-        })
-
-        .on('dblclick', 'video, .weevideo-top-shadow, .weevideo-bottom-shadow', function(){
-            
-            goFullscreen();
-
-        })
-
-        .on( 'mousemove', function( e ){
-
-            if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
-
-                prevClientX = e.clientX;
-                prevClientY = e.clientY;
-
-                clearTimeout( hidingControls );
-
-                if( win.hasClass( 'hidden-controls' ) ){
-
-                    showControls();
-                    win.css( 'cursor', 'default' );
-
-                }
-
-                if( win.hasClass( 'maximized' ) && win.hasClass( 'play' ) ){
-
-                    hidingControls = setTimeout( function(){
-
-                        hideControls();
-                        win.css( 'cursor', 'none' );
-
-                    }, 3000 );
-
-                }
-
-            }
-
-        })
-
-        .on( 'ui-view-resize-start', function(){
-            win.addClass( 'resizing' );
-        })
-
-        .on( 'ui-view-resize-end', function(){
-            win.removeClass( 'resizing' );
-        })
-
-        .on( 'ui-view-maximize', function(){
-            win.addClass( 'maximized' );
-        })
-
-        .on( 'ui-view-unmaximize', function(){
-            win.removeClass( 'maximized' );
-        })
+        var time      = video[ 0 ].duration;
+        var totalHour = parseInt( time / 3600, 10 );
+        var rem       = time % 3600;
+        var totalMin  = parseInt( rem / 60, 10 );
+        time          = emulatedSeekerTime;
+        var hour      = parseInt( time / 3600, 10 );
+        rem           = ( time % 3600 );
+        var min       = parseInt( rem / 60, 10 );
+        var sec       = parseInt( rem % 60, 10 );
         
-        .key('space', function(){
-        
-            if( win.hasClass('play') ){
-                video[0].pause();
-            }else{
-                video[0].play();
-            }
-            
-        })
-        
-        .key('enter', function(){
-        
-            goFullscreen();
-            
-        })
-        
-        .key(
-            'right',
-            function(){ video[0].currentTime += 10; },
-            function(){ video[0].currentTime += 10; }
-        )
-        
-        .key(
-            'left',
-            function(){ video[0].currentTime -= 10; },
-            function(){ video[0].currentTime -= 10; }
-        )
-        
-        .key(
-            'up',
-            function(){
-                if((video[0].volume + 0.1) < 1){
-                    video[0].volume += 0.1;
-                }else{
-                    video[0].volume = 1;
-                }
-            },
-            function(){
-                if((video[0].volume + 0.1) < 1){
-                    video[0].volume += 0.1;
-                }else{
-                    video[0].volume = 1;
-                }
-            }
-        )
-        
-        .key(
-            'down',
-            function(){
-                if((video[0].volume - 0.1) > 0){
-                    video[0].volume -= 0.1;
-                }else{
-                    video[0].volume = 0;
-                }
-            },
-            function(){
-                if((video[0].volume - 0.1) > 0){
-                    video[0].volume -= 0.1;
-                }else{
-                    video[0].volume = 0;
-                }
-            }
-        )
-        
-        .key(
-            'backspace',
-            function(){ video[0].currentTime = 0; }
-        );
-        
-        video
-        
-        .on('play',function(){
-            win.addClass('play');
-        })
-        
-        .on('pause',function(){
-            win.removeClass('play');
-        })
-        
-        .on('volumechange', function(){
-            
-            if( this.muted ){
-                win.addClass('muted');
-                wql.changeMute(1);
-            }else{
-                win.removeClass('muted');
-                wql.changeMute(0);
-            }      
-            
-            var volumePosition = this.volume*weevideoMaxVolume.width();
-            weevideoVolume.css('width',volumePosition);
-            weevideoVolumeSeeker.css({x:volumePosition});
-            wql.changeVolume( this.volume );
-            
-        })
-        
-        .on('timeupdate', function(e){
-                        
-            var time      = this.duration;
-            var totalHour = parseInt( time / 3600, 10 );
-            var rem       = time % 3600;
-            var totalMin  = parseInt( rem / 60, 10 );
-                        
-            time        = this.currentTime;
-            var hour    = parseInt( time / 3600, 10 );
-            rem         = time % 3600;
-            var min     = parseInt( rem / 60, 10 );
-            var sec     = parseInt( rem % 60, 10 );
-            
-            if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
-            if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
-            if( sec < 10 ){ sec  = '0'+sec; }
-                        
-            if(totalHour){
-                weevideoCurrentTime.text(hour+':'+min+':'+sec);
-            }else if(totalMin){
-                weevideoCurrentTime.text(min+':'+sec);
-            }else{
-                weevideoCurrentTime.text('0:'+sec);
-            }
-            
-            var pos = weevideoBackprogress.width()*(this.currentTime/this.duration);
-
-            weevideoProgress.width(pos);
-            
-            if( !weevideoSeeker.hasClass('wz-drag-active') ){
-                weevideoSeeker.css({x:pos});
-            }
-            
-        })
-        
-        .on('progress',function(){
-            
-            var buffer = 0;
-
-            try{
-                buffer = this.buffered.end(0);
-            }catch(e){}
-            
-            var width = ( weevideoBackprogress.width() * ( buffer / this.duration ) );
-            
-            if( width > 0 ){
-                weevideoBufferprogress.transition( { width : width },100);
-            }
+        if( totalHour > 9 && hour < 10 ){ hour = '0' + hour; }
+        if( totalHour > 0 || ( totalMin > 10 && min < 10 ) ){ min = '0' + min; }
+        if( sec < 10 ){ sec  = '0' + sec; }
                     
-        })
+        if( totalHour ){
+            uiTimeCurrent.text( hour + ':' + min + ':' + sec );
+        }else if( totalMin ){
+            uiTimeCurrent.text( min + ':' + sec );
+        }else{
+            uiTimeCurrent.text( '0:' + sec );
+        }
         
-        .on('ended', function(){
+    })
+    
+    .on( 'click', '.wz-view-fullscreen', function(){
+        toggleFullscreen();
+    })
 
+    .on( 'click', '.wz-view-minimize', function(){
+        
+        if( win.hasClass('fullscreen') ){
+            toggleFullscreen();
+        }
+
+    })
+
+    .on( 'mouseleave', function(){
+
+        if(
+            !uiTimeSeeker.hasClass('wz-drag-active') &&
+            !uiVolumeSeeker.hasClass('wz-drag-active') &&
+            !win.hasClass('maximized')
+        ){
+            hideControls();                    
+        }
+        
+    })
+
+    .on( 'mouseenter', function(){
+
+        if(
+            !uiTimeSeeker.hasClass('wz-drag-active') &&
+            !uiVolumeSeeker.hasClass('wz-drag-active') &&
+            !win.hasClass('maximized')
+        ){
             showControls();
+        }
+        
+    })
+    
+    /*
+    .on('wz-dragend', function(){
+        
+        if( !win.is( ':hover' ) ){
+            win.mouseleave();
+        }
+        
+    })    
+    */
+
+    .on( 'wz-dragend', '.weevideo-time-seeker', function(){
+        
+        clearInterval( emulatedSeekerTimer );
+
+        emulatedSeekerTimer    = 0;
+        video[ 0 ].currentTime = emulatedSeekerTime;
+        
+        video[ 0 ].play();
+                
+    })
+
+    .on( 'mousedown', '.weevideo-controls-rewind', function(){
+        video[ 0 ].currentTime -= 10;
+    })
+    
+    .on( 'mousedown', '.weevideo-controls-forward', function(){
+        video[ 0 ].currentTime += 10;
+    })
+        
+    .on( 'enterfullscreen', function(){
+
+        win.addClass('fullscreen');
+
+        wz.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+
+    })
+
+    .on( 'exitfullscreen', function(){
+
+        win.removeClass('fullscreen');
+
+        wz.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+
+    })
+
+    .on( 'dblclick', 'video', toggleFullscreen )
+
+    .on( 'mousemove', function( e ){
+
+        if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
+
+            prevClientX = e.clientX;
+            prevClientY = e.clientY;
+
+            clearTimeout( hideControlsTimer );
+
+            if( win.hasClass( 'hidden-controls' ) ){
+                showControls();
+            }
+
+            if( ( win.hasClass('maximized') || win.hasClass('fullscreen') ) && win.hasClass( 'play' ) ){
+
+                hideControlsTimer = setTimeout( function(){
+                    hideControls();
+                }, 3000 );
+
+            }
+
+        }
+
+    })
+
+    .on( 'ui-view-resize ui-view-resize-end ui-view-maximize ui-view-unmaximize', updateBars )
+
+    .on( 'ui-view-maximize', function(){
+        win.addClass( 'maximized' );
+    })
+
+    .on( 'ui-view-unmaximize', function(){
+        win.removeClass( 'maximized' );
+    })
+
+    .key( 'space', function(){
+    
+        if( win.hasClass('play') ){
+            video[ 0 ].pause();
+        }else{
+            video[ 0 ].play();
+        }
+        
+    })
+        
+    .key( 'enter', function(){
+        toggleFullscreen();
+    })
+
+    .key(
+        'right',
+        function(){ video[ 0 ].currentTime += 10; },
+        function(){ video[ 0 ].currentTime += 10; }
+    )
+    
+    .key(
+        'left',
+        function(){ video[ 0 ].currentTime -= 10; },
+        function(){ video[ 0 ].currentTime -= 10; }
+    )
+    
+    .key(
+        'up',
+        function(){
+
+            if( video[ 0 ].volume + 0.1 < 1){
+                video[ 0 ].volume += 0.1;
+            }else{
+                video[ 0 ].volume = 1;
+            }
+
+        },
+        function(){
+
+            if( video[ 0 ].volume + 0.1 < 1){
+                video[ 0 ].volume += 0.1;
+            }else{
+                video[ 0 ].volume = 1;
+            }
+
+        }
+    )
+    
+    .key(
+        'down',
+        function(){
+
+            if( video[ 0 ].volume - 0.1 > 0){
+                video[ 0 ].volume -= 0.1;
+            }else{
+                video[ 0 ].volume = 0;
+            }
+
+        },
+        function(){
+
+            if( video[ 0 ].volume - 0.1 > 0){
+                video[ 0 ].volume -= 0.1;
+            }else{
+                video[ 0 ].volume = 0;
+            }
+
+        }
+    )
+    
+    .key(
+        'backspace',
+        function(){ video[ 0 ].currentTime = 0; }
+    );
+
+    video
+    .on( 'play', function(){
+        win.addClass('play');
+    })
+    
+    .on( 'pause', function(){
+        win.removeClass('play');
+    })
+
+    .on( 'timeupdate', function( e ){
+                    
+        var time      = this.duration;
+        var totalHour = parseInt( time / 3600, 10 );
+        var rem       = time % 3600;
+        var totalMin  = parseInt( rem / 60, 10 );
+        time          = this.currentTime;
+        var hour      = parseInt( time / 3600, 10 );
+        rem           = time % 3600;
+        var min       = parseInt( rem / 60, 10 );
+        var sec       = parseInt( rem % 60, 10 );
+        
+        if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
+        if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
+        if( sec < 10 ){ sec  = '0'+sec; }
+                    
+        if(totalHour){
+            uiTimeCurrent.text(hour+':'+min+':'+sec);
+        }else if(totalMin){
+            uiTimeCurrent.text(min+':'+sec);
+        }else{
+            uiTimeCurrent.text('0:'+sec);
+        }
+
+        var backWidth = uiProgressBack.width();
+
+        uiProgress.width( backWidth * ( this.currentTime / this.duration ) );
+
+        if( !uiTimeSeeker.hasClass('wz-drag-active') ){
+            uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( this.currentTime / this.duration ) );
+        }
+        
+    })
+
+    .on( 'progress', updateProgressBar )
+        
+    .on('ended', function(){
+
+        //showControls();
+        
+        if( !uiTimeSeeker.hasClass('wz-drag-active') ){
             
-            if( !weevideoSeeker.hasClass('wz-drag-active') ){
-                
-                var time = this.duration;
-                var hour = parseInt( time / 3600, 10 );
-                weevideoProgress.width(0);
-                weevideoSeeker.css({x:0});
-                
-                if( parseInt( hour, 10 ) ){
-                    weevideoCurrentTime.text('00:00:00');
-                }else{
-                    weevideoCurrentTime.text('00:00');
-                }
-                
-                this.currentTime = 0;
-                this.pause();
-                
+            var time = this.duration;
+            var hour = parseInt( time / 3600, 10 );
+
+            uiProgress.width( 0 );
+            uiTimeSeeker.css( { x : 0 } );
+            
+            if( parseInt( hour, 10 ) ){
+                uiTimeCurrent.text('00:00:00');
+            }else{
+                uiTimeCurrent.text('00:00');
             }
-                        
-        });
+            
+            this.currentTime = 0;
+            this.pause();
+            
+        }
+                    
+    })
 
-        wql.getConfig( function( error, result ){
+    .on( 'volumechange', function(){
+            
+        if( this.muted ){
+            win.addClass('muted');
+        }else{
+            win.removeClass('muted');
+        }
 
-            if( result[0].mute ){
-                video[0].muted = true;
-            }
+        if( !uiVolumeSeeker.hasClass('wz-drag-active') ){
+            
+            uiVolume.css( 'width', this.volume * uiVolumeMax.width() );
+            uiVolumeSeeker.css( 'x', Math.floor( this.volume * ( uiVolumeMax.width() - uiVolumeSeeker.width() ) ) );
 
-            video[0].volume = result[0].volume;
-
-        });
+        }
         
     });
+
+});
