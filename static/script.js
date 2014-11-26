@@ -40,23 +40,27 @@ uiVolume.width( uiVolumeMax.width() );
 uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
 
 // Functions
-var loadItem = function( structure ){
+var loadItem = function( structureId ){
 
-    video
-        .empty()
-        .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-        .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
-        .load();
+    wz.fs( structureId, function( error, structure ){
 
-    resizeVideo(
+        video
+            .empty()
+            .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
+            .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+            .load();
 
-        structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
-        structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
-        true
+        resizeVideo(
 
-    );
+            structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
+            structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
+            true
 
-    uiTitle.text( structure.name );
+        );
+
+        uiTitle.text( structure.name );
+        
+    });
 
 };
 
