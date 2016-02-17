@@ -42,7 +42,7 @@ uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
 // Functions
 var loadItem = function( structureId ){
 
-    wz.fs( structureId, function( error, structure ){
+    api.fs( structureId, function( error, structure ){
 
         video
             .empty()
@@ -59,7 +59,7 @@ var loadItem = function( structureId ){
         );
 
         uiTitle.text( structure.name );
-        
+
     });
 
 };
@@ -67,10 +67,10 @@ var loadItem = function( structureId ){
 var toggleFullscreen = function(){
 
     video[ 0 ].play();
-    
+
     if( win.hasClass( 'fullscreen' ) ){
 
-        wz.tool.exitFullscreen();
+        api.tool.exitFullscreen();
 
     }else{
 
@@ -98,20 +98,20 @@ var resizeVideo = function( width, height, limit ){
 
     if( limit ){
 
-        var widthRatio  = width / ( wz.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
-        var heightRatio = height / ( wz.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
+        var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
+        var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
 
         if( widthRatio > 1 || heightRatio > 1 ){
 
             if( widthRatio > heightRatio ){
 
-                width  = wz.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
+                width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
                 height = height / widthRatio;
 
             }else{
 
                 width  = width / heightRatio;
-                height = wz.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
+                height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
 
             }
 
@@ -119,9 +119,9 @@ var resizeVideo = function( width, height, limit ){
 
     }
 
-    wz.fit( win, width - win.width(), height - win.height() );
-    win.deskitemX( parseInt( ( wz.tool.desktopWidth() - win.width() ) / 2, 10 ) );
-    win.deskitemY( parseInt( ( wz.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+    api.fit( win, width - win.width(), height - win.height() );
+    win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+    win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
     updateBars();
 
 };
@@ -133,19 +133,19 @@ var updateBars = function(){
     uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
     uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
     updateProgressBar( true );
-    
+
 };
 
 var updateProgressBar = function( noAnimate ){
-    
+
     var buffer = 0;
 
     try{
         buffer = video[ 0 ].buffered.end( 0 );
     }catch(e){}
-    
+
     var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
-    
+
     if( width > 0 ){
 
         if( noAnimate ){
@@ -155,7 +155,7 @@ var updateProgressBar = function( noAnimate ){
         }
 
     }
-    
+
 };
 
 var hideControls = function(){
@@ -224,7 +224,7 @@ win.on( 'app-param', function( e, params ){
 });
 
 video.on( 'durationchange', function(){
-    
+
     var time = this.duration;
     var hour = parseInt( time / 3600, 10 );
     var rem  = time % 3600;
@@ -258,52 +258,52 @@ video.on( 'durationchange', function(){
 
     uiVolumeSeeker.addClass('wz-dragger-x');
     uiTimeSeeker.addClass('wz-dragger-x');
-    
+
     video[ 0 ].play();
 
     win
     .on( 'click', 'video', function(){
-                
+
         if( win.hasClass('play') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
         }
-        
+
     })
 
     .on( 'mousedown', '.weevideo-controls-play', function(){
-                
+
         if( win.hasClass('play') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
         }
-        
+
     })
 
     .on( 'mousedown', '.weevideo-volume-icon', function(){
-        
+
         if( win.hasClass('muted') ){
             video[ 0 ].muted = false;
         }else{
             video[ 0 ].muted = true;
         }
-        
+
     })
 
     .on( 'wz-dragmove', '.weevideo-volume-seeker', function( e, posX, posY ){
-        
+
         if( win.hasClass('muted') ){
             video[ 0 ].muted = false;
         }
-        
+
         uiVolume.css( 'width', posX * uiVolumeMax.width() );
-        
+
         video[ 0 ].volume = 1 * posX;
-        
+
     })
-    
+
     .on( 'wz-dragmove', '.weevideo-time-seeker', function( e, posX, posY ){
 
         // Usar el de Music
@@ -316,7 +316,7 @@ video.on( 'durationchange', function(){
             }, 100 );
 
         }
-        
+
         uiProgress.css( 'width', posX * uiProgressBack.width() );
 
         /*
@@ -334,11 +334,11 @@ video.on( 'durationchange', function(){
         rem           = ( time % 3600 );
         var min       = parseInt( rem / 60, 10 );
         var sec       = parseInt( rem % 60, 10 );
-        
+
         if( totalHour > 9 && hour < 10 ){ hour = '0' + hour; }
         if( totalHour > 0 || ( totalMin > 10 && min < 10 ) ){ min = '0' + min; }
         if( sec < 10 ){ sec  = '0' + sec; }
-                    
+
         if( totalHour ){
             uiTimeCurrent.text( hour + ':' + min + ':' + sec );
         }else if( totalMin ){
@@ -346,15 +346,15 @@ video.on( 'durationchange', function(){
         }else{
             uiTimeCurrent.text( '0:' + sec );
         }
-        
+
     })
-    
+
     .on( 'click', '.wz-view-fullscreen', function(){
         toggleFullscreen();
     })
 
     .on( 'click', '.wz-view-minimize', function(){
-        
+
         if( win.hasClass('fullscreen') ){
             toggleFullscreen();
         }
@@ -368,9 +368,9 @@ video.on( 'durationchange', function(){
             !uiVolumeSeeker.hasClass('wz-drag-active') &&
             !win.hasClass('maximized')
         ){
-            hideControls();                    
+            hideControls();
         }
-        
+
     })
 
     .on( 'mouseenter', function(){
@@ -382,43 +382,43 @@ video.on( 'durationchange', function(){
         ){
             showControls();
         }
-        
+
     })
-    
+
     /*
     .on('wz-dragend', function(){
-        
+
         if( !win.is( ':hover' ) ){
             win.mouseleave();
         }
-        
-    })    
+
+    })
     */
 
     .on( 'wz-dragend', '.weevideo-time-seeker', function(){
-        
+
         clearInterval( emulatedSeekerTimer );
 
         emulatedSeekerTimer    = 0;
         video[ 0 ].currentTime = emulatedSeekerTime;
-        
+
         video[ 0 ].play();
-                
+
     })
 
     .on( 'mousedown', '.weevideo-controls-rewind', function(){
         video[ 0 ].currentTime -= 10;
     })
-    
+
     .on( 'mousedown', '.weevideo-controls-forward', function(){
         video[ 0 ].currentTime += 10;
     })
-        
+
     .on( 'enterfullscreen', function(){
 
         win.addClass('fullscreen');
 
-        wz.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+        api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
 
     })
 
@@ -426,7 +426,7 @@ video.on( 'durationchange', function(){
 
         win.removeClass('fullscreen');
 
-        wz.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+        api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
 
     })
 
@@ -468,15 +468,15 @@ video.on( 'durationchange', function(){
     })
 
     .key( 'space', function(){
-    
+
         if( win.hasClass('play') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
         }
-        
+
     })
-        
+
     .key( 'enter', function(){
         toggleFullscreen();
     })
@@ -486,13 +486,13 @@ video.on( 'durationchange', function(){
         function(){ video[ 0 ].currentTime += 10; },
         function(){ video[ 0 ].currentTime += 10; }
     )
-    
+
     .key(
         'left',
         function(){ video[ 0 ].currentTime -= 10; },
         function(){ video[ 0 ].currentTime -= 10; }
     )
-    
+
     .key(
         'up',
         function(){
@@ -514,7 +514,7 @@ video.on( 'durationchange', function(){
 
         }
     )
-    
+
     .key(
         'down',
         function(){
@@ -536,7 +536,7 @@ video.on( 'durationchange', function(){
 
         }
     )
-    
+
     .key(
         'backspace',
         function(){ video[ 0 ].currentTime = 0; }
@@ -546,13 +546,13 @@ video.on( 'durationchange', function(){
     .on( 'play', function(){
         win.addClass('play');
     })
-    
+
     .on( 'pause', function(){
         win.removeClass('play');
     })
 
     .on( 'timeupdate', function( e ){
-                    
+
         var time      = this.duration;
         var totalHour = parseInt( time / 3600, 10 );
         var rem       = time % 3600;
@@ -562,11 +562,11 @@ video.on( 'durationchange', function(){
         rem           = time % 3600;
         var min       = parseInt( rem / 60, 10 );
         var sec       = parseInt( rem % 60, 10 );
-        
+
         if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
         if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
         if( sec < 10 ){ sec  = '0'+sec; }
-                    
+
         if(totalHour){
             uiTimeCurrent.text(hour+':'+min+':'+sec);
         }else if(totalMin){
@@ -582,38 +582,38 @@ video.on( 'durationchange', function(){
         if( !uiTimeSeeker.hasClass('wz-drag-active') ){
             uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( this.currentTime / this.duration ) );
         }
-        
+
     })
 
     .on( 'progress', updateProgressBar )
-        
+
     .on('ended', function(){
 
         //showControls();
-        
+
         if( !uiTimeSeeker.hasClass('wz-drag-active') ){
-            
+
             var time = this.duration;
             var hour = parseInt( time / 3600, 10 );
 
             uiProgress.width( 0 );
             uiTimeSeeker.css( { x : 0 } );
-            
+
             if( parseInt( hour, 10 ) ){
                 uiTimeCurrent.text('00:00:00');
             }else{
                 uiTimeCurrent.text('00:00');
             }
-            
+
             this.currentTime = 0;
             this.pause();
-            
+
         }
-                    
+
     })
 
     .on( 'volumechange', function(){
-            
+
         if( this.muted ){
             win.addClass('muted');
         }else{
@@ -621,12 +621,12 @@ video.on( 'durationchange', function(){
         }
 
         if( !uiVolumeSeeker.hasClass('wz-drag-active') ){
-            
+
             uiVolume.css( 'width', this.volume * uiVolumeMax.width() );
             uiVolumeSeeker.css( 'x', Math.floor( this.volume * ( uiVolumeMax.width() - uiVolumeSeeker.width() ) ) );
 
         }
-        
+
     });
 
 });
