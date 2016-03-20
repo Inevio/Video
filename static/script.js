@@ -44,21 +44,25 @@ var loadItem = function( structureId ){
 
     api.fs( structureId, function( error, structure ){
 
-        video
-            .empty()
-            .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-            .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
-            .load();
+        structure.getFormats( function( error, formats ){
 
-        resizeVideo(
+            video
+                .empty()
+                .append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
+                .append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
+                .load();
 
-            structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
-            structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
-            true
+            resizeVideo(
 
-        );
+                formats.original.metadata.media.video.resolutionSquare.w || formats.original.metadata.media.video.resolution.w,
+                formats.original.metadata.media.video.resolutionSquare.h || formats.original.metadata.media.video.resolution.h,
+                true
 
-        uiTitle.text( structure.name );
+            );
+
+            uiTitle.text( structure.name );
+
+        });
 
     });
 
