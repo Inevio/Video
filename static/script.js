@@ -42,175 +42,175 @@ uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
 // Functions
 var loadItem = function( structureId ){
 
-    api.fs( structureId, function( error, structure ){
+  api.fs( structureId, function( error, structure ){
 
-        video
-            .empty()
-            .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-            .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
-            .load();
+    video
+      .empty()
+      .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
+      .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+      .load();
 
-        resizeVideo(
+    resizeVideo(
 
-            structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
-            structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
-            true
+      structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
+      structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
+      true
 
-        );
+    );
 
-        uiTitle.text( structure.name );
+    uiTitle.text( structure.name );
 
-    });
+  });
 
 };
 
 var toggleFullscreen = function(){
 
-    video[ 0 ].play();
+  video[ 0 ].play();
 
-    if( win.hasClass( 'fullscreen' ) ){
+  if( win.hasClass( 'fullscreen' ) ){
 
-        api.tool.exitFullscreen();
+    api.tool.exitFullscreen();
 
+  }else{
+
+    if( win[ 0 ].requestFullScreen ){
+        win[ 0 ].requestFullScreen();
+    }else if( win[ 0 ].webkitRequestFullScreen ){
+        win[ 0 ].webkitRequestFullScreen();
+    }else if( win[ 0 ].mozRequestFullScreen ){
+        win[ 0 ].mozRequestFullScreen();
     }else{
-
-        if( win[ 0 ].requestFullScreen ){
-            win[ 0 ].requestFullScreen();
-        }else if( win[ 0 ].webkitRequestFullScreen ){
-            win[ 0 ].webkitRequestFullScreen();
-        }else if( win[ 0 ].mozRequestFullScreen ){
-            win[ 0 ].mozRequestFullScreen();
-        }else{
-            alert( lang.fullscreenSupport );
-        }
-
-        normalWidth  = win.width();
-        normalHeight = win.height();
-
+        alert( lang.fullscreenSupport );
     }
+
+    normalWidth  = win.width();
+    normalHeight = win.height();
+
+  }
 
 };
 
 var resizeVideo = function( width, height, limit ){
 
-    width  = parseInt( width, 10 );
-    height = parseInt( height, 10 );
+  width  = parseInt( width, 10 );
+  height = parseInt( height, 10 );
 
-    if( limit ){
+  if( limit ){
 
-        var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
-        var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
+    var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
+    var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
 
-        if( widthRatio > 1 || heightRatio > 1 ){
+    if( widthRatio > 1 || heightRatio > 1 ){
 
-            if( widthRatio > heightRatio ){
+      if( widthRatio > heightRatio ){
 
-                width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
-                height = height / widthRatio;
+        width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
+        height = height / widthRatio;
 
-            }else{
+      }else{
 
-                width  = width / heightRatio;
-                height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
+        width  = width / heightRatio;
+        height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
 
-            }
-
-        }
+      }
 
     }
 
-    api.fit( win, width - win.width(), height - win.height() );
-    win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
-    win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
-    updateBars();
+  }
+
+  api.fit( win, width - win.width(), height - win.height() );
+  win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+  win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+  updateBars();
 
 };
 
 var updateBars = function(){
 
-    var backWidth = uiProgressBack.width();
+  var backWidth = uiProgressBack.width();
 
-    uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
-    uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
-    updateProgressBar( true );
+  uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+  uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+  updateProgressBar( true );
 
 };
 
 var updateProgressBar = function( noAnimate ){
 
-    var buffer = 0;
+  var buffer = 0;
 
-    try{
-        buffer = video[ 0 ].buffered.end( 0 );
-    }catch(e){}
+  try{
+    buffer = video[ 0 ].buffered.end( 0 );
+  }catch(e){}
 
-    var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
+  var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
 
-    if( width > 0 ){
+  if( width > 0 ){
 
-        if( noAnimate ){
-            uiProgressBuffer.stop().clearQueue().width( width );
-        }else{
-            uiProgressBuffer.stop().clearQueue().transition( { width : width }, 100 );
-        }
-
+    if( noAnimate ){
+      uiProgressBuffer.stop().clearQueue().width( width );
+    }else{
+      uiProgressBuffer.stop().clearQueue().transition( { width : width }, 100 );
     }
+
+  }
 
 };
 
 var hideControls = function(){
 
-    if( win.hasClass( 'hidden-controls') ){
-        return;
-    }
+  /*if( win.hasClass( 'hidden-controls') ){
+      return;
+  }
 
-    uiBarTop.stop().clearQueue();
-    uiBarBottom.stop().clearQueue();
-    win.addClass( 'hidden-controls' );
+  uiBarTop.stop().clearQueue();
+  uiBarBottom.stop().clearQueue();
+  win.addClass( 'hidden-controls' );
 
-    if( isWebKit ){
+  if( isWebKit ){
 
-        uiBarTop.animate( { top : -1 * uiBarTop.height() }, 1000 );
-        uiBarBottom.animate( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
+      uiBarTop.animate( { top : -1 * uiBarTop.height() }, 1000 );
+      uiBarBottom.animate( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
 
-    }else{
+  }else{
 
-        uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
-        uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
+      uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
+      uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
 
-    }
+  }*/
 
 };
 
 var showControls = function(){
 
-    /*
-    if( !win.hasClass( 'resizing' ) ){
-        */
+  /*
+  if( !win.hasClass( 'resizing' ) ){
+      */
 
-        if( !win.hasClass( 'hidden-controls') ){
-            return;
-        }
-
-        uiBarTop.stop().clearQueue();
-        uiBarBottom.stop().clearQueue();
-        win.removeClass( 'hidden-controls' );
-
-        if( isWebKit ){
-
-            uiBarTop.animate( { top : 0 }, 500 );
-            uiBarBottom.animate( { bottom : 0 }, 500 );
-
-        }else{
-
-            uiBarTop.transition( { top : 0 }, 500 );
-            uiBarBottom.transition( { bottom : 0 }, 500 );
-
-        }
-
-        /*
+    if( !win.hasClass( 'hidden-controls') ){
+      return;
     }
-    */
+
+    uiBarTop.stop().clearQueue();
+    uiBarBottom.stop().clearQueue();
+    win.removeClass( 'hidden-controls' );
+
+    if( isWebKit ){
+
+      uiBarTop.animate( { top : 0 }, 500 );
+      uiBarBottom.animate( { bottom : 0 }, 500 );
+
+    }else{
+
+      uiBarTop.transition( { top : 0 }, 500 );
+      uiBarBottom.transition( { bottom : 0 }, 500 );
+
+    }
+
+      /*
+  }
+  */
 
 };
 
@@ -218,7 +218,7 @@ var showControls = function(){
 win.on( 'app-param', function( e, params ){
 
     if( params && params.command === 'openFile' ){
-        loadItem( params.data );
+      loadItem( params.data );
     }
 
 });
@@ -630,3 +630,5 @@ video.on( 'durationchange', function(){
     });
 
 });
+
+loadItem(962240);
