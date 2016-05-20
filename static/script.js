@@ -160,7 +160,7 @@ var updateProgressBar = function( noAnimate ){
 
 var hideControls = function(){
 
-  if( win.hasClass( 'hidden-controls') ){
+  /*if( win.hasClass( 'hidden-controls') ){
       return;
   }
 
@@ -178,7 +178,7 @@ var hideControls = function(){
       uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
       uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
 
-  }
+  }*/
 
 };
 
@@ -282,7 +282,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'mousedown', '.video-volume-icon', function(){
+    .on( 'mousedown', '.volume-icon', function(){
 
         if( win.hasClass('muted') ){
             video[ 0 ].muted = false;

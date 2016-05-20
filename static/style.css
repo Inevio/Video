@@ -54,51 +54,6 @@ video{
   background-size: 102px 31px;
 }
 
-.weevideo-seeker{
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.5 );
-  background-image: -webkit-linear-gradient( bottom, #D1D1D1, #FFFFFF );
-  background-image: -moz-linear-gradient( bottom, #D1D1D1, #FFFFFF );
-  background-image: -o-linear-gradient( bottom, #D1D1D1, #FFFFFF );
-  background-image: linear-gradient( to top, #D1D1D1, #FFFFFF );
-  position: absolute;
-  top: -2px;
-}
-
-.weevideo-volume{
-  width: 110px;
-  height: 30px;
-  padding: 13px 11px 6px;
-  float: right;
-}
-
-.weevideo-volume-icon{
-  padding: 6px 3px;
-}
-
-.weevideo-volume-icon i{
-  width: 19px;
-  height: 15px;
-  float: left;
-  background: url('@static/sprite.png') -50px -16px no-repeat;
-  background-size: 102px 31px;
-}
-
-.wz-view.muted .weevideo-volume-icon i{
-  background-position: -69px -16px;
-}
-
-.weevideo-volume-current{
-  width: 0;
-  height: 6px;
-  float: left;
-  background: #7D81BE;
-}
-
-.weevideo-volume-seeker{}
-
 .weevideo-title{
   font-size: 14px;
   color: #FFF;
@@ -116,32 +71,6 @@ video{
   bottom: 0;
   left: 0;
   background-color: #272c32;
-}
-
-.weevideo-backprogress{
-  width: 30%;
-  height: 6px;
-  float: left;
-  background: #FFF;
-  position: relative;
-}
-
-.weevideo-buffer{
-  width: 0;
-  height: 6px;
-  background: rgba( 125, 129, 190, 0.5 );
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.weevideo-progress{
-  width: 0;
-  height: 6px;
-  background: #7D81BE;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .weevideo-info{
