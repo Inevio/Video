@@ -31,12 +31,19 @@
 }
 
 .ui-fullscreen{
+  float: left;
+  margin-top: 8px;
+  border: 1px solid transparent;
+  margin-left: 0;
+  margin-bottom: 8px;
+  margin-right: 8px;
   padding: 8px !important;
   width: 8px !important;
   height: 8px !important;
 }
 
 .ui-fullscreen i{
+  float: left;
   background: url('@static/fullscreen.png');
   background-position: 0px 0;
   background-size: 8px 8px;

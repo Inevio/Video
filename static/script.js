@@ -349,7 +349,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'click', '.wz-view-fullscreen', function(){
+    .on( 'click', '.ui-fullscreen', function(){
         toggleFullscreen();
     })
 
