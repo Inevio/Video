@@ -30,6 +30,20 @@
   box-shadow: none;
 }
 
+.ui-fullscreen{
+  padding: 8px !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.ui-fullscreen i{
+  background: url('@static/fullscreen.png');
+  background-position: 0px 0;
+  background-size: 8px 8px;
+  width: 8px;
+  height: 8px
+}
+
 video{
   width: 100%;
   height: 100%;
