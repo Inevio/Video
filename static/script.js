@@ -176,7 +176,7 @@ var updateProgressBar = function( noAnimate ){
 
 var hideControls = function(){
 
-  /*if( win.hasClass( 'hidden-controls') ){
+  if( win.hasClass( 'hidden-controls') ){
       return;
   }
 
@@ -185,7 +185,7 @@ var hideControls = function(){
   win.addClass( 'hidden-controls' );
 
   uiBarTop.transition( { opacity : 0 }, 500 );
-  uiBarBottom.transition( { opacity : 0 }, 500 );*/
+  uiBarBottom.transition( { opacity : 0 }, 500 );
 
 };
 
@@ -608,5 +608,3 @@ video.on( 'durationchange', function(){
     });
 
 });
-
-loadItem(2413573);
