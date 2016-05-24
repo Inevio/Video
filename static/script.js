@@ -9,16 +9,16 @@ var win               = $( this );
 var video             = $('video');
 var uiBarBottom       = $('.weevideo-bottom');
 var uiBarTop          = $('.wz-ui-header');
-var uiProgress        = $('.weevideo-progress');
-var uiProgressBack    = $('.weevideo-backprogress');
-var uiProgressBuffer  = $('.weevideo-buffer');
+var uiProgress        = $('.video-progress');
+var uiProgressBack    = $('.video-backprogress');
+var uiProgressBuffer  = $('.video-buffer');
 var uiTimeCurrent     = $('.currentTime');
-var uiTimeSeeker      = $('.weevideo-time-seeker');
+var uiTimeSeeker      = $('.video-time-seeker');
 var uiTimeTotal       = $('.totalTime');
-var uiTitle           = $('.weevideo-title');
-var uiVolume          = $('.weevideo-volume-current');
-var uiVolumeMax       = $('.weevideo-volume-max');
-var uiVolumeSeeker    = $('.weevideo-volume-seeker');
+var uiTitle           = $('.video-title');
+var uiVolume          = $('.video-volume-current');
+var uiVolumeMax       = $('.video-volume-max');
+var uiVolumeSeeker    = $('.video-volume-seeker');
 var isWebKit          = /webkit/i.test( navigator.userAgent );
 var prevClientX       = 0;
 var prevClientY       = 0;
@@ -42,184 +42,174 @@ uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
 // Functions
 var loadItem = function( structureId ){
 
-    api.fs( structureId, function( error, structure ){
+  api.fs( structureId, function( error, structure ){
 
-        video
-            .empty()
-            .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-            .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
-            .load();
+    video
+      .empty()
+      .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
+      .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+      .load();
+
+      if( structure.metadata.media.video.resolutionSquare ){
 
         resizeVideo(
 
-            structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
-            structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
-            true
+          structure.metadata.media.video.resolutionSquare.w,
+          structure.metadata.media.video.resolutionSquare.h,
+          true
 
         );
 
-        uiTitle.text( structure.name );
+      }else{
 
-    });
+        resizeVideo(
+
+          structure.metadata.media.video.resolution.w,
+          structure.metadata.media.video.resolution.h,
+          true
+
+        );
+
+      }
+
+    uiTitle.text( structure.name );
+
+  });
 
 };
 
 var toggleFullscreen = function(){
 
-    video[ 0 ].play();
+  video[ 0 ].play();
 
-    if( win.hasClass( 'fullscreen' ) ){
+  if( win.hasClass( 'fullscreen' ) ){
 
-        api.tool.exitFullscreen();
+    api.tool.exitFullscreen();
 
+  }else{
+
+    if( win[ 0 ].requestFullScreen ){
+        win[ 0 ].requestFullScreen();
+    }else if( win[ 0 ].webkitRequestFullScreen ){
+        win[ 0 ].webkitRequestFullScreen();
+    }else if( win[ 0 ].mozRequestFullScreen ){
+        win[ 0 ].mozRequestFullScreen();
     }else{
-
-        if( win[ 0 ].requestFullScreen ){
-            win[ 0 ].requestFullScreen();
-        }else if( win[ 0 ].webkitRequestFullScreen ){
-            win[ 0 ].webkitRequestFullScreen();
-        }else if( win[ 0 ].mozRequestFullScreen ){
-            win[ 0 ].mozRequestFullScreen();
-        }else{
-            alert( lang.fullscreenSupport );
-        }
-
-        normalWidth  = win.width();
-        normalHeight = win.height();
-
+        alert( lang.fullscreenSupport );
     }
+
+    normalWidth  = win.width();
+    normalHeight = win.height();
+
+  }
 
 };
 
 var resizeVideo = function( width, height, limit ){
 
-    width  = parseInt( width, 10 );
-    height = parseInt( height, 10 );
+  width = width.replace(/\s/g, '');
+  width  = parseInt( width, 10 );
+  height = height.replace(/\s/g, '');
+  height = parseInt( height, 10 );
 
-    if( limit ){
+  if( limit ){
 
-        var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
-        var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
+    var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
+    var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
 
-        if( widthRatio > 1 || heightRatio > 1 ){
+    if( widthRatio > 1 || heightRatio > 1 ){
 
-            if( widthRatio > heightRatio ){
+      if( widthRatio > heightRatio ){
 
-                width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
-                height = height / widthRatio;
+        width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
+        height = height / widthRatio;
 
-            }else{
+      }else{
 
-                width  = width / heightRatio;
-                height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
+        width  = width / heightRatio;
+        height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
 
-            }
-
-        }
+      }
 
     }
 
-    api.fit( win, width - win.width(), height - win.height() );
-    win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
-    win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
-    updateBars();
+  }
+
+  api.fit( win, width - win.width(), height - win.height() );
+  win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+  win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+  updateBars();
 
 };
 
 var updateBars = function(){
 
-    var backWidth = uiProgressBack.width();
+  var backWidth = uiProgressBack.width();
 
-    uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
-    uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
-    updateProgressBar( true );
+  uiProgress.width( backWidth * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+  uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( video[ 0 ].currentTime / video[ 0 ].duration ) );
+  updateProgressBar( true );
 
 };
 
 var updateProgressBar = function( noAnimate ){
 
-    var buffer = 0;
+  var buffer = 0;
 
-    try{
-        buffer = video[ 0 ].buffered.end( 0 );
-    }catch(e){}
+  try{
+    buffer = video[ 0 ].buffered.end( 0 );
+  }catch(e){}
 
-    var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
+  var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
 
-    if( width > 0 ){
+  if( width > 0 ){
 
-        if( noAnimate ){
-            uiProgressBuffer.stop().clearQueue().width( width );
-        }else{
-            uiProgressBuffer.stop().clearQueue().transition( { width : width }, 100 );
-        }
-
+    if( noAnimate ){
+      uiProgressBuffer.stop().clearQueue().width( width );
+    }else{
+      uiProgressBuffer.stop().clearQueue().transition( { width : width }, 100 );
     }
+
+  }
 
 };
 
 var hideControls = function(){
 
-    if( win.hasClass( 'hidden-controls') ){
-        return;
-    }
+  if( win.hasClass( 'hidden-controls') ){
+      return;
+  }
 
-    uiBarTop.stop().clearQueue();
-    uiBarBottom.stop().clearQueue();
-    win.addClass( 'hidden-controls' );
+  uiBarTop.stop().clearQueue();
+  uiBarBottom.stop().clearQueue();
+  win.addClass( 'hidden-controls' );
 
-    if( isWebKit ){
-
-        uiBarTop.animate( { top : -1 * uiBarTop.height() }, 1000 );
-        uiBarBottom.animate( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
-
-    }else{
-
-        uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
-        uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
-
-    }
+  uiBarTop.transition( { opacity : 0 }, 500 );
+  uiBarBottom.transition( { opacity : 0 }, 500 );
 
 };
 
 var showControls = function(){
 
-    /*
-    if( !win.hasClass( 'resizing' ) ){
-        */
+  if( !win.hasClass( 'hidden-controls') ){
+    return;
+  }
 
-        if( !win.hasClass( 'hidden-controls') ){
-            return;
-        }
+  uiBarTop.stop().clearQueue();
+  uiBarBottom.stop().clearQueue();
+  win.removeClass( 'hidden-controls' );
 
-        uiBarTop.stop().clearQueue();
-        uiBarBottom.stop().clearQueue();
-        win.removeClass( 'hidden-controls' );
-
-        if( isWebKit ){
-
-            uiBarTop.animate( { top : 0 }, 500 );
-            uiBarBottom.animate( { bottom : 0 }, 500 );
-
-        }else{
-
-            uiBarTop.transition( { top : 0 }, 500 );
-            uiBarBottom.transition( { bottom : 0 }, 500 );
-
-        }
-
-        /*
-    }
-    */
+  uiBarTop.transition( { opacity : 1 }, 500 );
+  uiBarBottom.transition( { opacity : 1 }, 500 );
 
 };
 
 // Events
 win.on( 'app-param', function( e, params ){
 
-    if( params && params.command === 'openFile' ){
-        loadItem( params.data );
-    }
+  if( params && params.command === 'openFile' ){
+    loadItem( params.data );
+  }
 
 });
 
@@ -264,7 +254,7 @@ video.on( 'durationchange', function(){
     win
     .on( 'click', 'video', function(){
 
-        if( win.hasClass('play') ){
+        if( win.hasClass('playing') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
@@ -272,9 +262,9 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'mousedown', '.weevideo-controls-play', function(){
+    .on( 'mousedown', '.play', function(){
 
-        if( win.hasClass('play') ){
+        if( win.hasClass('playing') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
@@ -282,7 +272,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'mousedown', '.weevideo-volume-icon', function(){
+    .on( 'mousedown', '.volume-icon', function(){
 
         if( win.hasClass('muted') ){
             video[ 0 ].muted = false;
@@ -292,7 +282,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'wz-dragmove', '.weevideo-volume-seeker', function( e, posX, posY ){
+    .on( 'wz-dragmove', '.video-volume-seeker', function( e, posX, posY ){
 
         if( win.hasClass('muted') ){
             video[ 0 ].muted = false;
@@ -304,7 +294,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'wz-dragmove', '.weevideo-time-seeker', function( e, posX, posY ){
+    .on( 'wz-dragmove', '.video-time-seeker', function( e, posX, posY ){
 
         // Usar el de Music
         video[ 0 ].pause();
@@ -349,7 +339,7 @@ video.on( 'durationchange', function(){
 
     })
 
-    .on( 'click', '.wz-view-fullscreen', function(){
+    .on( 'click', '.ui-fullscreen', function(){
         toggleFullscreen();
     })
 
@@ -385,32 +375,20 @@ video.on( 'durationchange', function(){
 
     })
 
-    /*
-    .on('wz-dragend', function(){
-
-        if( !win.is( ':hover' ) ){
-            win.mouseleave();
-        }
-
-    })
-    */
-
-    .on( 'wz-dragend', '.weevideo-time-seeker', function(){
+    .on( 'wz-dragend', '.video-time-seeker', function(){
 
         clearInterval( emulatedSeekerTimer );
-
         emulatedSeekerTimer    = 0;
         video[ 0 ].currentTime = emulatedSeekerTime;
-
         video[ 0 ].play();
 
     })
 
-    .on( 'mousedown', '.weevideo-controls-rewind', function(){
+    .on( 'mousedown', '.rewind', function(){
         video[ 0 ].currentTime -= 10;
     })
 
-    .on( 'mousedown', '.weevideo-controls-forward', function(){
+    .on( 'mousedown', '.forward', function(){
         video[ 0 ].currentTime += 10;
     })
 
@@ -445,7 +423,7 @@ video.on( 'durationchange', function(){
                 showControls();
             }
 
-            if( ( win.hasClass('maximized') || win.hasClass('fullscreen') ) && win.hasClass( 'play' ) ){
+            if( ( win.hasClass('maximized') || win.hasClass('fullscreen') ) && win.hasClass( 'playing' ) ){
 
                 hideControlsTimer = setTimeout( function(){
                     hideControls();
@@ -469,7 +447,7 @@ video.on( 'durationchange', function(){
 
     .key( 'space', function(){
 
-        if( win.hasClass('play') ){
+        if( win.hasClass('playing') ){
             video[ 0 ].pause();
         }else{
             video[ 0 ].play();
@@ -544,11 +522,11 @@ video.on( 'durationchange', function(){
 
     video
     .on( 'play', function(){
-        win.addClass('play');
+      win.addClass('playing');
     })
 
     .on( 'pause', function(){
-        win.removeClass('play');
+      win.removeClass('playing');
     })
 
     .on( 'timeupdate', function( e ){
