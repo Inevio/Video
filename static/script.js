@@ -50,13 +50,27 @@ var loadItem = function( structureId ){
       .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
       .load();
 
-    resizeVideo(
+      if( structure.metadata.media.video.resolutionSquare ){
 
-      structure.metadata.media.video.resolutionSquare.w || structure.metadata.media.video.resolution.w,
-      structure.metadata.media.video.resolutionSquare.h || structure.metadata.media.video.resolution.h,
-      true
+        resizeVideo(
 
-    );
+          structure.metadata.media.video.resolutionSquare.w,
+          structure.metadata.media.video.resolutionSquare.h,
+          true
+
+        );
+
+      }else{
+
+        resizeVideo(
+
+          structure.metadata.media.video.resolution.w,
+          structure.metadata.media.video.resolution.h,
+          true
+
+        );
+
+      }
 
     uiTitle.text( structure.name );
 
@@ -93,7 +107,9 @@ var toggleFullscreen = function(){
 
 var resizeVideo = function( width, height, limit ){
 
+  width = width.replace(/\s/g, '');
   width  = parseInt( width, 10 );
+  height = height.replace(/\s/g, '');
   height = parseInt( height, 10 );
 
   if( limit ){
@@ -160,7 +176,7 @@ var updateProgressBar = function( noAnimate ){
 
 var hideControls = function(){
 
-  if( win.hasClass( 'hidden-controls') ){
+  /*if( win.hasClass( 'hidden-controls') ){
       return;
   }
 
@@ -168,49 +184,23 @@ var hideControls = function(){
   uiBarBottom.stop().clearQueue();
   win.addClass( 'hidden-controls' );
 
-  if( isWebKit ){
-
-      uiBarTop.animate( { top : -1 * uiBarTop.height() }, 1000 );
-      uiBarBottom.animate( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
-
-  }else{
-
-      uiBarTop.transition( { top : -1 * uiBarTop.height() }, 1000 );
-      uiBarBottom.transition( { bottom : -1.1 * uiBarBottom.height() }, 1000 ); // El .1 extra es para ocultar el seeker
-
-  }
+  uiBarTop.transition( { opacity : 0 }, 500 );
+  uiBarBottom.transition( { opacity : 0 }, 500 );*/
 
 };
 
 var showControls = function(){
 
-  /*
-  if( !win.hasClass( 'resizing' ) ){
-      */
-
-    if( !win.hasClass( 'hidden-controls') ){
-      return;
-    }
-
-    uiBarTop.stop().clearQueue();
-    uiBarBottom.stop().clearQueue();
-    win.removeClass( 'hidden-controls' );
-
-    if( isWebKit ){
-
-      uiBarTop.animate( { top : 0 }, 500 );
-      uiBarBottom.animate( { bottom : 0 }, 500 );
-
-    }else{
-
-      uiBarTop.transition( { top : 0 }, 500 );
-      uiBarBottom.transition( { bottom : 0 }, 500 );
-
-    }
-
-      /*
+  if( !win.hasClass( 'hidden-controls') ){
+    return;
   }
-  */
+
+  uiBarTop.stop().clearQueue();
+  uiBarBottom.stop().clearQueue();
+  win.removeClass( 'hidden-controls' );
+
+  uiBarTop.transition( { opacity : 1 }, 500 );
+  uiBarBottom.transition( { opacity : 1 }, 500 );
 
 };
 
@@ -619,4 +609,4 @@ video.on( 'durationchange', function(){
 
 });
 
-loadItem(962239);
+loadItem(2413573);
