@@ -106,7 +106,8 @@ video{
 }
 
 .btn{
-  opacity: 0.7;
+  opacity: 0.8;
+  transition: opacity .2s linear;
 }
 
 .btn:hover{
@@ -125,7 +126,7 @@ video{
 
 .play-button i{
   display: inline-block;
-  background-size: 197px 24px;
+  background-size: 122px 24px;
   background-image: url('@static/sprite.png');
 }
 
@@ -261,7 +262,7 @@ video{
   height: 12px;
   float: left;
   background: url('@static/sprite.png') no-repeat;
-  background-size: 197px 24px;
+  background-size: 122px 24px;
   background-position: -96px 0px;
 }
 
