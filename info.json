@@ -1,7 +1,7 @@
 
 {
 
-    "name"    : "Video Player",
+    "name"    : "Video Mobile",
     "version" : "1.0",
     "stage"   : "beta",
     "api"     : "a100d2",
@@ -39,16 +39,16 @@
 
                     "width"  : {
 
-                        "default" : 750,
-                        "min"     : 750,
+                        "default" : 375,
+                        "min"     : 375,
                         "max"     : 0
 
                     },
 
                     "height" : {
 
-                        "default" : 472,
-                        "min"     : 472,
+                        "default" : 667,
+                        "min"     : 667,
                         "max"     : 0
 
                     },

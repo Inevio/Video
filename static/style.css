@@ -32,6 +32,10 @@
   opacity: 1;
 }
 
+.ui-header-mobile{
+  display: none;
+}
+
 .ui-fullscreen{
   float: left;
   margin-top: 8px;
@@ -289,4 +293,32 @@ video{
   float: left;
   background: #60b25e;
   border-radius: 3px;
+}
+
+.wz-view.mobile{
+
+  .ui-header-desktop{
+    display: none;
+  }
+
+  .ui-header-mobile{
+    display: block;
+    background-color: #272d33;
+    background-image: none;
+    height: 50px;
+    text-align: center;
+  }
+
+  .ui-header-mobile .video-title{
+    margin-left: 0px;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .weevideo-bottom{
+    height: 107px;
+    background-color: #272d33;
+    background-image: none;
+  }
+
 }

@@ -26,6 +26,11 @@ var hideControlsTimer = 0;
 var normalWidth       = 0;
 var normalHeight      = 0;
 
+
+
+win.addClass('mobile');
+var mobile = true;
+
 /*
  * Las operaciones de cambio de tiempos por drag son muy exigentes en cuanto a procesador,
  * por lo que las emulamos con un pequeño lag.
@@ -107,27 +112,52 @@ var toggleFullscreen = function(){
 
 var resizeVideo = function( width, height, limit ){
 
-  width = width.replace(/\s/g, '');
+  width  = width.replace(/\s/g, '');
   width  = parseInt( width, 10 );
   height = height.replace(/\s/g, '');
   height = parseInt( height, 10 );
 
   if( limit ){
 
-    var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
-    var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
+    if( mobile ){
 
-    if( widthRatio > 1 || heightRatio > 1 ){
+      var widthRatio  = width / ( win.width() );
+      var heightRatio = height / ( win.height() );
 
-      if( widthRatio > heightRatio ){
+      if( widthRatio > 1 || heightRatio > 1 ){
 
-        width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
-        height = height / widthRatio;
+        if( widthRatio > heightRatio ){
 
-      }else{
+          width  = win.width();
+          height = height / widthRatio;
 
-        width  = width / heightRatio;
-        height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
+        }else{
+
+          width  = width / heightRatio;
+          height = win.height();
+
+        }
+
+      }
+
+    }else{
+
+      var widthRatio  = width / ( api.tool.desktopWidth() - ( VIEW_MARGIN * 2 ) );
+      var heightRatio = height / ( api.tool.desktopHeight() - ( VIEW_MARGIN * 2 ) );
+
+      if( widthRatio > 1 || heightRatio > 1 ){
+
+        if( widthRatio > heightRatio ){
+
+          width  = api.tool.desktopWidth() - ( VIEW_MARGIN * 2 );
+          height = height / widthRatio;
+
+        }else{
+
+          width  = width / heightRatio;
+          height = api.tool.desktopHeight() - ( VIEW_MARGIN * 2 );
+
+        }
 
       }
 
@@ -176,7 +206,7 @@ var updateProgressBar = function( noAnimate ){
 
 var hideControls = function(){
 
-  if( win.hasClass( 'hidden-controls') ){
+  /*if( win.hasClass( 'hidden-controls') ){
       return;
   }
 
@@ -185,7 +215,7 @@ var hideControls = function(){
   win.addClass( 'hidden-controls' );
 
   uiBarTop.transition( { opacity : 0 }, 500 );
-  uiBarBottom.transition( { opacity : 0 }, 500 );
+  uiBarBottom.transition( { opacity : 0 }, 500 );*/
 
 };
 
@@ -608,3 +638,5 @@ video.on( 'durationchange', function(){
     });
 
 });
+
+loadItem(962238);
