@@ -10,6 +10,7 @@ win.addClass('mobile');
 var mobile = true;
 var video             = $('video');
 var uiBarTop          = $('.wz-ui-header');
+var uiTitle           = $('.video-title');
 
 if( mobile ){
 
@@ -20,7 +21,6 @@ if( mobile ){
   var uiTimeCurrent     = $('.video-bottom-mobile .currentTime');
   var uiTimeSeeker      = $('.video-bottom-mobile .video-time-seeker');
   var uiTimeTotal       = $('.video-bottom-mobile .totalTime');
-  var uiTitle           = $('.video-bottom-mobile .video-title');
   var uiVolume          = $('.video-bottom-mobile .video-volume-current');
   var uiVolumeMax       = $('.video-bottom-mobile .video-volume-max');
   var uiVolumeSeeker    = $('.video-bottom-mobile .video-volume-seeker');
@@ -34,7 +34,6 @@ if( mobile ){
   var uiTimeCurrent     = $('.video-bottom-desktop .currentTime');
   var uiTimeSeeker      = $('.video-bottom-desktop .video-time-seeker');
   var uiTimeTotal       = $('.video-bottom-desktop .totalTime');
-  var uiTitle           = $('.video-bottom-desktop .video-title');
   var uiVolume          = $('.video-bottom-desktop .video-volume-current');
   var uiVolumeMax       = $('.video-bottom-desktop .video-volume-max');
   var uiVolumeSeeker    = $('.video-bottom-desktop .video-volume-seeker');

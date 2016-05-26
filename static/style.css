@@ -352,6 +352,7 @@ video{
 
   .video-bottom-mobile .rewind{
     height: 19px;
+    margin-top: 1px;
   }
 
   .video-bottom-mobile .rewind i{
@@ -363,6 +364,7 @@ video{
 
   .video-bottom-mobile .forward{
     height: 19px;
+    margin-top: 1px;
   }
 
   .video-bottom-mobile .forward i{
@@ -370,6 +372,33 @@ video{
     background-position: 0px 0px;
     background-size: cover;
     background-image: url('@static/mobile/forward.png');
+  }
+
+  .video-bottom-mobile .play{
+    width: 15px;
+    height: 21px;
+    background-color: #1f2429;
+    border-radius: 50%;
+    padding: 14px 17px;
+  }
+
+  .video-bottom-mobile .play i{
+    background-size: 29px 21px;
+    background-image: url('@static/mobile/play-pause.png');
+    background-position: 0px 0px;
+    width: 15px;
+    height: 21px;
+  }
+
+}
+
+.wz-view.mobile.playing{
+
+  .video-bottom-mobile .play i{
+    background-position: -16px 0px;
+    width: 13px;
+    height: 21px;
+    margin-left: 2px;
   }
 
 }
