@@ -6,30 +6,47 @@ var SHOW_DURATION = 500;
 
 // Local variables
 var win               = $( this );
+win.addClass('mobile');
+var mobile = true;
 var video             = $('video');
-var uiBarBottom       = $('.weevideo-bottom');
 var uiBarTop          = $('.wz-ui-header');
-var uiProgress        = $('.video-progress');
-var uiProgressBack    = $('.video-backprogress');
-var uiProgressBuffer  = $('.video-buffer');
-var uiTimeCurrent     = $('.currentTime');
-var uiTimeSeeker      = $('.video-time-seeker');
-var uiTimeTotal       = $('.totalTime');
-var uiTitle           = $('.video-title');
-var uiVolume          = $('.video-volume-current');
-var uiVolumeMax       = $('.video-volume-max');
-var uiVolumeSeeker    = $('.video-volume-seeker');
+
+if( mobile ){
+
+  var uiBarBottom       = $('.video-bottom.video-bottom-mobile');
+  var uiProgress        = $('.video-bottom-mobile .video-progress');
+  var uiProgressBack    = $('.video-bottom-mobile .video-backprogress');
+  var uiProgressBuffer  = $('.video-bottom-mobile .video-buffer');
+  var uiTimeCurrent     = $('.video-bottom-mobile .currentTime');
+  var uiTimeSeeker      = $('.video-bottom-mobile .video-time-seeker');
+  var uiTimeTotal       = $('.video-bottom-mobile .totalTime');
+  var uiTitle           = $('.video-bottom-mobile .video-title');
+  var uiVolume          = $('.video-bottom-mobile .video-volume-current');
+  var uiVolumeMax       = $('.video-bottom-mobile .video-volume-max');
+  var uiVolumeSeeker    = $('.video-bottom-mobile .video-volume-seeker');
+
+}else{
+
+  var uiBarBottom       = $('.video-bottom.video-bottom-desktop');
+  var uiProgress        = $('.video-bottom-desktop .video-progress');
+  var uiProgressBack    = $('.video-bottom-desktop .video-backprogress');
+  var uiProgressBuffer  = $('.video-bottom-desktop .video-buffer');
+  var uiTimeCurrent     = $('.video-bottom-desktop .currentTime');
+  var uiTimeSeeker      = $('.video-bottom-desktop .video-time-seeker');
+  var uiTimeTotal       = $('.video-bottom-desktop .totalTime');
+  var uiTitle           = $('.video-bottom-desktop .video-title');
+  var uiVolume          = $('.video-bottom-desktop .video-volume-current');
+  var uiVolumeMax       = $('.video-bottom-desktop .video-volume-max');
+  var uiVolumeSeeker    = $('.video-bottom-desktop .video-volume-seeker');
+
+}
+
 var isWebKit          = /webkit/i.test( navigator.userAgent );
 var prevClientX       = 0;
 var prevClientY       = 0;
 var hideControlsTimer = 0;
 var normalWidth       = 0;
 var normalHeight      = 0;
-
-
-
-win.addClass('mobile');
-var mobile = true;
 
 /*
  * Las operaciones de cambio de tiempos por drag son muy exigentes en cuanto a procesador,

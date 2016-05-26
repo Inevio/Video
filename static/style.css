@@ -73,10 +73,9 @@ video{
   line-height: 1.1em;
 }
 
-.weevideo-bottom{
+.video-bottom{
   opacity: 1;
   width: 100%;
-  /*height: 50px;*/
   text-align: center;
   position: absolute;
   bottom: 0;
@@ -88,6 +87,10 @@ video{
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,.4) 70%);
 	background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,.4) 70%);
 	background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.4) 70%);
+}
+
+.video-bottom-mobile{
+  display: none;
 }
 
 .ui-header .ui-header-buttons{
@@ -315,10 +318,58 @@ video{
     font-weight: bold;
   }
 
-  .weevideo-bottom{
+  .video-bottom-desktop{
+    display: none;
+  }
+
+  .video-bottom-mobile{
+    display: block;
     height: 107px;
     background-color: #272d33;
     background-image: none;
+  }
+
+  .video-bottom-mobile .time{
+    float: none;
+    width: ~'calc(100% - 20px)';
+    margin: 15px 10px;
+  }
+
+  .video-bottom-mobile .time .video-backprogress{
+    width: ~'calc(100% - 124px)';
+  }
+
+  .video-bottom-mobile .play-buttons{
+    float: none;
+    margin: 5px;
+    display: inline-block;
+  }
+
+  .video-bottom-mobile .play{
+    /*width: 22px;
+    padding: 12px 13px;*/
+  }
+
+  .video-bottom-mobile .rewind{
+    height: 19px;
+  }
+
+  .video-bottom-mobile .rewind i{
+    height: 19px;
+    background-position: 0px 0px;
+    background-size: cover;
+    background-image: url('@static/mobile/backward.png');
+  }
+
+  .video-bottom-mobile .forward{
+    height: 19px;
+  }
+
+  .video-bottom-mobile .forward i{
+    height: 19px;
+    background-position: 0px 0px;
+    background-size: cover;
+    background-image: url('@static/mobile/forward.png');
   }
 
 }
