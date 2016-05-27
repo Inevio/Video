@@ -102,7 +102,7 @@ video{
 }
 
 .play-buttons{
-  height: 38px;
+  /*height: 38px;*/
   margin-left: 29px;
   margin-top: 43px;
   float: left;
@@ -308,7 +308,7 @@ video{
     display: block;
     background-color: #272d33;
     background-image: none;
-    height: 50px;
+    height: 55px;
     text-align: center;
   }
 
@@ -316,6 +316,8 @@ video{
     margin-left: 0px;
     color: #ffffff;
     font-weight: bold;
+    font-size: 20px;
+    margin-top: 17px;
   }
 
   .video-bottom-desktop{
@@ -332,7 +334,29 @@ video{
   .video-bottom-mobile .time{
     float: none;
     width: ~'calc(100% - 20px)';
-    margin: 15px 10px;
+    margin: 14px 10px 17px 10px;
+  }
+
+  .video-bottom-mobile .time .currentTime{
+    margin-right: 7px;
+  }
+
+  .video-bottom-mobile .time .totalTime{
+    margin-left: 7px;
+  }
+
+  .video-bottom-mobile .time .video-seeker{
+    width: 17px;
+    height: 17px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: -5px;
   }
 
   .video-bottom-mobile .time .video-backprogress{
@@ -341,18 +365,14 @@ video{
 
   .video-bottom-mobile .play-buttons{
     float: none;
-    margin: 5px;
+    margin: 0px 5px;
     display: inline-block;
-  }
-
-  .video-bottom-mobile .play{
-    /*width: 22px;
-    padding: 12px 13px;*/
   }
 
   .video-bottom-mobile .rewind{
     height: 19px;
-    margin-top: 1px;
+    margin-top: 7px;
+    margin-right: 19px;
   }
 
   .video-bottom-mobile .rewind i{
@@ -364,7 +384,8 @@ video{
 
   .video-bottom-mobile .forward{
     height: 19px;
-    margin-top: 1px;
+    margin-top: 7px;
+    margin-left: 19px;
   }
 
   .video-bottom-mobile .forward i{
@@ -379,7 +400,7 @@ video{
     height: 21px;
     background-color: #1f2429;
     border-radius: 50%;
-    padding: 14px 17px;
+    padding: 13px 16px;
   }
 
   .video-bottom-mobile .play i{
@@ -388,6 +409,7 @@ video{
     background-position: 0px 0px;
     width: 15px;
     height: 21px;
+    margin-left: 2px;
   }
 
 }
@@ -398,7 +420,7 @@ video{
     background-position: -16px 0px;
     width: 13px;
     height: 21px;
-    margin-left: 2px;
+    margin-left: 0px;
   }
 
 }

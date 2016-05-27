@@ -6,18 +6,19 @@ var SHOW_DURATION = 500;
 
 // Local variables
 var win               = $( this );
-win.addClass('mobile');
-var mobile = true;
 var video             = $('video');
 var uiBarTop          = $('.wz-ui-header');
 var uiTitle           = $('.video-title');
+var mobile = false;
 
 if( mobile ){
 
+  win.addClass('mobile');
   var uiBarBottom       = $('.video-bottom.video-bottom-mobile');
   var uiProgress        = $('.video-bottom-mobile .video-progress');
   var uiProgressBack    = $('.video-bottom-mobile .video-backprogress');
   var uiProgressBuffer  = $('.video-bottom-mobile .video-buffer');
+  var uiTime            = $('.video-bottom-mobile .time');
   var uiTimeCurrent     = $('.video-bottom-mobile .currentTime');
   var uiTimeSeeker      = $('.video-bottom-mobile .video-time-seeker');
   var uiTimeTotal       = $('.video-bottom-mobile .totalTime');
@@ -31,6 +32,7 @@ if( mobile ){
   var uiProgress        = $('.video-bottom-desktop .video-progress');
   var uiProgressBack    = $('.video-bottom-desktop .video-backprogress');
   var uiProgressBuffer  = $('.video-bottom-desktop .video-buffer');
+  var uiTime            = $('.video-bottom-desktop .time');
   var uiTimeCurrent     = $('.video-bottom-desktop .currentTime');
   var uiTimeSeeker      = $('.video-bottom-desktop .video-time-seeker');
   var uiTimeTotal       = $('.video-bottom-desktop .totalTime');
@@ -297,6 +299,14 @@ video.on( 'durationchange', function(){
 
     video[ 0 ].play();
 
+    if( mobile ){
+
+      var uiProgressBackWidth = 2 * parseInt( uiTime.css('margin-left') ) + 2 * ( parseInt( uiTimeCurrent.outerWidth(true) ) + 1 );
+      uiProgressBack.css('width', 'calc(100% - ' + uiProgressBackWidth +'px)');
+      console.log( uiProgressBackWidth );
+
+    }
+
     win
     .on( 'click', 'video', function(){
 
@@ -372,7 +382,9 @@ video.on( 'durationchange', function(){
         var sec       = parseInt( rem % 60, 10 );
 
         if( totalHour > 9 && hour < 10 ){ hour = '0' + hour; }
-        if( totalHour > 0 || ( totalMin > 10 && min < 10 ) ){ min = '0' + min; }
+        if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
+           min = '0' + min;
+         }
         if( sec < 10 ){ sec  = '0' + sec; }
 
         if( totalHour ){
@@ -588,7 +600,9 @@ video.on( 'durationchange', function(){
         var sec       = parseInt( rem % 60, 10 );
 
         if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
-        if( totalHour > 0 || (totalMin > 10 && min < 10)){ min  = '0' + min; }
+        if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
+           min = '0' + min;
+         }
         if( sec < 10 ){ sec  = '0'+sec; }
 
         if(totalHour){
@@ -655,4 +669,4 @@ video.on( 'durationchange', function(){
 
 });
 
-loadItem(962238);
+loadItem(1296045);
