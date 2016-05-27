@@ -668,5 +668,3 @@ video.on( 'durationchange', function(){
     });
 
 });
-
-loadItem(1296045);
