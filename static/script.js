@@ -75,12 +75,12 @@ var loadItem = function( structureId ){
       .append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
       .load();
 
-      if( structure.original.metadata.media.video.resolutionSquare ){
+      if( formats.original.metadata.media.video.resolutionSquare ){
 
         resizeVideo(
 
-          structure.original.metadata.media.video.resolutionSquare.w,
-          structure.original.metadata.media.video.resolutionSquare.h,
+          formats.original.metadata.media.video.resolutionSquare.w,
+          formats.original.metadata.media.video.resolutionSquare.h,
           true
 
         );
@@ -89,8 +89,8 @@ var loadItem = function( structureId ){
 
         resizeVideo(
 
-          structure.original.metadata.media.video.resolution.w,
-          structure.original.metadata.media.video.resolution.h,
+          formats.original.metadata.media.video.resolution.w,
+          formats.original.metadata.media.video.resolution.h,
           true
 
         );
