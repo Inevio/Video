@@ -9,7 +9,7 @@ var win               = $( this );
 var video             = $('video');
 var uiBarTop          = $('.wz-ui-header');
 var uiTitle           = $('.video-title');
-var mobile = false;
+var mobile = true;
 
 if( mobile ){
 
@@ -181,11 +181,12 @@ var resizeVideo = function( width, height, limit ){
 
     }
 
+    //api.fit( win, width - win.width(), height - win.height() );
+    //win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+    //win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+
   }
 
-  api.fit( win, width - win.width(), height - win.height() );
-  win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
-  win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
   updateBars();
 
 };
@@ -503,7 +504,7 @@ video.on( 'durationchange', function(){
         win.removeClass( 'maximized' );
     })
 
-    .key( 'space', function(){
+    /*.key( 'space', function(){
 
         if( win.hasClass('playing') ){
             video[ 0 ].pause();
@@ -576,7 +577,7 @@ video.on( 'durationchange', function(){
     .key(
         'backspace',
         function(){ video[ 0 ].currentTime = 0; }
-    );
+    );*/
 
     video
     .on( 'play', function(){
@@ -668,3 +669,5 @@ video.on( 'durationchange', function(){
     });
 
 });
+
+loadItem(1296045);
