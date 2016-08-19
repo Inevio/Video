@@ -67,11 +67,14 @@ var loadItem = function( structureId ){
 
   api.fs( structureId, function( error, structure ){
 
+    console.log( structure );
     video
       .empty()
       .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
       .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
       .load();
+
+    if( !mobile ){
 
       if( structure.metadata.media.video.resolutionSquare ){
 
@@ -94,6 +97,8 @@ var loadItem = function( structureId ){
         );
 
       }
+
+    }
 
     uiTitle.text( structure.name );
 
