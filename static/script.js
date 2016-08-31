@@ -9,7 +9,7 @@ var win               = $( this );
 var video             = $('video');
 var uiBarTop          = $('.wz-ui-header');
 var uiTitle           = $('.video-title');
-var mobile = true;
+var mobile = win.hasClass( 'wz-mobile-view' );
 
 if( mobile ){
 
@@ -74,29 +74,25 @@ var loadItem = function( structureId ){
       .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
       .load();
 
-    if( !mobile ){
+    if( structure.metadata.media.video.resolutionSquare ){
 
-      if( structure.metadata.media.video.resolutionSquare ){
+      resizeVideo(
 
-        resizeVideo(
+        structure.metadata.media.video.resolutionSquare.w,
+        structure.metadata.media.video.resolutionSquare.h,
+        true
 
-          structure.metadata.media.video.resolutionSquare.w,
-          structure.metadata.media.video.resolutionSquare.h,
-          true
+      );
 
-        );
+    }else{
 
-      }else{
+      resizeVideo(
 
-        resizeVideo(
+        structure.metadata.media.video.resolution.w,
+        structure.metadata.media.video.resolution.h,
+        true
 
-          structure.metadata.media.video.resolution.w,
-          structure.metadata.media.video.resolution.h,
-          true
-
-        );
-
-      }
+      );
 
     }
 
@@ -267,412 +263,416 @@ win.on( 'app-param', function( e, params ){
 
 });
 
+video.on( 'error' ,function(){
+  console.log(arguments);
+});
+
 video.on( 'durationchange', function(){
 
-    var time = this.duration;
-    var hour = parseInt( time / 3600, 10 );
-    var rem  = time % 3600;
-    var min  = parseInt( rem / 60, 10 );
-    var sec  = parseInt( rem % 60, 10 );
+  var time = this.duration;
+  var hour = parseInt( time / 3600, 10 );
+  var rem  = time % 3600;
+  var min  = parseInt( rem / 60, 10 );
+  var sec  = parseInt( rem % 60, 10 );
 
-    if( hour > 0 && min < 10 ){ min  = '0' + min; }
-    if( sec < 10 ){ sec = '0' + sec; }
+  if( hour > 0 && min < 10 ){ min  = '0' + min; }
+  if( sec < 10 ){ sec = '0' + sec; }
 
-    if( 9 < hour ){
+  if( 9 < hour ){
 
-        uiTimeCurrent.text('00:00:00');
-        uiTimeTotal.text(hour+':'+min+':'+sec);
+    uiTimeCurrent.text('00:00:00');
+    uiTimeTotal.text(hour+':'+min+':'+sec);
 
-    }else if( 0 < hour && hour < 10 ){
+  }else if( 0 < hour && hour < 10 ){
 
-        uiTimeCurrent.text('0:00:00');
-        uiTimeTotal.text(hour+':'+min+':'+sec);
+    uiTimeCurrent.text('0:00:00');
+    uiTimeTotal.text(hour+':'+min+':'+sec);
 
-    }else if( 9 < min ){
+  }else if( 9 < min ){
 
-        uiTimeCurrent.text('00:00');
-        uiTimeTotal.text(min+':'+sec);
+    uiTimeCurrent.text('00:00');
+    uiTimeTotal.text(min+':'+sec);
 
+  }else{
+
+    uiTimeCurrent.text('0:00');
+    uiTimeTotal.text(min+':'+sec);
+
+  }
+
+  uiVolumeSeeker.addClass('wz-dragger-x');
+  uiTimeSeeker.addClass('wz-dragger-x');
+
+  video[ 0 ].play();
+
+  if( mobile ){
+
+    var uiProgressBackWidth = 2 * parseInt( uiTime.css('margin-left') ) + 2 * ( parseInt( uiTimeCurrent.outerWidth(true) ) + 1 );
+    uiProgressBack.css('width', 'calc(100% - ' + uiProgressBackWidth +'px)');
+    console.log( uiProgressBackWidth );
+
+  }
+
+  win
+  .on( 'click', 'video', function(){
+
+    if( win.hasClass('playing') ){
+      video[ 0 ].pause();
     }else{
+      video[ 0 ].play();
+    }
 
-        uiTimeCurrent.text('0:00');
-        uiTimeTotal.text(min+':'+sec);
+  })
+
+  .on( 'mousedown', '.play', function(){
+
+    if( win.hasClass('playing') ){
+      video[ 0 ].pause();
+    }else{
+      video[ 0 ].play();
+    }
+
+  })
+
+  .on( 'mousedown', '.volume-icon', function(){
+
+    if( win.hasClass('muted') ){
+      video[ 0 ].muted = false;
+    }else{
+      video[ 0 ].muted = true;
+    }
+
+  })
+
+  .on( 'wz-dragmove', '.video-volume-seeker', function( e, posX, posY ){
+
+    if( win.hasClass('muted') ){
+      video[ 0 ].muted = false;
+    }
+
+    uiVolume.css( 'width', posX * uiVolumeMax.width() );
+
+    video[ 0 ].volume = 1 * posX;
+
+  })
+
+  .on( 'wz-dragmove', '.video-time-seeker', function( e, posX, posY ){
+
+    // Usar el de Music
+    video[ 0 ].pause();
+
+    if( !emulatedSeekerTimer ){
+
+      emulatedSeekerTimer = setInterval( function(){
+        video[ 0 ].currentTime = emulatedSeekerTime;
+      }, 100 );
 
     }
 
-    uiVolumeSeeker.addClass('wz-dragger-x');
-    uiTimeSeeker.addClass('wz-dragger-x');
+    uiProgress.css( 'width', posX * uiProgressBack.width() );
 
+    /*
+     * Como cambiar el currentTime de un elemento es un proceso costoso
+     * para el procesador, emulamos ese proceso
+     */
+    emulatedSeekerTime = video[ 0 ].duration * posX;
+
+    var time      = video[ 0 ].duration;
+    var totalHour = parseInt( time / 3600, 10 );
+    var rem       = time % 3600;
+    var totalMin  = parseInt( rem / 60, 10 );
+    time          = emulatedSeekerTime;
+    var hour      = parseInt( time / 3600, 10 );
+    rem           = ( time % 3600 );
+    var min       = parseInt( rem / 60, 10 );
+    var sec       = parseInt( rem % 60, 10 );
+
+    if( totalHour > 9 && hour < 10 ){ hour = '0' + hour; }
+    if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
+      min = '0' + min;
+    }
+    if( sec < 10 ){ sec  = '0' + sec; }
+
+    if( totalHour ){
+      uiTimeCurrent.text( hour + ':' + min + ':' + sec );
+    }else if( totalMin ){
+      uiTimeCurrent.text( min + ':' + sec );
+    }else{
+      uiTimeCurrent.text( '0:' + sec );
+    }
+
+  })
+
+  .on( 'click', '.ui-fullscreen', function(){
+    toggleFullscreen();
+  })
+
+  .on( 'click', '.wz-view-minimize', function(){
+
+    if( win.hasClass('fullscreen') ){
+      toggleFullscreen();
+    }
+
+  })
+
+  .on( 'mouseleave', function(){
+
+    if(
+      !uiTimeSeeker.hasClass('wz-drag-active') &&
+      !uiVolumeSeeker.hasClass('wz-drag-active') &&
+      !win.hasClass('maximized')
+    ){
+      hideControls();
+    }
+
+  })
+
+  .on( 'mouseenter', function(){
+
+    if(
+      !uiTimeSeeker.hasClass('wz-drag-active') &&
+      !uiVolumeSeeker.hasClass('wz-drag-active') &&
+      !win.hasClass('maximized')
+    ){
+      showControls();
+    }
+
+  })
+
+  .on( 'wz-dragend', '.video-time-seeker', function(){
+
+    clearInterval( emulatedSeekerTimer );
+    emulatedSeekerTimer    = 0;
+    video[ 0 ].currentTime = emulatedSeekerTime;
     video[ 0 ].play();
 
-    if( mobile ){
+  })
 
-      var uiProgressBackWidth = 2 * parseInt( uiTime.css('margin-left') ) + 2 * ( parseInt( uiTimeCurrent.outerWidth(true) ) + 1 );
-      uiProgressBack.css('width', 'calc(100% - ' + uiProgressBackWidth +'px)');
-      console.log( uiProgressBackWidth );
+  .on( 'mousedown', '.rewind', function(){
+    video[ 0 ].currentTime -= 10;
+  })
+
+  .on( 'mousedown', '.forward', function(){
+    video[ 0 ].currentTime += 10;
+  })
+
+  .on( 'enterfullscreen', function(){
+
+    win.addClass('fullscreen');
+
+    api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+
+  })
+
+  .on( 'exitfullscreen', function(){
+
+    win.removeClass('fullscreen');
+
+    api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+
+  })
+
+  .on( 'dblclick', 'video', toggleFullscreen )
+
+  .on( 'mousemove', function( e ){
+
+    if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
+
+      prevClientX = e.clientX;
+      prevClientY = e.clientY;
+
+      clearTimeout( hideControlsTimer );
+
+      if( win.hasClass( 'hidden-controls' ) ){
+        showControls();
+      }
+
+      if( ( win.hasClass('maximized') || win.hasClass('fullscreen') ) && win.hasClass( 'playing' ) ){
+
+        hideControlsTimer = setTimeout( function(){
+            hideControls();
+        }, 3000 );
+
+      }
 
     }
 
-    win
-    .on( 'click', 'video', function(){
+  })
+
+  .on( 'ui-view-resize ui-view-resize-end ui-view-maximize ui-view-unmaximize', updateBars )
+
+  .on( 'ui-view-maximize', function(){
+    win.addClass( 'maximized' );
+  })
+
+  .on( 'ui-view-unmaximize', function(){
+    win.removeClass( 'maximized' );
+  })
+
+  /*.key( 'space', function(){
+
+      if( win.hasClass('playing') ){
+          video[ 0 ].pause();
+      }else{
+          video[ 0 ].play();
+      }
+
+  })
+
+  .key( 'enter', function(){
+      toggleFullscreen();
+  })
+
+  .key(
+      'right',
+      function(){ video[ 0 ].currentTime += 10; },
+      function(){ video[ 0 ].currentTime += 10; }
+  )
+
+  .key(
+      'left',
+      function(){ video[ 0 ].currentTime -= 10; },
+      function(){ video[ 0 ].currentTime -= 10; }
+  )
+
+  .key(
+      'up',
+      function(){
+
+          if( video[ 0 ].volume + 0.1 < 1){
+              video[ 0 ].volume += 0.1;
+          }else{
+              video[ 0 ].volume = 1;
+          }
 
-        if( win.hasClass('playing') ){
-            video[ 0 ].pause();
-        }else{
-            video[ 0 ].play();
-        }
+      },
+      function(){
+
+          if( video[ 0 ].volume + 0.1 < 1){
+              video[ 0 ].volume += 0.1;
+          }else{
+              video[ 0 ].volume = 1;
+          }
 
-    })
+      }
+  )
 
-    .on( 'mousedown', '.play', function(){
+  .key(
+      'down',
+      function(){
 
-        if( win.hasClass('playing') ){
-            video[ 0 ].pause();
-        }else{
-            video[ 0 ].play();
-        }
+          if( video[ 0 ].volume - 0.1 > 0){
+              video[ 0 ].volume -= 0.1;
+          }else{
+              video[ 0 ].volume = 0;
+          }
 
-    })
+      },
+      function(){
 
-    .on( 'mousedown', '.volume-icon', function(){
+          if( video[ 0 ].volume - 0.1 > 0){
+              video[ 0 ].volume -= 0.1;
+          }else{
+              video[ 0 ].volume = 0;
+          }
 
-        if( win.hasClass('muted') ){
-            video[ 0 ].muted = false;
-        }else{
-            video[ 0 ].muted = true;
-        }
+      }
+  )
 
-    })
+  .key(
+      'backspace',
+      function(){ video[ 0 ].currentTime = 0; }
+  );*/
 
-    .on( 'wz-dragmove', '.video-volume-seeker', function( e, posX, posY ){
+  video
+  .on( 'play', function(){
+    win.addClass('playing');
+  })
 
-        if( win.hasClass('muted') ){
-            video[ 0 ].muted = false;
-        }
+  .on( 'pause', function(){
+    win.removeClass('playing');
+  })
 
-        uiVolume.css( 'width', posX * uiVolumeMax.width() );
+  .on( 'timeupdate', function( e ){
 
-        video[ 0 ].volume = 1 * posX;
+    var time      = this.duration;
+    var totalHour = parseInt( time / 3600, 10 );
+    var rem       = time % 3600;
+    var totalMin  = parseInt( rem / 60, 10 );
+    time          = this.currentTime;
+    var hour      = parseInt( time / 3600, 10 );
+    rem           = time % 3600;
+    var min       = parseInt( rem / 60, 10 );
+    var sec       = parseInt( rem % 60, 10 );
 
-    })
+    if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
+    if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
+     min = '0' + min;
+    }
+    if( sec < 10 ){ sec  = '0'+sec; }
 
-    .on( 'wz-dragmove', '.video-time-seeker', function( e, posX, posY ){
+    if(totalHour){
+      uiTimeCurrent.text(hour+':'+min+':'+sec);
+    }else if(totalMin){
+      uiTimeCurrent.text(min+':'+sec);
+    }else{
+      uiTimeCurrent.text('0:'+sec);
+    }
 
-        // Usar el de Music
-        video[ 0 ].pause();
+    var backWidth = uiProgressBack.width();
 
-        if( !emulatedSeekerTimer ){
+    uiProgress.width( backWidth * ( this.currentTime / this.duration ) );
 
-            emulatedSeekerTimer = setInterval( function(){
-                video[ 0 ].currentTime = emulatedSeekerTime;
-            }, 100 );
+    if( !uiTimeSeeker.hasClass('wz-drag-active') ){
+      uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( this.currentTime / this.duration ) );
+    }
 
-        }
+  })
 
-        uiProgress.css( 'width', posX * uiProgressBack.width() );
+  .on( 'progress', updateProgressBar )
 
-        /*
-         * Como cambiar el currentTime de un elemento es un proceso costoso
-         * para el procesador, emulamos ese proceso
-         */
-        emulatedSeekerTime = video[ 0 ].duration * posX;
+  .on('ended', function(){
 
-        var time      = video[ 0 ].duration;
-        var totalHour = parseInt( time / 3600, 10 );
-        var rem       = time % 3600;
-        var totalMin  = parseInt( rem / 60, 10 );
-        time          = emulatedSeekerTime;
-        var hour      = parseInt( time / 3600, 10 );
-        rem           = ( time % 3600 );
-        var min       = parseInt( rem / 60, 10 );
-        var sec       = parseInt( rem % 60, 10 );
+      //showControls();
 
-        if( totalHour > 9 && hour < 10 ){ hour = '0' + hour; }
-        if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
-           min = '0' + min;
-         }
-        if( sec < 10 ){ sec  = '0' + sec; }
+    if( !uiTimeSeeker.hasClass('wz-drag-active') ){
 
-        if( totalHour ){
-            uiTimeCurrent.text( hour + ':' + min + ':' + sec );
-        }else if( totalMin ){
-            uiTimeCurrent.text( min + ':' + sec );
-        }else{
-            uiTimeCurrent.text( '0:' + sec );
-        }
+      var time = this.duration;
+      var hour = parseInt( time / 3600, 10 );
 
-    })
+      uiProgress.width( 0 );
+      uiTimeSeeker.css( { x : 0 } );
 
-    .on( 'click', '.ui-fullscreen', function(){
-        toggleFullscreen();
-    })
+      if( parseInt( hour, 10 ) ){
+          uiTimeCurrent.text('00:00:00');
+      }else{
+          uiTimeCurrent.text('00:00');
+      }
 
-    .on( 'click', '.wz-view-minimize', function(){
+      this.currentTime = 0;
+      this.pause();
 
-        if( win.hasClass('fullscreen') ){
-            toggleFullscreen();
-        }
+    }
 
-    })
+  })
 
-    .on( 'mouseleave', function(){
+  .on( 'volumechange', function(){
 
-        if(
-            !uiTimeSeeker.hasClass('wz-drag-active') &&
-            !uiVolumeSeeker.hasClass('wz-drag-active') &&
-            !win.hasClass('maximized')
-        ){
-            hideControls();
-        }
+    if( this.muted ){
+      win.addClass('muted');
+    }else{
+      win.removeClass('muted');
+    }
 
-    })
+    if( !uiVolumeSeeker.hasClass('wz-drag-active') ){
 
-    .on( 'mouseenter', function(){
+      uiVolume.css( 'width', this.volume * uiVolumeMax.width() );
+      uiVolumeSeeker.css( 'x', Math.floor( this.volume * ( uiVolumeMax.width() - uiVolumeSeeker.width() ) ) );
 
-        if(
-            !uiTimeSeeker.hasClass('wz-drag-active') &&
-            !uiVolumeSeeker.hasClass('wz-drag-active') &&
-            !win.hasClass('maximized')
-        ){
-            showControls();
-        }
+    }
 
-    })
-
-    .on( 'wz-dragend', '.video-time-seeker', function(){
-
-        clearInterval( emulatedSeekerTimer );
-        emulatedSeekerTimer    = 0;
-        video[ 0 ].currentTime = emulatedSeekerTime;
-        video[ 0 ].play();
-
-    })
-
-    .on( 'mousedown', '.rewind', function(){
-        video[ 0 ].currentTime -= 10;
-    })
-
-    .on( 'mousedown', '.forward', function(){
-        video[ 0 ].currentTime += 10;
-    })
-
-    .on( 'enterfullscreen', function(){
-
-        win.addClass('fullscreen');
-
-        api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
-
-    })
-
-    .on( 'exitfullscreen', function(){
-
-        win.removeClass('fullscreen');
-
-        api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
-
-    })
-
-    .on( 'dblclick', 'video', toggleFullscreen )
-
-    .on( 'mousemove', function( e ){
-
-        if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
-
-            prevClientX = e.clientX;
-            prevClientY = e.clientY;
-
-            clearTimeout( hideControlsTimer );
-
-            if( win.hasClass( 'hidden-controls' ) ){
-                showControls();
-            }
-
-            if( ( win.hasClass('maximized') || win.hasClass('fullscreen') ) && win.hasClass( 'playing' ) ){
-
-                hideControlsTimer = setTimeout( function(){
-                    hideControls();
-                }, 3000 );
-
-            }
-
-        }
-
-    })
-
-    .on( 'ui-view-resize ui-view-resize-end ui-view-maximize ui-view-unmaximize', updateBars )
-
-    .on( 'ui-view-maximize', function(){
-        win.addClass( 'maximized' );
-    })
-
-    .on( 'ui-view-unmaximize', function(){
-        win.removeClass( 'maximized' );
-    })
-
-    /*.key( 'space', function(){
-
-        if( win.hasClass('playing') ){
-            video[ 0 ].pause();
-        }else{
-            video[ 0 ].play();
-        }
-
-    })
-
-    .key( 'enter', function(){
-        toggleFullscreen();
-    })
-
-    .key(
-        'right',
-        function(){ video[ 0 ].currentTime += 10; },
-        function(){ video[ 0 ].currentTime += 10; }
-    )
-
-    .key(
-        'left',
-        function(){ video[ 0 ].currentTime -= 10; },
-        function(){ video[ 0 ].currentTime -= 10; }
-    )
-
-    .key(
-        'up',
-        function(){
-
-            if( video[ 0 ].volume + 0.1 < 1){
-                video[ 0 ].volume += 0.1;
-            }else{
-                video[ 0 ].volume = 1;
-            }
-
-        },
-        function(){
-
-            if( video[ 0 ].volume + 0.1 < 1){
-                video[ 0 ].volume += 0.1;
-            }else{
-                video[ 0 ].volume = 1;
-            }
-
-        }
-    )
-
-    .key(
-        'down',
-        function(){
-
-            if( video[ 0 ].volume - 0.1 > 0){
-                video[ 0 ].volume -= 0.1;
-            }else{
-                video[ 0 ].volume = 0;
-            }
-
-        },
-        function(){
-
-            if( video[ 0 ].volume - 0.1 > 0){
-                video[ 0 ].volume -= 0.1;
-            }else{
-                video[ 0 ].volume = 0;
-            }
-
-        }
-    )
-
-    .key(
-        'backspace',
-        function(){ video[ 0 ].currentTime = 0; }
-    );*/
-
-    video
-    .on( 'play', function(){
-      win.addClass('playing');
-    })
-
-    .on( 'pause', function(){
-      win.removeClass('playing');
-    })
-
-    .on( 'timeupdate', function( e ){
-
-        var time      = this.duration;
-        var totalHour = parseInt( time / 3600, 10 );
-        var rem       = time % 3600;
-        var totalMin  = parseInt( rem / 60, 10 );
-        time          = this.currentTime;
-        var hour      = parseInt( time / 3600, 10 );
-        rem           = time % 3600;
-        var min       = parseInt( rem / 60, 10 );
-        var sec       = parseInt( rem % 60, 10 );
-
-        if( totalHour > 9 && hour < 10){ hour = '0' + hour; }
-        if( ( totalHour > 0 && min < 10 ) || ( totalMin > 10 && min < 10 ) ){
-           min = '0' + min;
-         }
-        if( sec < 10 ){ sec  = '0'+sec; }
-
-        if(totalHour){
-            uiTimeCurrent.text(hour+':'+min+':'+sec);
-        }else if(totalMin){
-            uiTimeCurrent.text(min+':'+sec);
-        }else{
-            uiTimeCurrent.text('0:'+sec);
-        }
-
-        var backWidth = uiProgressBack.width();
-
-        uiProgress.width( backWidth * ( this.currentTime / this.duration ) );
-
-        if( !uiTimeSeeker.hasClass('wz-drag-active') ){
-            uiTimeSeeker.css( 'x', ( backWidth - uiTimeSeeker.width() ) * ( this.currentTime / this.duration ) );
-        }
-
-    })
-
-    .on( 'progress', updateProgressBar )
-
-    .on('ended', function(){
-
-        //showControls();
-
-        if( !uiTimeSeeker.hasClass('wz-drag-active') ){
-
-            var time = this.duration;
-            var hour = parseInt( time / 3600, 10 );
-
-            uiProgress.width( 0 );
-            uiTimeSeeker.css( { x : 0 } );
-
-            if( parseInt( hour, 10 ) ){
-                uiTimeCurrent.text('00:00:00');
-            }else{
-                uiTimeCurrent.text('00:00');
-            }
-
-            this.currentTime = 0;
-            this.pause();
-
-        }
-
-    })
-
-    .on( 'volumechange', function(){
-
-        if( this.muted ){
-            win.addClass('muted');
-        }else{
-            win.removeClass('muted');
-        }
-
-        if( !uiVolumeSeeker.hasClass('wz-drag-active') ){
-
-            uiVolume.css( 'width', this.volume * uiVolumeMax.width() );
-            uiVolumeSeeker.css( 'x', Math.floor( this.volume * ( uiVolumeMax.width() - uiVolumeSeeker.width() ) ) );
-
-        }
-
-    });
+  });
 
 });
 
-loadItem(4122673);
+loadItem(962243);
