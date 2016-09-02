@@ -674,5 +674,3 @@ video.on( 'durationchange', function(){
   });
 
 });
-
-loadItem(962243);
