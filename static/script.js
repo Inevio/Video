@@ -316,10 +316,22 @@ video.on( 'durationchange', function(){
   win
   .on( 'click', 'video', function(){
 
-    if( win.hasClass('playing') ){
-      video[ 0 ].pause();
+    if( !mobile ){
+
+      if( win.hasClass('playing') ){
+        video[ 0 ].pause();
+      }else{
+        video[ 0 ].play();
+      }
+
     }else{
-      video[ 0 ].play();
+
+      if( win.hasClass( 'hidden-controls' ) ){
+        showControls();
+      }else{
+        hideControls();
+      }
+
     }
 
   })
