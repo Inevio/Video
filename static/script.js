@@ -180,11 +180,11 @@ var resizeVideo = function( width, height, limit ){
 
       }
 
-    }
+      api.fit( win, width - win.width(), height - win.height() );
+      win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
+      win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
 
-    //api.fit( win, width - win.width(), height - win.height() );
-    //win.deskitemX( parseInt( ( api.tool.desktopWidth() - win.width() ) / 2, 10 ) );
-    //win.deskitemY( parseInt( ( api.tool.desktopHeight() - win.height() ) / 2, 10 ) );
+    }
 
   }
 
