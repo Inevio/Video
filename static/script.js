@@ -521,7 +521,7 @@ video.on( 'durationchange', function(){
     win.removeClass( 'maximized' );
   })
 
-  /*.key( 'space', function(){
+  .key( 'space', function(){
 
       if( win.hasClass('playing') ){
           video[ 0 ].pause();
@@ -594,7 +594,7 @@ video.on( 'durationchange', function(){
   .key(
       'backspace',
       function(){ video[ 0 ].currentTime = 0; }
-  );*/
+  );
 
   video
   .on( 'play', function(){
