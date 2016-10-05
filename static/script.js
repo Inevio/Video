@@ -67,20 +67,21 @@ var loadItem = function( structureId ){
 
   api.fs( structureId, function( error, structure ){
 
-    console.log( structure );
-    video
+    structure.getFormats( function( error, formats ){
+
+      video
       .empty()
-      .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-      .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+      .append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
+      .append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
       .load();
 
-    if( structure.metadata.media.video.resolutionSquare ){
+      if( formats.original.metadata.media.video.resolutionSquare ){
 
       resizeVideo(
 
-        structure.metadata.media.video.resolutionSquare.w,
-        structure.metadata.media.video.resolutionSquare.h,
-        true
+          formats.original.metadata.media.video.resolutionSquare.w,
+          formats.original.metadata.media.video.resolutionSquare.h,
+          true
 
       );
 
@@ -88,15 +89,17 @@ var loadItem = function( structureId ){
 
       resizeVideo(
 
-        structure.metadata.media.video.resolution.w,
-        structure.metadata.media.video.resolution.h,
-        true
+          formats.original.metadata.media.video.resolution.w,
+          formats.original.metadata.media.video.resolution.h,
+          true
 
       );
 
     }
 
-    uiTitle.text( structure.name );
+      uiTitle.text( structure.name );
+
+    });
 
   });
 
