@@ -339,7 +339,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.play', function(){
+  .on( 'mousedown touchstart', '.play', function(){
 
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
@@ -349,7 +349,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.volume-icon', function(){
+  .on( 'mousedown touchstart', '.volume-icon', function(){
 
     if( win.hasClass('muted') ){
       video[ 0 ].muted = false;
@@ -463,11 +463,11 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.rewind', function(){
+  .on( 'mousedown touchstart', '.rewind', function(){
     video[ 0 ].currentTime -= 10;
   })
 
-  .on( 'mousedown', '.forward', function(){
+  .on( 'mousedown touchstart', '.forward', function(){
     video[ 0 ].currentTime += 10;
   })
 
