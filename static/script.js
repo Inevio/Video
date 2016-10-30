@@ -5,11 +5,11 @@ var HIDE_DURATION = 1000;
 var SHOW_DURATION = 500;
 
 // Local variables
-var win               = $( this );
-var video             = $('video');
-var uiBarTop          = $('.wz-ui-header');
-var uiTitle           = $('.video-title');
-var mobile = win.hasClass( 'wz-mobile-view' );
+var win      = $( this );
+var video    = $('video');
+var uiBarTop = $('.wz-ui-header');
+var uiTitle  = $('.video-title');
+var mobile   = typeof cordova !== 'undefined'
 
 if( mobile ){
 
@@ -444,6 +444,10 @@ video.on( 'durationchange', function(){
 
   .on( 'mouseenter', function(){
 
+    if( mobile ){
+      return
+    }
+
     if(
       !uiTimeSeeker.hasClass('wz-drag-active') &&
       !uiVolumeSeeker.hasClass('wz-drag-active') &&
@@ -490,6 +494,10 @@ video.on( 'durationchange', function(){
   .on( 'dblclick', 'video', toggleFullscreen )
 
   .on( 'mousemove', function( e ){
+
+    if( mobile ){
+      return
+    }
 
     if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
 
