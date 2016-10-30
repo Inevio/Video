@@ -412,6 +412,10 @@ video{
     margin-left: 2px;
   }
 
+  .video-bottom-mobile .ui-fullscreen{
+    background: #f00;
+  }
+
 }
 
 .wz-view.mobile.playing{

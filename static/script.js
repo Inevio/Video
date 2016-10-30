@@ -110,9 +110,7 @@ var toggleFullscreen = function(){
   video[ 0 ].play();
 
   if( win.hasClass( 'fullscreen' ) ){
-
     api.tool.exitFullscreen();
-
   }else{
 
     if( win[ 0 ].requestFullScreen ){
@@ -121,6 +119,11 @@ var toggleFullscreen = function(){
         win[ 0 ].webkitRequestFullScreen();
     }else if( win[ 0 ].mozRequestFullScreen ){
         win[ 0 ].mozRequestFullScreen();
+    }else if( video[ 0 ].webkitEnterFullscreen ){
+
+      video[ 0 ].webkitEnterFullscreen();
+      screen.lockOrientation('landscape')
+
     }else{
         alert( lang.fullscreenSupport );
     }
@@ -695,5 +698,16 @@ video.on( 'durationchange', function(){
     }
 
   });
+
+  if( mobile ){
+
+    video
+    .on( 'webkitbeginfullscreen', function(){})
+
+    .on( 'webkitendfullscreen', function(){
+      screen.lockOrientation('portrait')
+    })
+
+  }
 
 });
