@@ -413,7 +413,22 @@ video{
   }
 
   .video-bottom-mobile .ui-fullscreen{
-    background: #f00;
+    background-color: #1f2429;
+    border-radius: 50%;
+    margin-top: 6px !important;
+    padding: 10px !important;
+    width: 16px !important;
+    height: 16px !important;
+    position: absolute;
+    right: 10px;
+  }
+
+  .video-bottom-mobile .ui-fullscreen i{
+    background-size: 16px 16px;
+    background-image: url('@static/fullscreen.png');
+    background-position: 0px 0px;
+    width: 16px;
+    height: 16px;
   }
 
 }
