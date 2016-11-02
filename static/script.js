@@ -342,7 +342,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( typeof cordova === 'undefined' ? 'mousedown' : 'touchstart', '.play', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.play', function(){
 
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
@@ -352,7 +352,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( typeof cordova === 'undefined' ? 'mousedown' : 'touchstart', '.volume-icon', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.volume-icon', function(){
 
     if( win.hasClass('muted') ){
       video[ 0 ].muted = false;
@@ -470,11 +470,11 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( typeof cordova === 'undefined' ? 'mousedown' : 'touchstart', '.rewind', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.rewind', function(){
     video[ 0 ].currentTime -= 10;
   })
 
-  .on( typeof cordova === 'undefined' ? 'mousedown' : 'touchstart', '.forward', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.forward', function(){
     video[ 0 ].currentTime += 10;
   })
 
