@@ -5,11 +5,11 @@ var HIDE_DURATION = 1000;
 var SHOW_DURATION = 500;
 
 // Local variables
-var win               = $( this );
-var video             = $('video');
-var uiBarTop          = $('.wz-ui-header');
-var uiTitle           = $('.video-title');
-var mobile = win.hasClass( 'wz-mobile-view' );
+var win      = $( this );
+var video    = $('video');
+var uiBarTop = $('.wz-ui-header');
+var uiTitle  = $('.video-title');
+var mobile   = typeof cordova !== 'undefined'
 
 if( mobile ){
 
@@ -67,20 +67,21 @@ var loadItem = function( structureId ){
 
   api.fs( structureId, function( error, structure ){
 
-    console.log( structure );
-    video
+    structure.getFormats( function( error, formats ){
+
+      video
       .empty()
-      .append( $('<source></source>').attr('type','video/webm').attr('src', structure.formats.webm.url) )
-      .append( $('<source></source>').attr('type','video/mp4').attr('src', structure.formats.mp4.url) )
+      .append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
+      .append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
       .load();
 
-    if( structure.metadata.media.video.resolutionSquare ){
+      if( formats.original.metadata.media.video.resolutionSquare ){
 
       resizeVideo(
 
-        structure.metadata.media.video.resolutionSquare.w,
-        structure.metadata.media.video.resolutionSquare.h,
-        true
+          formats.original.metadata.media.video.resolutionSquare.w,
+          formats.original.metadata.media.video.resolutionSquare.h,
+          true
 
       );
 
@@ -88,15 +89,17 @@ var loadItem = function( structureId ){
 
       resizeVideo(
 
-        structure.metadata.media.video.resolution.w,
-        structure.metadata.media.video.resolution.h,
-        true
+          formats.original.metadata.media.video.resolution.w,
+          formats.original.metadata.media.video.resolution.h,
+          true
 
       );
 
     }
 
-    uiTitle.text( structure.name );
+      uiTitle.text( structure.name );
+
+    });
 
   });
 
@@ -107,9 +110,7 @@ var toggleFullscreen = function(){
   video[ 0 ].play();
 
   if( win.hasClass( 'fullscreen' ) ){
-
     api.tool.exitFullscreen();
-
   }else{
 
     if( win[ 0 ].requestFullScreen ){
@@ -118,6 +119,11 @@ var toggleFullscreen = function(){
         win[ 0 ].webkitRequestFullScreen();
     }else if( win[ 0 ].mozRequestFullScreen ){
         win[ 0 ].mozRequestFullScreen();
+    }else if( video[ 0 ].webkitEnterFullscreen ){
+
+      video[ 0 ].webkitEnterFullscreen();
+      screen.lockOrientation('landscape')
+
     }else{
         alert( lang.fullscreenSupport );
     }
@@ -336,7 +342,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.play', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.play', function(){
 
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
@@ -346,7 +352,7 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.volume-icon', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.volume-icon', function(){
 
     if( win.hasClass('muted') ){
       video[ 0 ].muted = false;
@@ -441,6 +447,10 @@ video.on( 'durationchange', function(){
 
   .on( 'mouseenter', function(){
 
+    if( mobile ){
+      return
+    }
+
     if(
       !uiTimeSeeker.hasClass('wz-drag-active') &&
       !uiVolumeSeeker.hasClass('wz-drag-active') &&
@@ -460,11 +470,11 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'mousedown', '.rewind', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.rewind', function(){
     video[ 0 ].currentTime -= 10;
   })
 
-  .on( 'mousedown', '.forward', function(){
+  .on( !mobile ? 'mousedown' : 'touchstart', '.forward', function(){
     video[ 0 ].currentTime += 10;
   })
 
@@ -487,6 +497,10 @@ video.on( 'durationchange', function(){
   .on( 'dblclick', 'video', toggleFullscreen )
 
   .on( 'mousemove', function( e ){
+
+    if( mobile ){
+      return
+    }
 
     if( e.clientX !== prevClientX || e.clientY !== prevClientY ){
 
@@ -684,5 +698,16 @@ video.on( 'durationchange', function(){
     }
 
   });
+
+  if( mobile ){
+
+    video
+    .on( 'webkitbeginfullscreen', function(){})
+
+    .on( 'webkitendfullscreen', function(){
+      screen.lockOrientation('portrait')
+    })
+
+  }
 
 });
