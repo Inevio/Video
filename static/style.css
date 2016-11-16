@@ -413,22 +413,22 @@ video{
   }
 
   .video-bottom-mobile .ui-fullscreen{
-    background-color: #1f2429;
+    background-color: none;
     border-radius: 50%;
-    margin-top: 6px !important;
+    margin-top: 3px !important;
     padding: 10px !important;
-    width: 16px !important;
-    height: 16px !important;
+    width: 21px !important;
+    height: 21px !important;
     position: absolute;
-    right: 10px;
+    right: 3px;
   }
 
   .video-bottom-mobile .ui-fullscreen i{
-    background-size: 16px 16px;
-    background-image: url('@static/fullscreen.png');
+    background-size: 21px 21px;
+    background-image: url('@static/mobile/full-screen.png');
     background-position: 0px 0px;
-    width: 16px;
-    height: 16px;
+    width: 21px;
+    height: 21px;
   }
 
 }
