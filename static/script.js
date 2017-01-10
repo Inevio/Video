@@ -69,11 +69,19 @@ var loadItem = function( structureId ){
 
     structure.getFormats( function( error, formats ){
 
+      console.log(formats);
       video
-      .empty()
-      .append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
-      .append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
-      .load();
+      .empty();
+
+      if( formats['video/webm'] ){
+        video.append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
+      }
+
+      if( formats['video/mp4'] ){
+        video.append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
+      }
+
+      video.load();
 
       if( formats.original.metadata.media.video.resolutionSquare ){
 
