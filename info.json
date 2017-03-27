@@ -100,6 +100,12 @@
 
         }
 
+    },
+
+    "stats" : {
+
+        "active-dau" : "idle"
+
     }
 
 }

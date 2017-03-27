@@ -62,6 +62,11 @@ var emulatedSeekerTime  = 0;
 uiVolume.width( uiVolumeMax.width() );
 uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
 
+if( location.hostname.indexOf('file') === 0 ){
+  win.addClass('link-mode');
+  win.parent().removeClass('wz-draggable');
+}
+
 // Functions
 var loadItem = function( structureId ){
 
