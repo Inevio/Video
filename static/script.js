@@ -123,19 +123,36 @@ var toggleFullscreen = function(){
   video[ 0 ].play();
 
   if( win.hasClass( 'fullscreen' ) ){
+
+    console.log('llego1');
     api.tool.exitFullscreen();
+    if( mobile ){
+      win.removeClass('fullscreen');
+      screen.lockOrientation('portrait');
+    }
+
   }else{
 
     if( win[ 0 ].requestFullScreen ){
-        win[ 0 ].requestFullScreen();
+      win[ 0 ].requestFullScreen();
     }else if( win[ 0 ].webkitRequestFullScreen ){
-        win[ 0 ].webkitRequestFullScreen();
+
+      console.log('llego2');
+      win[ 0 ].webkitRequestFullScreen();
+      win.addClass('fullscreen');
+      if( mobile ){
+        screen.lockOrientation('landscape');
+      }
+
     }else if( win[ 0 ].mozRequestFullScreen ){
-        win[ 0 ].mozRequestFullScreen();
+      win[ 0 ].mozRequestFullScreen();
     }else if( video[ 0 ].webkitEnterFullscreen ){
 
+      win.addClass('fullscreen');
       video[ 0 ].webkitEnterFullscreen();
-      screen.lockOrientation('landscape')
+      if( mobile ){
+        screen.lockOrientation('landscape');
+      }
 
     }else{
         alert( lang.fullscreenSupport );
@@ -230,6 +247,7 @@ var updateProgressBar = function( noAnimate ){
   }catch(e){}
 
   var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
+  //console.log(width, uiProgressBack.width(), ( buffer / video[ 0 ].duration ));
 
   if( width > 0 ){
 
@@ -280,6 +298,32 @@ win.on( 'app-param', function( e, params ){
     loadItem( params.data );
   }
 
+})
+
+.on( !mobile ? 'click' : 'tap', 'video', function(){
+
+  if( !mobile ){
+
+    if( win.hasClass('playing') ){
+      video[ 0 ].pause();
+    }else{
+      video[ 0 ].play();
+    }
+
+  }else{
+
+    if( win.hasClass( 'hidden-controls' ) ){
+      showControls();
+    }else{
+      hideControls();
+    }
+
+  }
+
+})
+
+.on( 'click', '.ui-fullscreen', function(){
+  toggleFullscreen();
 });
 
 video.on( 'error' ,function(){
@@ -328,34 +372,10 @@ video.on( 'durationchange', function(){
 
     var uiProgressBackWidth = 2 * parseInt( uiTime.css('margin-left') ) + 2 * ( parseInt( uiTimeCurrent.outerWidth(true) ) + 1 );
     uiProgressBack.css('width', 'calc(100% - ' + uiProgressBackWidth +'px)');
-    console.log( uiProgressBackWidth );
 
   }
 
-  win
-  .on( 'click', 'video', function(){
-
-    if( !mobile ){
-
-      if( win.hasClass('playing') ){
-        video[ 0 ].pause();
-      }else{
-        video[ 0 ].play();
-      }
-
-    }else{
-
-      if( win.hasClass( 'hidden-controls' ) ){
-        showControls();
-      }else{
-        hideControls();
-      }
-
-    }
-
-  })
-
-  .on( !mobile ? 'mousedown' : 'touchstart', '.play', function(){
+  win.on( !mobile ? 'mousedown' : 'touchstart', '.play', function(){
 
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
@@ -434,10 +454,6 @@ video.on( 'durationchange', function(){
 
   })
 
-  .on( 'click', '.ui-fullscreen', function(){
-    toggleFullscreen();
-  })
-
   .on( 'click', '.wz-view-minimize', function(){
 
     if( win.hasClass('fullscreen') ){
@@ -494,20 +510,26 @@ video.on( 'durationchange', function(){
   .on( 'enterfullscreen', function(){
 
     win.addClass('fullscreen');
-
-    api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+    console.log('entro fullscreen');
+    if( !mobile ){
+      api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+      updateBars();
+    }
 
   })
 
   .on( 'exitfullscreen', function(){
 
+    console.log('salgo fullscreen');
     win.removeClass('fullscreen');
-
-    api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+    if( !mobile ){
+      api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+      updateBars();
+    }
 
   })
 
-  .on( 'dblclick', 'video', toggleFullscreen )
+  .on( 'dblclick ', 'video', toggleFullscreen )
 
   .on( 'mousemove', function( e ){
 
@@ -559,7 +581,7 @@ video.on( 'durationchange', function(){
   })
 
   .key( 'enter', function(){
-      toggleFullscreen();
+    toggleFullscreen();
   })
 
   .key(
