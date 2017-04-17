@@ -140,7 +140,9 @@ var toggleFullscreen = function(){
       console.log('llego2');
       win[ 0 ].webkitRequestFullScreen();
       win.addClass('fullscreen');
-      screen.lockOrientation('landscape');
+      if( mobile ){
+        screen.lockOrientation('landscape');
+      }
 
     }else if( win[ 0 ].mozRequestFullScreen ){
       win[ 0 ].mozRequestFullScreen();
@@ -148,7 +150,9 @@ var toggleFullscreen = function(){
 
       win.addClass('fullscreen');
       video[ 0 ].webkitEnterFullscreen();
-      screen.lockOrientation('landscape');
+      if( mobile ){
+        screen.lockOrientation('landscape');
+      }
 
     }else{
         alert( lang.fullscreenSupport );
@@ -243,6 +247,7 @@ var updateProgressBar = function( noAnimate ){
   }catch(e){}
 
   var width = ( uiProgressBack.width() * ( buffer / video[ 0 ].duration ) );
+  //console.log(width, uiProgressBack.width(), ( buffer / video[ 0 ].duration ));
 
   if( width > 0 ){
 
@@ -508,6 +513,7 @@ video.on( 'durationchange', function(){
     console.log('entro fullscreen');
     if( !mobile ){
       api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
+      updateBars();
     }
 
   })
@@ -518,6 +524,7 @@ video.on( 'durationchange', function(){
     win.removeClass('fullscreen');
     if( !mobile ){
       api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
+      updateBars();
     }
 
   })
