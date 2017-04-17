@@ -38,7 +38,7 @@
 
 .ui-fullscreen{
   float: left;
-  margin-top: 8px;
+  margin-top: 12px;
   border: 1px solid transparent;
   margin-left: 0;
   margin-bottom: 8px;
@@ -95,10 +95,6 @@ video{
 
 .ui-header .ui-header-buttons{
   margin-top: 7px;
-}
-
-.ui-header .btn:hover{
-  border: 1px solid transparent !important;
 }
 
 .play-buttons{
