@@ -126,8 +126,9 @@ var toggleFullscreen = function(){
 
     console.log('llego1');
     api.tool.exitFullscreen();
+    win.removeClass('fullscreen');
     if( mobile ){
-      win.removeClass('fullscreen');
+      showControls();
       screen.lockOrientation('portrait');
     }
 
@@ -141,6 +142,7 @@ var toggleFullscreen = function(){
       win[ 0 ].webkitRequestFullScreen();
       win.addClass('fullscreen');
       if( mobile ){
+        hideControls();
         screen.lockOrientation('landscape');
       }
 
@@ -151,11 +153,12 @@ var toggleFullscreen = function(){
       win.addClass('fullscreen');
       video[ 0 ].webkitEnterFullscreen();
       if( mobile ){
+        hideControls();
         screen.lockOrientation('landscape');
       }
 
     }else{
-        alert( lang.fullscreenSupport );
+      alert( lang.fullscreenSupport );
     }
 
     normalWidth  = win.width();
