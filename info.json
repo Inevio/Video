@@ -19,7 +19,7 @@
 
             "primary" : "main",
             "unique"  : true,
-            "service" : [],
+            "service" : ["service.js"],
             "common"  : {
 
                 "css"    : [],
@@ -82,7 +82,7 @@
                     "template" : "main.html",
                     "css"    : ["style.css"],
                     "script" : ["script.js"],
-                    "start"  : []
+                    "start"  : [""]
 
                 }
 
@@ -98,7 +98,14 @@
 
             "read" : true
 
-        }
+        },
+        "channel" : true,
+        "user" : {
+
+            "read" : true
+
+        },
+        "service": true
 
     },
 
