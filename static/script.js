@@ -327,7 +327,13 @@ win.on( 'app-param', function( e, params ){
 
 .on( 'click', '.ui-fullscreen', function(){
   toggleFullscreen();
-});
+})
+
+.on( 'click', '.invite-button', function(){
+
+
+  
+})
 
 video.on( 'error' ,function(){
   console.log(arguments);

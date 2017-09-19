@@ -72,6 +72,18 @@ video{
   line-height: 1.1em;
 }
 
+.invite-button{
+  font-size: 15px;
+  color: #d2dce2;
+  display: inline-block;
+  margin-top: 19px;
+  line-height: 1.1em;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
 .video-bottom{
   opacity: 1;
   width: 100%;
