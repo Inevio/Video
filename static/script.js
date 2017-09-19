@@ -58,6 +58,10 @@ var normalHeight      = 0;
 var emulatedSeekerTimer = 0;
 var emulatedSeekerTime  = 0;
 
+var apiVideo      = null;
+var collabChannel = null;
+var collabMode    = false;
+
 // Start app
 uiVolume.width( uiVolumeMax.width() );
 uiVolumeSeeker.css( 'x', uiVolumeMax.width() - uiVolumeSeeker.width() );
@@ -72,7 +76,11 @@ var loadItem = function( structureId ){
 
   api.fs( structureId, function( error, structure ){
 
+    apiVideo = structure;
+
     structure.getFormats( function( error, formats ){
+
+      apiVideo.formats = formats;
 
       console.log(formats);
       video
@@ -294,6 +302,21 @@ var showControls = function(){
 
 };
 
+var intiveToCollaborative = function( userId, channel, callback ){
+
+  channel.addUser( userId , function(){
+
+    channel.send(  { 'action' : 'inviteToCollab' , 'videoId' : apiVideo.id , 'channelId' : channel.id } , function( error ){
+
+      if ( error ) { console.log('ERROR: ', error ); }
+
+    });
+
+  });
+
+}
+
+
 // Events
 win.on( 'app-param', function( e, params ){
 
@@ -331,8 +354,58 @@ win.on( 'app-param', function( e, params ){
 
 .on( 'click', '.invite-button', function(){
 
+  if( !mobile ){
 
-  
+    if( win.hasClass('playing') ){
+      video[ 0 ].pause();
+    }
+
+    console.log( apiVideo );
+    apiVideo.sharedWith( function( err , users ){
+
+      if( err ){
+        return alert( 'No se ha podido obtener informacion del archivo' );
+      }
+
+      if( users.length === 1 ){
+        return alert( 'Necesitas compartir el video para poder ver en modo colaborativo');
+      }
+
+      console.log( api.channel );
+
+      /*api.channel.list( function(){
+        console.log( arguments );
+      })*/
+
+      /*api.channel( function( error , channel ){
+
+        if( error ){
+          return alert( 'Error al crear el canal' );
+        }
+
+        collabChannel = channel;
+        intiveToCollaborative( 6980, channel );
+
+      }*/
+
+
+      /*$.each( users , function( i , user ){
+
+        var isOwner = user.isOwner;
+
+        api.user( user.userId , function( err , user ){
+
+          appendUser( user , isOwner );
+
+        });
+
+
+      });*/
+
+    });
+
+  }
+
 })
 
 video.on( 'error' ,function(){
