@@ -309,7 +309,7 @@ var intiveToCollaborative = function( userId, channel, callback ){
 
     channel.send(  { 'action' : 'inviteToCollab' , 'videoId' : apiVideo.id } , function( error ){
 
-      if ( error ) { console.log('ERROR: ', error ); }
+      if ( error ) { console.log( 'ERROR: ', error ); }
 
     });
 
@@ -317,11 +317,9 @@ var intiveToCollaborative = function( userId, channel, callback ){
 
 }
 
-
 // Events
 win.on( 'app-param', function( e, params ){
 
-  console.log( params );
   if( params && params.command === 'openFile' ){
 
     if( params.collab ){
@@ -431,12 +429,11 @@ video.on( 'canplay' , function(){
         return;
       }
 
-      console.log( arguments );
       collabChannel = channelApi;
 
       collabChannel.send({ 'action' : 'startCollab' , 'videoId' : apiVideo.id } , function( error ){
 
-        if ( error ) { console.log('ERROR: ', error ); }
+        if ( error ) { console.log( 'ERROR: ', error ); }
 
       });
 
@@ -616,7 +613,7 @@ video.on( 'durationchange', function(){
 
       collabChannel.send({ 'action' : 'moveTo', 'time' : video[ 0 ].currentTime , 'videoId' : apiVideo.id } , function( error ){
 
-        if ( error ) { console.log('ERROR: ', error ); }
+        if ( error ){ console.log( 'ERROR: ', error ); }
 
       });
 
@@ -637,21 +634,25 @@ video.on( 'durationchange', function(){
   .on( 'enterfullscreen', function(){
 
     win.addClass('fullscreen');
-    console.log('entro fullscreen');
+
     if( !mobile ){
+
       api.fit( win, screen.width - normalWidth, screen.height - normalHeight );
       updateBars();
+
     }
 
   })
 
   .on( 'exitfullscreen', function(){
 
-    console.log('salgo fullscreen');
     win.removeClass('fullscreen');
+
     if( !mobile ){
+
       api.fit( win, normalWidth - win.width(), normalHeight - win.height() );
       updateBars();
+
     }
 
   })
@@ -775,13 +776,13 @@ video.on( 'durationchange', function(){
   video
   .on( 'play', function(){
 
-    console.log( 'play',collabChannel );
+    console.log( 'play', collabChannel );
 
     if( collabMode && collabChannel ){
       
       collabChannel.send({ 'action' : 'play' , 'videoId' : apiVideo.id } , function( error ){
 
-        if ( error ) { console.log('ERROR: ', error ); }
+        if ( error ) { console.log( 'ERROR: ', error ); }
 
       });
 
@@ -792,13 +793,14 @@ video.on( 'durationchange', function(){
 
   .on( 'pause', function(){
 
-    console.log( 'pause',collabChannel );
+    console.log( 'pause', collabChannel );
+    
 
     if( collabMode && collabChannel ){
 
       collabChannel.send({ 'action' : 'pause' , 'videoId' : apiVideo.id } , function( error ){
 
-        if ( error ) { console.log('ERROR: ', error ); }
+        if ( error ) { console.log( 'ERROR: ', error ); }
 
       });
 
@@ -902,15 +904,14 @@ video.on( 'durationchange', function(){
 
 api.channel.on( 'message' , function( info , o ){
 
-  console.log( o );
+  console.log( o.action );
 
-  if (info.sender == myUserID ) {
+  if( info.sender == myUserID ) {
     return;
   }
 
   if ( o.action === 'startCollab') {
 
-    console.log( 'lets play ');
     collabMode = true;
     video[ 0 ].currentTime = 0;
     video[ 0 ].play();
