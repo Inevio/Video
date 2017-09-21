@@ -10,6 +10,7 @@ var video    = $('video');
 var uiBarTop = $('.wz-ui-header');
 var uiTitle  = $('.video-title');
 var mobile   = typeof cordova !== 'undefined'
+var myUserID  = api.system.user().id;
 
 if( mobile ){
 
@@ -95,7 +96,7 @@ var loadItem = function( structureId ){
       }
 
       video.load();
-
+      
       if( formats.original.metadata.media.video.resolutionSquare ){
 
       resizeVideo(
@@ -306,7 +307,7 @@ var intiveToCollaborative = function( userId, channel, callback ){
 
   channel.addUser( userId , function(){
 
-    channel.send(  { 'action' : 'inviteToCollab' , 'videoId' : apiVideo.id , 'channelId' : channel.id } , function( error ){
+    channel.send(  { 'action' : 'inviteToCollab' , 'videoId' : apiVideo.id } , function( error ){
 
       if ( error ) { console.log('ERROR: ', error ); }
 
@@ -320,7 +321,14 @@ var intiveToCollaborative = function( userId, channel, callback ){
 // Events
 win.on( 'app-param', function( e, params ){
 
+  console.log( params );
   if( params && params.command === 'openFile' ){
+
+    if( params.collab ){
+      collabMode = true;
+      collabChannel = params.channelId;
+    }
+
     loadItem( params.data );
   }
 
@@ -360,7 +368,6 @@ win.on( 'app-param', function( e, params ){
       video[ 0 ].pause();
     }
 
-    console.log( apiVideo );
     apiVideo.sharedWith( function( err , users ){
 
       if( err ){
@@ -371,22 +378,20 @@ win.on( 'app-param', function( e, params ){
         return alert( 'Necesitas compartir el video para poder ver en modo colaborativo');
       }
 
-      console.log( api.channel );
-
       /*api.channel.list( function(){
         console.log( arguments );
       })*/
 
-      /*api.channel( function( error , channel ){
+      api.channel( function( error , channel ){
 
         if( error ){
           return alert( 'Error al crear el canal' );
         }
 
         collabChannel = channel;
-        intiveToCollaborative( 6980, channel );
+        intiveToCollaborative( 49269, channel );
 
-      }*/
+      });
 
 
       /*$.each( users , function( i , user ){
@@ -410,6 +415,37 @@ win.on( 'app-param', function( e, params ){
 
 video.on( 'error' ,function(){
   console.log(arguments);
+});
+
+video.on( 'canplay' , function(){
+
+  console.log('canplay', collabMode, collabChannel);
+  if( !collabMode ){
+    video[ 0 ].play();
+  }else{
+
+    api.channel( collabChannel , function( error, channelApi ){
+
+      if( error ){
+        console.error( error );
+        return;
+      }
+
+      collabChannel = channelApi;
+
+      collabChannel.send({ 'action' : 'startCollab' , 'videoId' : apiVideo.id } , function( error ){
+
+        if ( error ) { console.log('ERROR: ', error ); }
+
+        video[ 0 ].play();
+
+      });
+
+
+    });
+
+  }
+
 });
 
 video.on( 'durationchange', function(){
@@ -448,7 +484,6 @@ video.on( 'durationchange', function(){
   uiVolumeSeeker.addClass('wz-dragger-x');
   uiTimeSeeker.addClass('wz-dragger-x');
 
-  video[ 0 ].play();
 
   if( mobile ){
 
@@ -577,7 +612,20 @@ video.on( 'durationchange', function(){
     clearInterval( emulatedSeekerTimer );
     emulatedSeekerTimer    = 0;
     video[ 0 ].currentTime = emulatedSeekerTime;
-    video[ 0 ].play();
+
+    if( collabMode && collabChannel ){
+
+      collabChannel.send({ 'action' : 'moveTo', 'time' : video[ 0 ].currentTime , 'videoId' : apiVideo.id } , function( error ){
+
+        if ( error ) { console.log('ERROR: ', error ); }
+
+        video[ 0 ].play();
+
+      });
+
+    }else{
+      video[ 0 ].play();
+    }
 
   })
 
@@ -729,11 +777,37 @@ video.on( 'durationchange', function(){
 
   video
   .on( 'play', function(){
+
+    console.log( 'play',collabChannel );
+
+    if( collabMode && collabChannel ){
+      
+      collabChannel.send({ 'action' : 'play' , 'videoId' : apiVideo.id } , function( error ){
+
+        if ( error ) { console.log('ERROR: ', error ); }
+
+      });
+
+    }
     win.addClass('playing');
+
   })
 
   .on( 'pause', function(){
+
+    console.log( 'pause',collabChannel );
+
+    if( collabMode && collabChannel ){
+
+      collabChannel.send({ 'action' : 'pause' , 'videoId' : apiVideo.id } , function( error ){
+
+        if ( error ) { console.log('ERROR: ', error ); }
+
+      });
+
+    }
     win.removeClass('playing');
+
   })
 
   .on( 'timeupdate', function( e ){
@@ -828,3 +902,31 @@ video.on( 'durationchange', function(){
   }
 
 });
+
+api.channel.on( 'message' , function( info , o ){
+
+  console.log( o );
+
+  if (info.sender == myUserID ) {
+    return;
+  }
+
+  if ( o.action === 'startCollab') {
+
+    console.log( 'lets play ');
+    collabMode = true;
+    video[ 0 ].currentTime = 0;
+    video[ 0 ].play();
+
+  }else if( o.action === 'play' ){
+    video[ 0 ].play();
+  }else if( o.action === 'pause' ){
+    video[ 0 ].pause();
+  }else if( o.action === 'moveTo' ){
+
+    video[ 0 ].currentTime = o.time;
+    video[ 0 ].play();
+
+  }
+
+})
