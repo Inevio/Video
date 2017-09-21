@@ -34,29 +34,27 @@ api.channel.on( 'message' , function( info , o ){
   if ( o.action === 'inviteToCollab' ) {
 
     console.log( arguments );
-    api.app.openApp( 376 , { 'command' : 'openFile' , data : o.videoId, 'collab' : true, 'channelId' : info.id } , function( o ){});
+    //api.app.openApp( 376 , { 'command' : 'openFile' , data : o.videoId, 'collab' : true, 'channelId' : info.id } , function( o ){});
 
-    /*api.user( info.sender, function( error, user ){
+    api.user( info.sender, function( error, user ){
 
       if( error ){
         return;
       }
 
-      var name = o.groupName ? o.groupName : user.fullName;
-
       api.banner()
-        .setTitle( name )
-        .setText( o.txt )
+        .setTitle( user.fullName )
+        .setText( 'Te ha invitado a ver un video' )
         .setIcon( user.avatar.tiny )
         .on( 'click', function(){
 
           //TODO funcion para sacar el id de mi app?
-          api.app.openApp( 232 , info.id , function(o){});
+          api.app.openApp( 376 , { 'command' : 'openFile' , data : o.videoId, 'collab' : true, 'channelId' : info.id } , function( o ){});
 
         })
         .render();
 
-    });*/
+    });
 
   }
 
