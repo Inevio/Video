@@ -422,7 +422,7 @@ video.on( 'canplay' , function(){
   console.log('canplay', collabMode, collabChannel);
   if( !collabMode ){
     video[ 0 ].play();
-  }else{
+  }else if( typeof collabChannel == 'number' ){
 
     api.channel( collabChannel , function( error, channelApi ){
 
@@ -431,6 +431,7 @@ video.on( 'canplay' , function(){
         return;
       }
 
+      console.log( arguments );
       collabChannel = channelApi;
 
       collabChannel.send({ 'action' : 'startCollab' , 'videoId' : apiVideo.id } , function( error ){
