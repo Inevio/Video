@@ -437,8 +437,6 @@ video.on( 'canplay' , function(){
 
         if ( error ) { console.log('ERROR: ', error ); }
 
-        video[ 0 ].play();
-
       });
 
 
