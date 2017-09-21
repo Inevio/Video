@@ -129,7 +129,7 @@ var loadItem = function( structureId ){
 
 var toggleFullscreen = function(){
 
-  playVideo();
+  video[ 0 ].play();
 
   if( win.hasClass( 'fullscreen' ) ){
 
@@ -317,29 +317,6 @@ var intiveToCollaborative = function( userId, channel, callback ){
 
 }
 
-var playVideo = function(){
-
-  if( collabMode && collabChannel ){
-
-    console.log( 'play',collabChannel );
-
-    if( collabMode && collabChannel ){
-      
-      collabChannel.send({ 'action' : 'play' , 'videoId' : apiVideo.id } , function( error ){
-
-        if ( error ) { console.log('ERROR: ', error ); }
-        video[ 0 ].play();
-
-      });
-
-    }
-
-  }else{
-    video[ 0 ].play();
-  }
-
-}
-
 
 // Events
 win.on( 'app-param', function( e, params ){
@@ -364,7 +341,7 @@ win.on( 'app-param', function( e, params ){
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
     }else{
-      playVideo();
+      video[ 0 ].play();
     }
 
   }else{
@@ -518,7 +495,7 @@ video.on( 'durationchange', function(){
     if( win.hasClass('playing') ){
       video[ 0 ].pause();
     }else{
-      playVideo();
+      video[ 0 ].play();
     }
 
   })
@@ -643,7 +620,7 @@ video.on( 'durationchange', function(){
       });
 
     }else{
-      playVideo();
+      video[ 0 ].play();
     }
 
   })
@@ -724,7 +701,7 @@ video.on( 'durationchange', function(){
       if( win.hasClass('playing') ){
           video[ 0 ].pause();
       }else{
-          playVideo();
+          video[ 0 ].play();
       }
 
   })
@@ -797,6 +774,17 @@ video.on( 'durationchange', function(){
   video
   .on( 'play', function(){
 
+    console.log( 'play',collabChannel );
+
+    if( collabMode && collabChannel ){
+      
+      collabChannel.send({ 'action' : 'play' , 'videoId' : apiVideo.id } , function( error ){
+
+        if ( error ) { console.log('ERROR: ', error ); }
+
+      });
+
+    }
     win.addClass('playing');
 
   })
@@ -921,19 +909,19 @@ api.channel.on( 'message' , function( info , o ){
 
   if ( o.action === 'startCollab') {
 
-    console.log( 'lets play' );
+    console.log( 'lets play ');
     collabMode = true;
     video[ 0 ].currentTime = 0;
-    playVideo();
+    video[ 0 ].play();
 
   }else if( o.action === 'play' ){
-    playVideo();
+    video[ 0 ].play();
   }else if( o.action === 'pause' ){
     video[ 0 ].pause();
   }else if( o.action === 'moveTo' ){
 
     video[ 0 ].currentTime = o.time;
-    playVideo();
+    video[ 0 ].play();
 
   }
 
