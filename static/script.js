@@ -617,8 +617,6 @@ video.on( 'durationchange', function(){
 
         if ( error ) { console.log('ERROR: ', error ); }
 
-        video[ 0 ].play();
-
       });
 
     }else{
