@@ -370,6 +370,8 @@ video.on( 'durationchange', function(){
   uiTimeSeeker.addClass('wz-dragger-x');
 
   video[ 0 ].play();
+  //Hide spinner
+  $( '.spinner' ).removeClass( 'active' );
 
   if( mobile ){
 

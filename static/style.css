@@ -16,6 +16,24 @@
   display: none;
 }
 
+.spinner{
+  display: none;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background-image: url('@static/spinner.gif');
+  background-size: 100px, 100px;
+}
+
+.spinner.active{
+  display: block;
+}
+
 .wz-ui-header{
   border: none;
   position: absolute;
