@@ -419,7 +419,10 @@ video.on( 'canplay' , function(){
 
   console.log('canplay', collabMode, collabChannel);
   if( !collabMode ){
+
+    $( '.spinner' ).removeClass( 'active' );
     video[ 0 ].play();
+    
   }else if( typeof collabChannel == 'number' ){
 
     api.channel( collabChannel , function( error, channelApi ){
@@ -912,6 +915,7 @@ api.channel.on( 'message' , function( info , o ){
 
   if ( o.action === 'startCollab') {
 
+    $( '.spinner' ).removeClass( 'active' );
     collabMode = true;
     video[ 0 ].currentTime = 0;
     video[ 0 ].play();
