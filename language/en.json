@@ -1,6 +1,12 @@
 
 {
-    
-    "fullscreenSupport" : "Internet Explorer doesn't support HTML5 Fullscreen"
+
+  "fullscreenSupport" : "Internet Explorer doesn't support HTML5 Fullscreen",
+
+  "invalidFormat" : "Invalid format",
+  "invalidDescription" : "This video has an incompatible format. Try to upload to your horbito account.",
+
+  "conversionPending" : "Conversion pending",
+  "conversionDescription" : "This video is under conversion. Please, try latter."
 
 }

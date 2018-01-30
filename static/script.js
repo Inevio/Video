@@ -68,53 +68,124 @@ if( location.hostname.indexOf('file') === 0 ){
 }
 
 // Functions
-var loadItem = function( structureId ){
+var loadItem = function( data ){
 
-  api.fs( structureId, function( error, structure ){
+  console.log( data )
 
-    structure.getFormats( function( error, formats ){
+  if( params.dropbox ){
 
-      console.log(formats);
-      video
-      .empty();
+    api.integration.dropbox( params.dropbox, function( err, account ){
 
-      if( formats['video/webm'] ){
-        video.append( $('<source></source>').attr('type','video/webm').attr('src', formats['video/webm'].url) )
-      }
+      account.get( data.id, function( err, fsnode ){
 
-      if( formats['video/mp4'] ){
-        video.append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
-      }
+        if( fsnode.mime !== 'video/mp4' ){
 
-      video.load();
+          var dialog = api.dialog()
+          dialog.setTitle(lang.invalidFormat)
+          dialog.setText(lang.invalidDescription)
+          dialog.setButton(0,wzLang.core.dialogAccept)
+          return dialog.render(function(){
+            api.app.removeView( win )
+          })
 
-      if( formats.original.metadata.media.video.resolutionSquare ){
+        }
 
-      resizeVideo(
+        video.empty();
+        video.append( $('<source></source>').attr('type','video/mp4').attr('src', 'https://download.horbito.com/dropbox/' + fsnode.account + '/' + encodeURIComponent( fsnode.id )) )
+        video.load();
 
-          formats.original.metadata.media.video.resolutionSquare.w,
-          formats.original.metadata.media.video.resolutionSquare.h,
-          true
+      })
 
-      );
+    })
 
-    }else{
+  }else if( params.gdrive ){
 
-      resizeVideo(
+    api.integration.gdrive( params.gdrive, function( err, account ){
 
-          formats.original.metadata.media.video.resolution.w,
-          formats.original.metadata.media.video.resolution.h,
-          true
+      account.get( data.id, function( err, fsnode ){
 
-      );
+        if( fsnode.mimeType !== 'video/mp4' ){
 
-    }
+          var dialog = api.dialog()
+          dialog.setTitle(lang.invalidFormat)
+          dialog.setText(lang.invalidDescription)
+          dialog.setButton(0,wzLang.core.dialogAccept)
+          return dialog.render(function(){
+            api.app.removeView( win )
+          })
 
-      uiTitle.text( structure.name );
+        }
+
+        video.empty();
+        video.append( $('<source></source>').attr('type','video/mp4').attr('src', 'https://download.horbito.com/gdrive/' + fsnode.account + '/' + encodeURIComponent( fsnode.id )) )
+        video.load();
+
+      })
+
+    })
+
+  }else if( params.onedrive ){
+
+    api.integration.onedrive( params.onedrive, function( err, account ){
+
+      account.get( data.id, function( err, fsnode ){
+
+        if( fsnode.mime !== 'video/mp4' ){
+
+          var dialog = api.dialog()
+          dialog.setTitle(lang.invalidFormat)
+          dialog.setText(lang.invalidDescription)
+          dialog.setButton(0,wzLang.core.dialogAccept)
+          return dialog.render(function(){
+            api.app.removeView( win )
+          })
+
+        }
+
+        video.empty();
+        video.append( $('<source></source>').attr('type','video/mp4').attr('src', 'https://download.horbito.com/onedrive/' + fsnode.account + '/' + encodeURIComponent( fsnode.id )) )
+        video.load();
+
+      })
+
+    })
+
+  }else{
+
+    api.fs( data.id, function( error, structure ){
+
+      structure.getFormats( function( error, formats ){
+
+        if( formats['video/mp4'] ){
+          video.empty();
+          video.append( $('<source></source>').attr('type','video/mp4').attr('src', formats['video/mp4'].url) )
+        }else{
+
+          var dialog = api.dialog()
+          dialog.setTitle(lang.conversionPending)
+          dialog.setText(lang.conversionDescription)
+          dialog.setButton(0,wzLang.core.dialogAccept)
+          return dialog.render(function(){
+            api.app.removeView( win )
+          })
+
+        }
+
+        video.load();
+
+        if( formats.original.metadata.media.video.resolutionSquare ){
+          resizeVideo( formats.original.metadata.media.video.resolutionSquare.w, formats.original.metadata.media.video.resolutionSquare.h, true );
+        }else{
+          resizeVideo( formats.original.metadata.media.video.resolution.w, formats.original.metadata.media.video.resolution.h, true );
+        }
+
+        uiTitle.text( structure.name );
+
+      });
 
     });
 
-  });
+  }
 
 };
 
@@ -298,7 +369,7 @@ var showControls = function(){
 win.on( 'app-param', function( e, params ){
 
   if( params && params.command === 'openFile' ){
-    loadItem( params.data );
+    loadItem( params );
   }
 
 })
