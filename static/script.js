@@ -171,7 +171,13 @@ var loadItem = function( data ){
 
         }
 
+        /*if( win.hasClass('link-mode') ){
+          console.log(structure)
+          video.attr('poster', structure.icons[512])
+        }*/
+        
         video.load();
+
 
         if( formats.original.metadata.media.video.resolutionSquare ){
           resizeVideo( formats.original.metadata.media.video.resolutionSquare.w, formats.original.metadata.media.video.resolutionSquare.h, true );
